@@ -3,11 +3,13 @@
 
 ## About the project
 
-**CoherentSolutions.Extensions.Configuration.AnyWhere** is the extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration) that allows application to setup it's own configurable configuration engine. The engine is configured using environment variables what allows it to move the responsibility of configuration source management from the application code to the environment configuration.
+**CoherentSolutions.Extensions.Configuration.AnyWhere** is the extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration) that allows application to setup it's own configuration engine that is configured using environment variables. This moves the responsibility of configuration management from the application code to the environment configuration.
 
 ### How it works?
 
-The **CoherentSolutions.Extensions.Configuration.AnyWhere** consists from two parts: the configuration engine and configuration adapters. The engine is initialized using `AddAnyWhereConfiguration` extention method:
+The **CoherentSolutions.Extensions.Configuration.AnyWhere** consists from two parts - configuration engine and configuration adapters. 
+
+The engine is initialized using `AddAnyWhereConfiguration` extention method:
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)
@@ -21,8 +23,6 @@ WebHost.CreateDefaultBuilder(args)
   .Run();
 ```
 
-When the engine is initialized the application is ready to consume configuration throgh the adapters. 
-
 The adapter is represented by the implementation of `IAnyWhereConfigurationSourceAdapter` interface:
 
 ``` csharp
@@ -34,15 +34,17 @@ public interface IAnyWhereConfigurationSourceAdapter
 }
 ```
 
-The implementation typically (but not mandatory) is located in a separate assembly. 
+Adapter implementation typically (but not mandatory) located in a separate assembly. 
 
-The purpose of the adapter is to initialize add additional configuration source to `IConfigurationBuilder`. Adapter is picked up by the engine using the information stored in environment variables. All engine recognizable environment variables have the following format: **ANYWHERE_ADAPTER_\{INDEX\}_\{VARIABLE_NAME\}**:
+The purpose of the adapter is to initialize and add additional `IConfigurationSource` to `IConfigurationBuilder`. Adapter is picked up by the engine using the information stored in environment variables. 
+
+All engine recognizable environment variables have the following format: **ANYWHERE_ADAPTER_\{INDEX\}_\{VARIABLE_NAME\}**:
 
 * **ANYWHERE_ADAPTER** is a predefined prefix, only variables with this prefix are scanned by the engine.
 * **\{INDEX\}** is a zero based index of the adapter being configured.
 * **\{VARIABLE_NAME\}** is a name of the actual variable.
 
-> When configuring multiple adapters the indexes should be sequential i.e. 0, 1, 2, ..., N. Any gap between indexes is threated as end of list and the rest of adapters will be ignored.
+> When configuring multiple adapters the indexes should be sequential i.e. 0, 1, 2, ..., N. Any gap between indexes is threated as end of adapters list and the rest of adapters will be ignored.
 
 Adapter is identified and loaded using values of three variables:
 

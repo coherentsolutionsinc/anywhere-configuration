@@ -1,4 +1,4 @@
-﻿# CONTRIBUTING
+# CONTRIBUTING
 
 The project is created using Visual Studio 2017. You are encouraged to use Visual Studio too but it isn't prohibited to use any IDE you like.
 
@@ -9,7 +9,7 @@ The project is created using Visual Studio 2017. You are encouraged to use Visua
 
 ## Set up the development environment
 
-* Clone the master branch. `git clone https://github.com/coherentsolutionsinc/aspnetcore-service-fabric-hosting/ <path to the local folder>`
+* Clone the master branch. `git clone https://github.com/coherentsolutionsinc/anywhere-configuration/ <path to the local folder>`
 * Build & Run Tests. `build-and-test.ps1`
 
 ## Questions and Issues
@@ -20,4 +20,4 @@ An idea? - [Request][1]!
 
 Found an issue? - [Report][1]!
 
-[1]: https://github.com/coherentsolutionsinc/aspnetcore-service-fabric-hosting/issues "Ask a question or report an issue"
+[1]: https://github.com/coherentsolutionsinc/anywhere-configuration/issues "Ask a question or report an issue"

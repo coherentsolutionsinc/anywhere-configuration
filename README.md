@@ -115,7 +115,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
 
 The environment variables are configured as following:
 
-* ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereKeyPerFileConfigurationSourceAdapter
+* ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter
 * ANYWHERE_ADAPTER_0_ASSEMBLY_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json
 * ANYWHERE_ADAPTER_0_SEARCH_PATH=/adapters
 * ANYWHERE_ADAPTER_0_PATH=/configuration/secrets.json

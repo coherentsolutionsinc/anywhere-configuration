@@ -14,12 +14,10 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         public static IConfigurationBuilder AddAnyWhereConfiguration(
             this IConfigurationBuilder configurationBuilder)
         {
-            var adapterList =
-                configurationBuilder.Properties[ANYWHERE_ADAPTER_LIST_PROPERTY] as IEnumerable<(string adapterName, string typeName, string assemblyPath)>;
-
-            if (adapterList == null)
+            var adapterList = Enumerable.Empty<(string adapterName, string typeName, string assemblyPath)>();
+            if (configurationBuilder.Properties.TryGetValue(ANYWHERE_ADAPTER_LIST_PROPERTY, out var propertyValue))
             {
-                adapterList = Enumerable.Empty<(string adapterName, string typeName, string assemblyPath)>();
+                adapterList = (IEnumerable<(string adapterName, string typeName, string assemblyPath)>)propertyValue;
             }
 
             var configurationLoaderEnvironment =

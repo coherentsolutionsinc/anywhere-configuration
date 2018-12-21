@@ -13,10 +13,10 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList
             {
                 ("Json",
                     "CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter",
-                    "CoherentSolutions.Extensions.Configuration.AnyWhere.Json.dll"),
+                    "CoherentSolutions.Extensions.Configuration.AnyWhere.Json"),
                 ("KeyPerFile",
                     "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter",
-                    "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.dll")
+                    "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile")
             };
 
             return configurationBuilder;

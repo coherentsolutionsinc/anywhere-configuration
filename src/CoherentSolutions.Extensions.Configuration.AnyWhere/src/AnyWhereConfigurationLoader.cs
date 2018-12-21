@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
@@ -47,6 +49,19 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 {
                     var adapter = this.ActivateAdapter(adapterArg);
 
+                    AppDomain.CurrentDomain.AssemblyResolve += (
+                        sender,
+                        args) =>
+                    {
+                        var name = new AssemblyName(args.Name);
+                        var p = Path.Combine(adapterArg.AdapterSearchPaths, name.Name) + ".dll";
+                        if (File.Exists(p))
+                        {
+                            return Assembly.Load(p);
+                        }
+                        return null;
+                    };
+
                     adapter.ConfigureAppConfiguration(
                         configurationBuilder, 
                         adapterArg.AdapterEnvironmentReader);
@@ -58,7 +73,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                         adapterArg.AdapterTypeName,
                         adapterArg.AdapterAssemblyName,
                         arguments,
-                        exception.InnerException);
+                        ExceptionDispatchInfo.Capture(exception).SourceException);
                 }
             }
         }

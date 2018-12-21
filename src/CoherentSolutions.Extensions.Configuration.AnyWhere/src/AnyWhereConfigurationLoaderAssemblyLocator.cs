@@ -21,7 +21,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 throw new ArgumentNullException(nameof(name));
             }
 
-            var fileName = Path.ChangeExtension(name, ".dll");
+            var fileName = $"{name}.dll";
+
+            var resolvedLocations = new List<string>(locations.Count);
             foreach (var location in locations)
             {
                 var path = Path.Combine(location, fileName);
@@ -34,15 +36,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 {
                     return path;
                 }
+
+                resolvedLocations.Add(path);
             }
 
             var sb = new StringBuilder()
                .AppendFormat("The assembly: '{0}' doesn't exist in any of the provided locations:", name)
                .AppendLine();
 
-            foreach (var location in locations)
+            foreach (var resolvedLocation in resolvedLocations)
             {
-                sb.Append("- ").AppendLine(location);
+                sb.Append("- ").AppendLine(resolvedLocation);
             }
 
             throw new FileNotFoundException(sb.ToString());

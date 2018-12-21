@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -12,6 +12,7 @@
     <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>configuration, anywhere, adapter, json</PackageTags>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>

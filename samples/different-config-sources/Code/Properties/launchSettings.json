@@ -1,14 +1,7 @@
 {
   "profiles": {
     "Code": {
-      "commandName": "Project",
-      "environmentVariables": {
-        "ANYWHERE_ADAPTER_0_TYPE_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter",
-        "ANYWHERE_ADAPTER_0_DIRECTORY_PATH": "D:\\Projects\\OpenSource\\anywhere-configuration\\samples\\different-config-sources\\Code\\_configs\\config",
-        "ANYWHERE_ADAPTER_0_ASSEMBLY_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile",
-        "ANYWHERE_ADAPTER_0_SEARCH_PATHS": "D:\\Projects\\OpenSource\\anywhere-configuration\\samples\\different-config-sources\\Code\\_adapters\\KeyPerFile",
-        "SET ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter": "Value"
-      }
+      "commandName": "Project"
     }
   }
 }

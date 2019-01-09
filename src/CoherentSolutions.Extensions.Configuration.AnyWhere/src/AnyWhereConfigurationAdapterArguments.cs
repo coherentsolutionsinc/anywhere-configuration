@@ -6,23 +6,23 @@ using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereConfigurationLoaderAdapterArguments : IEnumerable<AnyWhereConfigurationLoaderAdapterArgument>
+    public class AnyWhereConfigurationAdapterArguments : IEnumerable<AnyWhereConfigurationAdapterArgument>
     {
-        private readonly IReadOnlyDictionary<string, AnyWhereConfigurationLoaderAdapterMetadata> adaptersMetadata;
+        private readonly IReadOnlyDictionary<string, AnyWhereConfigurationAdapterMetadata> adaptersMetadata;
 
         private readonly IAnyWhereConfigurationEnvironment environment;
 
-        public AnyWhereConfigurationLoaderAdapterArguments(
-            IReadOnlyDictionary<string, AnyWhereConfigurationLoaderAdapterMetadata> adaptersMetadata,
+        public AnyWhereConfigurationAdapterArguments(
+            IReadOnlyDictionary<string, AnyWhereConfigurationAdapterMetadata> adaptersMetadata,
             IAnyWhereConfigurationEnvironment environment)
         {
             this.adaptersMetadata = adaptersMetadata ?? throw new ArgumentNullException(nameof(adaptersMetadata));
             this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
-        public IEnumerator<AnyWhereConfigurationLoaderAdapterArgument> GetEnumerator()
+        public IEnumerator<AnyWhereConfigurationAdapterArgument> GetEnumerator()
         {
-            return new AnyWhereConfigurationLoaderAdapterArgumentsEnumerator(
+            return new AnyWhereConfigurationAdapterArgumentsEnumerator(
                 this.adaptersMetadata,
                 this.environment);
         }

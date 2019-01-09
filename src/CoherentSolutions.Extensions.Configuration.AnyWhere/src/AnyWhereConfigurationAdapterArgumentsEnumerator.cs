@@ -7,7 +7,7 @@ using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereConfigurationLoaderAdapterArgumentsEnumerator : IEnumerator<AnyWhereConfigurationLoaderAdapterArgument>
+    public class AnyWhereConfigurationAdapterArgumentsEnumerator : IEnumerator<AnyWhereConfigurationAdapterArgument>
     {
         public const string ANYWHERE_ADAPTER_NAME_PARAMETER_NAME = "NAME";
 
@@ -15,19 +15,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         public const string ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME = "ASSEMBLY_NAME";
 
-        public const string ANYWHERE_ADAPTER_SEARCH_PATHS_PARAMETER_NAME = "SEARCH_PATHS";
-
-        private readonly IReadOnlyDictionary<string, AnyWhereConfigurationLoaderAdapterMetadata> adaptersMetadata;
+        private readonly IReadOnlyDictionary<string, AnyWhereConfigurationAdapterMetadata> adaptersMetadata;
 
         private readonly IAnyWhereConfigurationEnvironment environment;
 
-        private AnyWhereConfigurationLoaderAdapterArgument current;
+        private AnyWhereConfigurationAdapterArgument current;
 
         private bool completed;
 
         private int index;
 
-        public AnyWhereConfigurationLoaderAdapterArgument Current
+        public AnyWhereConfigurationAdapterArgument Current
         {
             get
             {
@@ -42,8 +40,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         object IEnumerator.Current => this.Current;
 
-        public AnyWhereConfigurationLoaderAdapterArgumentsEnumerator(
-            IReadOnlyDictionary<string, AnyWhereConfigurationLoaderAdapterMetadata> adaptersMetadata,
+        public AnyWhereConfigurationAdapterArgumentsEnumerator(
+            IReadOnlyDictionary<string, AnyWhereConfigurationAdapterMetadata> adaptersMetadata,
             IAnyWhereConfigurationEnvironment environment)
         {
             this.adaptersMetadata = adaptersMetadata ?? throw new ArgumentNullException(nameof(adaptersMetadata));
@@ -86,7 +84,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
                 if (adapterTypeName == null && adapterAssemblyName == null)
                 {
-                    this.current = default(AnyWhereConfigurationLoaderAdapterArgument);
+                    this.current = default(AnyWhereConfigurationAdapterArgument);
                     this.completed = true;
                     return false;
                 }
@@ -95,15 +93,11 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 adapterAssemblyName = adapterEnvironmentReader.GetString(ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME);
             }
 
-            var adapterSearchPaths =
-                adapterEnvironmentReader.GetString(ANYWHERE_ADAPTER_SEARCH_PATHS_PARAMETER_NAME, optional: true) ?? Directory.GetCurrentDirectory();
-
             this.index++;
-            this.current = new AnyWhereConfigurationLoaderAdapterArgument(
+            this.current = new AnyWhereConfigurationAdapterArgument(
                 adapterEnvironmentReader,
                 adapterTypeName,
-                adapterAssemblyName,
-                adapterSearchPaths);
+                adapterAssemblyName);
 
             return true;
         }

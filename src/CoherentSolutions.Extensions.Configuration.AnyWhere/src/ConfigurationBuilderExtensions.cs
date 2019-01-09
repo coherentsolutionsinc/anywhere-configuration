@@ -11,6 +11,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         private const string ANYWHERE_ADAPTER_PARAMETER_PREFIX = "ANYWHERE_ADAPTER";
 
+        private const string ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX = "ANYWHERE_ADAPTER_GLOBAL";
+
         public static IConfigurationBuilder AddAnyWhereConfiguration(
             this IConfigurationBuilder configurationBuilder)
         {
@@ -20,22 +22,30 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 adapterList = (IEnumerable<(string adapterName, string typeName, string assemblyPath)>)propertyValue;
             }
 
-            var configurationLoaderEnvironment =
+            var environment = new AnyWhereConfigurationEnvironment();
+
+            var adapterConfigurationEnvironment =
                 new AnyWhereConfigurationEnvironmentWithPrefix(
-                    new AnyWhereConfigurationEnvironment(),
+                    environment,
                     ANYWHERE_ADAPTER_PARAMETER_PREFIX);
 
-            var configurationLoader = new AnyWhereConfigurationLoader(
-                new AnyWhereConfigurationLoaderAdapterArgumentsReader(
+            var adapterGlobalConfigurationEnvironment = 
+                new AnyWhereConfigurationEnvironmentWithPrefix(
+                    environment,
+                    ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX);
+
+            var configuration = new AnyWhereConfiguration(
+                new AnyWhereConfigurationAdapterArgumentsReader(
                     adapterList.ToDictionary(
                         v => v.adapterName,
-                        v => new AnyWhereConfigurationLoaderAdapterMetadata(v.adapterName, v.typeName, v.assemblyPath))),
-                new AnyWhereConfigurationLoaderAssemblyLocator(),
-                new AnyWhereConfigurationLoaderTypeLoader());
+                        v => new AnyWhereConfigurationAdapterMetadata(v.adapterName, v.typeName, v.assemblyPath))),
+                new AnyWhereConfigurationAdapterFactory(
+                    new AnyWhereConfigurationAdapterFactoryTypeLoader(
+                        new AnyWhereConfigurationAdapterAssemblyLocator(adapterGlobalConfigurationEnvironment))));
 
-            configurationLoader.ConfigureAppConfiguration(
+            configuration.ConfigureAppConfiguration(
                 configurationBuilder,
-                configurationLoaderEnvironment);
+                adapterConfigurationEnvironment);
 
             return configurationBuilder;
         }

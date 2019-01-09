@@ -2,7 +2,7 @@
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereConfigurationLoaderAdapterMetadata
+    public class AnyWhereConfigurationAdapterMetadata
     {
         public string Name { get; }
 
@@ -10,7 +10,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         public string AssemblyName { get; }
 
-        public AnyWhereConfigurationLoaderAdapterMetadata(
+        public AnyWhereConfigurationAdapterMetadata(
             string name,
             string typeName,
             string assemblyName)

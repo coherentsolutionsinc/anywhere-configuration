@@ -2,7 +2,7 @@
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public struct AnyWhereConfigurationLoaderAdapterArgument
+    public struct AnyWhereConfigurationAdapterArgument
     {
         public IAnyWhereConfigurationEnvironmentReader AdapterEnvironmentReader { get; }
 
@@ -10,18 +10,14 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         public string AdapterAssemblyName { get; }
 
-        public string AdapterSearchPaths { get; }
-
-        public AnyWhereConfigurationLoaderAdapterArgument(
+        public AnyWhereConfigurationAdapterArgument(
             IAnyWhereConfigurationEnvironmentReader adapterEnvironmentReader,
             string adapterTypeName,
-            string adapterAssemblyName,
-            string adapterSearchPaths)
+            string adapterAssemblyName)
         {
             this.AdapterEnvironmentReader = adapterEnvironmentReader;
             this.AdapterTypeName = adapterTypeName;
             this.AdapterAssemblyName = adapterAssemblyName;
-            this.AdapterSearchPaths = adapterSearchPaths;
         }
     }
 }

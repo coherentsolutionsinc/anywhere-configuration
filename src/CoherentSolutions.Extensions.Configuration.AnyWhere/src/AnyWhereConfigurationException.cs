@@ -6,7 +6,7 @@ using System.Text;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereConfigurationLoaderException : Exception
+    public class AnyWhereConfigurationException : Exception
     {
         private const string UNKNOWN_ASSEMBLY_PATH = "<unknown>";
 
@@ -18,7 +18,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         public IReadOnlyDictionary<string, string> Arguments { get; }
 
-        public AnyWhereConfigurationLoaderException(
+        public AnyWhereConfigurationException(
             string typeName,
             string assemblyPath,
             IReadOnlyDictionary<string, string> arguments = null,

@@ -38,19 +38,30 @@ Adapter implementation typically (but not mandatory) located in a separate assem
 
 The purpose of the adapter is to initialize and add additional `IConfigurationSource` to `IConfigurationBuilder`. Adapter is picked up by the engine using the information stored in environment variables. 
 
-All engine recognizable environment variables have the following format: **ANYWHERE_ADAPTER_\{INDEX\}_\{VARIABLE_NAME\}**:
+All engine recognizable environment variables can be divided into two categories: **GLOBAL** and **ADAPTER**.
+
+**GLOBAL** variables are consumed by the infrastructure as a whole and have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}** where :
+
+* **ANYWHERE_ADAPTER_GLOBAL** is a predefined prefix, only variables with this prefix are scanned by the engine.
+* **\{VARIABLE_NAME\}** is a name of the actual variable.
+
+The engine defines the following **GLOBAL** variables:
+* **PROBING_PATH** - the list of paths to search for an adapter assembly i.e. `/configuration-adapters` (the default is _current directory_).
+
+> It should be noted that current directory is always scanned during assemblies lookup.
+
+**ADAPTER** variables are consumed by the concrete adapter and have the following format: **ANYWHERE_ADAPTER_\{INDEX\}_\{VARIABLE_NAME\}** where:
 
 * **ANYWHERE_ADAPTER** is a predefined prefix, only variables with this prefix are scanned by the engine.
 * **\{INDEX\}** is a zero based index of the adapter being configured.
 * **\{VARIABLE_NAME\}** is a name of the actual variable.
 
-> When configuring multiple adapters the indexes should be sequential i.e. 0, 1, 2, ..., N. Any gap between indexes is threated as end of adapters list and the rest of adapters will be ignored.
+> When configuring multiple adapters the indexes should be sequential i.e. 0, 1, 2, ..., N. Any gap between indexes is threated as end of adapters list and the rest of adapters is ignored.
 
 Adapter is identified and loaded using values of three variables:
 
 * **TYPE_NAME (required)** - the full name of the adapters type i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter`.
 * **ASSEMBLY_NAME (required)** - the name of the assembly where type is located i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile`.
-* **SEARCH_PATH (optional)** - the list of paths to search for an assembly i.e. `/configuration-adapters` (the default is _current directory_).
 
 All additional parameters required by the underlying `IConfigurationSource` are passed using the same mechanism and can be consumed using provided `IAnyWhereConfigurationEnvironmentReader`.
 
@@ -115,9 +126,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
 
 The environment variables are configured as following:
 
+* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
 * ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter
 * ANYWHERE_ADAPTER_0_ASSEMBLY_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json
-* ANYWHERE_ADAPTER_0_SEARCH_PATH=/adapters
 * ANYWHERE_ADAPTER_0_PATH=/configuration/secrets.json
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 
@@ -164,9 +175,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
 
 The environment variables are configured as following:
 
+* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
 * ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter
 * ANYWHERE_ADAPTER_0_ASSEMBLY_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
-* ANYWHERE_ADAPTER_0_SEARCH_PATH=/adapters
 * ANYWHERE_ADAPTER_0_DIRECTORY_PATH=/configuration
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 

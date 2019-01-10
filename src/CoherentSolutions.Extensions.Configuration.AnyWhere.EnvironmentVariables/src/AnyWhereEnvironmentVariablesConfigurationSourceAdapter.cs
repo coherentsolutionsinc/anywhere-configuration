@@ -4,9 +4,9 @@ using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 using Microsoft.Extensions.Configuration;
 
-namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
+namespace CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables
 {
-    public class AnyWhereJsonConfigurationSourceAdapter : IAnyWhereConfigurationAdapter
+    public class AnyWhereEnvironmentVariablesConfigurationSourceAdapter : IAnyWhereConfigurationAdapter
     {
         public void ConfigureAppConfiguration(
             IConfigurationBuilder configurationBuilder,
@@ -22,10 +22,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
                 throw new ArgumentNullException(nameof(environmentReader));
             }
 
-            configurationBuilder.AddJsonFile(
-                environmentReader.GetString("PATH"),
-                environmentReader.GetBool("OPTIONAL", optional: true),
-                environmentReader.GetBool("RELOAD_ON_CHANGE", optional: true));
+            configurationBuilder.AddEnvironmentVariables(
+                environmentReader.GetString("PREFIX", string.Empty, true));
         }
     }
 }

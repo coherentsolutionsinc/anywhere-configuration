@@ -14,11 +14,11 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             this.typeLoader = typeLoader ?? throw new ArgumentNullException(nameof(typeLoader));
         }
 
-        public IAnyWhereConfigurationSourceAdapter Create(
+        public IAnyWhereConfigurationAdapter Create(
             AnyWhereConfigurationAdapterArgument adapterArg)
         {
             var type = this.typeLoader.Load(adapterArg);
-            return (IAnyWhereConfigurationSourceAdapter) Activator.CreateInstance(type);
+            return (IAnyWhereConfigurationAdapter) Activator.CreateInstance(type);
         }
     }
 }

@@ -6,17 +6,20 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Coherent Solutions, Inc</Authors>
     <Company>Coherent Solutions, Inc</Company>
-    <Copyright>2018 Coherent Solutions, Inc</Copyright>
+    <Copyright>2019 Coherent Solutions, Inc</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MS-PL</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
     <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>configuration, anywhere, adapter, json</PackageTags>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Version>2.1.0</Version>
+    <Description>This package represents Configuration.Json adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/Json-Adapter for details.</Description>
+    <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="0.10.0" />
+    <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.0" />
   </ItemGroup>
 

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
 {
-    public class AnyWhereKeyPerFileConfigurationSourceAdapter : IAnyWhereConfigurationSourceAdapter
+    public class AnyWhereKeyPerFileConfigurationSourceAdapter : IAnyWhereConfigurationAdapter
     {
         public void ConfigureAppConfiguration(
             IConfigurationBuilder configurationBuilder,

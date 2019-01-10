@@ -1,24 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>1.0.0</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Coherent Solutions, Inc</Authors>
+    <Company>Coherent Solutions, Inc</Company>
     <Copyright>2019 Coherent Solutions, Inc</Copyright>
     <PackageLicenseUrl>https://opensource.org/licenses/MS-PL</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
     <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageTags>configuration, anywhere</PackageTags>
-    <Description>This project is an extension to Microsoft.Extensions.Configuration that allows application to setup it's configuration sources using environment variables and external adapters.</Description>
+    <PackageTags>configuration, anywhere, adapter, environment variables</PackageTags>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
+    <Description>This package represents Configuration.EnvironmentVariables adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/EnvironmentVariables-Adapter for details.</Description>
+    <Version>2.1.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

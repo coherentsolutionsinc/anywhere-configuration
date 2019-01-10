@@ -2,7 +2,7 @@
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions
 {
-    public interface IAnyWhereConfigurationSourceAdapter
+    public interface IAnyWhereConfigurationAdapter
     {
         void ConfigureAppConfiguration(
             IConfigurationBuilder configurationBuilder,

@@ -16,7 +16,10 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList
                     "CoherentSolutions.Extensions.Configuration.AnyWhere.Json"),
                 ("KeyPerFile",
                     "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter",
-                    "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile")
+                    "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile"),
+                ("EnvironmentVariables",
+                    "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables.AnyWhereEnvironmentVariablesConfigurationSourceAdapter",
+                    "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables")
             };
 
             return configurationBuilder;

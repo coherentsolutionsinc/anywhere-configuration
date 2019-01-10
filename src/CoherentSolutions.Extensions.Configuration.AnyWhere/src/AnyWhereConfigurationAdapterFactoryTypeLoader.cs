@@ -37,10 +37,10 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     Assembly.LoadFrom(assemblyPath)
                        .GetType(adapterArg.AdapterTypeName);
 
-                if (!typeof(IAnyWhereConfigurationSourceAdapter).IsAssignableFrom(type))
+                if (!typeof(IAnyWhereConfigurationAdapter).IsAssignableFrom(type))
                 {
                     throw new InvalidOperationException(
-                        $"{type.FullName} : type doesn't implement '{nameof(IAnyWhereConfigurationSourceAdapter)}'");
+                        $"{type.FullName} : type doesn't implement '{nameof(IAnyWhereConfigurationAdapter)}'");
                 }
 
                 return type;

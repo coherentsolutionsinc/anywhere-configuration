@@ -4,7 +4,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public interface IAnyWhereConfigurationAdapterFactory
     {
-        IAnyWhereConfigurationSourceAdapter Create(
+        IAnyWhereConfigurationAdapter Create(
             AnyWhereConfigurationAdapterArgument adapterArg);
     }
 }

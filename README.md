@@ -4,7 +4,7 @@
 
 ## About the project
 
-**CoherentSolutions.Extensions.Configuration.AnyWhere** is the extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration) that allows application to setup to setup it's configuration sources using environment variables and external adapters. 
+**CoherentSolutions.Extensions.Configuration.AnyWhere** is the extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration) that allows application to setup it's configuration sources using environment variables. 
 
 ### How it works?
 

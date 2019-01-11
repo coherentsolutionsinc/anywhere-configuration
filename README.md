@@ -8,9 +8,7 @@
 
 ### How it works?
 
-The **CoherentSolutions.Extensions.Configuration.AnyWhere** consists from two parts - configuration engine and configuration adapters. 
-
-Engine dynamically locates and loads configuration based on the configuration from environment variables. Adapter in turn is the interface used to plugin the configuration from different source.
+The **CoherentSolutions.Extensions.Configuration.AnyWhere** consists from two parts - configuration engine and configuration adapters. Engine dynamically locates and loads configuration based on the configuration from environment variables. Adapter in turn is the interface used to plugin the configuration from different source.
 
 The engine is installed as nuget package to the application and is initialized using `AddAnyWhereConfiguration` extention method (this is the extension method for `IConfigurationBuilder`):
 

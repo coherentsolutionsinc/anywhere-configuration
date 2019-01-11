@@ -16,7 +16,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         public static IConfigurationBuilder AddAnyWhereConfiguration(
             this IConfigurationBuilder configurationBuilder)
         {
-            var adapterList = Enumerable.Empty<(string adapterName, string typeName, string assemblyPath)>();
+            var adapterList = Enumerable.Empty<(string adapterName, string typeName, string assemblyName)>();
             if (configurationBuilder.Properties.TryGetValue(ANYWHERE_ADAPTER_LIST_PROPERTY, out var propertyValue))
             {
                 adapterList = (IEnumerable<(string adapterName, string typeName, string assemblyPath)>)propertyValue;
@@ -38,7 +38,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 new AnyWhereConfigurationAdapterArgumentsReader(
                     adapterList.ToDictionary(
                         v => v.adapterName,
-                        v => new AnyWhereConfigurationAdapterMetadata(v.adapterName, v.typeName, v.assemblyPath))),
+                        v => new AnyWhereConfigurationAdapterMetadata(v.adapterName, v.typeName, v.assemblyName))),
                 new AnyWhereConfigurationAdapterFactory(
                     new AnyWhereConfigurationAdapterFactoryTypeLoader(
                         new AnyWhereConfigurationAdapterAssemblyLocator(adapterGlobalConfigurationEnvironment))));

@@ -32,6 +32,10 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
                 foreach (var path in paths)
                 {
+                    if (!Path.IsPathRooted(path))
+                    {
+                        yield return Path.GetFullPath(path);
+                    }
                     yield return path;
                 }
             }

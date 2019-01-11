@@ -30,12 +30,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 throw new ArgumentNullException(nameof(adapterArg.AdapterAssemblyName));
             }
 
-            var assemblyPath = this.assemblyLocator.FindAssembly(adapterArg.AdapterAssemblyName);
-            if (assemblyPath != null)
+            var assemblyLoadContext = new AnyWhereConfigurationAdapterAssemblyLoadContext(this.assemblyLocator);
+            var assemblyName = new AssemblyName(adapterArg.AdapterAssemblyName);
+
+            try
             {
-                var type =
-                    Assembly.LoadFrom(assemblyPath)
-                       .GetType(adapterArg.AdapterTypeName);
+                var assembly = assemblyLoadContext.LoadFromAssemblyName(assemblyName);
+                var type = assembly.GetType(adapterArg.AdapterTypeName, true);
 
                 if (!typeof(IAnyWhereConfigurationAdapter).IsAssignableFrom(type))
                 {
@@ -45,17 +46,19 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
                 return type;
             }
-
-            var sb = new StringBuilder()
-               .AppendFormat("The assembly: '{0}' isn't found in any of probing paths:", adapterArg.AdapterAssemblyName)
-               .AppendLine();
-
-            foreach (var probingPath in this.assemblyLocator.GetProbingPaths())
+            catch (FileNotFoundException e)
             {
-                sb.AppendLine("- ").Append(probingPath);
-            }
+                var sb = new StringBuilder()
+                   .AppendFormat("The assembly: '{0}' isn't found in any of probing paths:", adapterArg.AdapterAssemblyName)
+                   .AppendLine();
 
-            throw new TypeLoadException(sb.ToString());
+                foreach (var probingPath in this.assemblyLocator.GetProbingPaths())
+                {
+                    sb.AppendLine("- ").Append(probingPath);
+                }
+
+                throw new FileNotFoundException(sb.ToString(), e.FileName, e);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
@@ -17,8 +18,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         public IAnyWhereConfigurationAdapter Create(
             AnyWhereConfigurationAdapterArgument adapterArg)
         {
-            var type = this.typeLoader.Load(adapterArg);
-            return (IAnyWhereConfigurationAdapter) Activator.CreateInstance(type);
+            return (IAnyWhereConfigurationAdapter) Activator.CreateInstance(this.typeLoader.Load(adapterArg));
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere;
+using CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,7 +47,9 @@ namespace Code
                .ConfigureAppConfiguration(
                     config =>
                     {
-                        config.AddAnyWhereConfiguration();
+                        config
+                           .AddAnyWhereConfigurationAdapterList()
+                           .AddAnyWhereConfiguration();
                     })
                .ConfigureServices(
                     services =>

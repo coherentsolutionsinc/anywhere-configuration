@@ -7,7 +7,12 @@
 
   <ItemGroup>
     <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere" Version="1.0.2" />
+    <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="_adapters\EnvironmentVariables\" />
   </ItemGroup>
 
 </Project>

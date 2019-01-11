@@ -4,7 +4,23 @@ This sample demonstrates a minimalistic console application that consumes config
 
 ## What is inside?
 
-**Code.csproj**
+**run-from-json.cmd**
+
+The command file that configures environment variables to use _Json_ configuration adapter from `Code/_adapters/Json` with configuration from `Code/_configs/config.json`.
+
+The successfull command execution results in the: 
+
+> secret-value = This secret value is obtained from the JSON
+
+**run-from-key-per-file.cmd**
+
+The command file that configures environment variables to use _KeyPerFile_ configuration adapter from `Code/_adapters/KeyPerFile` with configuration from `Code/_configs/config` directory.
+
+The successfull command execution results in the: 
+
+> secret-value = This secret value is obtained from the KEY-PER-FILE
+
+**Code/Code.csproj**
 
 The minimalistic project with only entry point configuration.
 
@@ -33,8 +49,28 @@ new HostBuilder()
 
 **Visual Studio**
 
-TODO
+The following steps will configure the project to use _Json_ configuration adapter from `Code/_adapters/Json` with configuration from `Code/_configs/config.json`.
+
+1. Open `/Code/Properties/launchSettings.json` and uncomment the following lines:
+
+    ``` json
+    "workingDirectory": "<path>/anywhere-configuration/samples",
+    "environmentVariables": {
+      "ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH": "different-config-sources/Code/_adapters/Json",
+      "ANYWHERE_ADAPTER_0_TYPE_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter",
+      "ANYWHERE_ADAPTER_0_ASSEMBLY_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.Json",
+      "ANYWHERE_ADAPTER_0_PATH": "different-config-sources/Code/_configs/config.json"
+    //}
+    ```
+
+2. Replace _\<path\>_ with the absolute path to `anywhere-configuration/samples` directory.
+3. Launch the project in debug mode using F5.
 
 ## Conclusion
 
-TODO
+For more information please check [wiki][1] and explore the source code! 
+
+If you have a suggestion or found an issue please consider [reporting it][2].
+
+[1]: https://github.com/coherentsolutionsinc/anywhere-configuration/wiki
+[2]: https://github.com/coherentsolutionsinc/anywhere-configuration/issues

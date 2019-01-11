@@ -183,13 +183,13 @@ The environment variables are configured as following:
 
 ### Adapters
 
-There are set of configuration adapters already available as [nuget](https://www.nuget.org/profiles/coherentsolutions) packages and [binaries]():
+There are set of configuration adapters already available as [nuget](https://www.nuget.org/profiles/coherentsolutions) packages and [binaries](https://github.com/coherentsolutionsinc/anywhere-configuration/releases):
 
 * Json
 * EnvironmentVariables
 * KeyPerFile
 
-The usage of available adapters can be significantely simplified when using [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList]() nuget package:
+The usage of available adapters can be significantely simplified when using [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList) nuget package:
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)

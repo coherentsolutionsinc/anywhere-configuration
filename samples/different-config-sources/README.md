@@ -20,6 +20,16 @@ The successfull command execution results in the:
 
 > secret-value = This secret value is obtained from the KEY-PER-FILE
 
+**run-from-environment.cmd**
+
+The command file that configures environment variables to use _EnvironmentVariables_ configuration adapter from `Code/_adapters/EnvironmentVariables` with configuration from environment variables prefixed with _SECRET_.
+
+The successfull command execution results in the: 
+
+> _VALUE = This secret value is obtained from the ENVIRONMENT VARIABLES
+
+The **by-name** command files have the same purpose as described above but use well known adapters shorthands.
+
 **Code/Code.csproj**
 
 The minimalistic project with only entry point configuration.

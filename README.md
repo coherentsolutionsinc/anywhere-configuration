@@ -1,6 +1,8 @@
 # CoherentSolutions.Extensions.Configuration.AnyWhere
 
-[![nuget package](https://img.shields.io/badge/nuget-1.0.2-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)
+| Engine | Adapters List |
+|:---:|:---:|
+|[![nuget package](https://img.shields.io/badge/nuget-1.0.2-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)|[![nuget package](https://img.shields.io/badge/nuget-1.0.0-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList/)
 
 ## About the project
 
@@ -183,11 +185,36 @@ The environment variables are configured as following:
 
 ### Adapters
 
-There are set of configuration adapters already available as **nuget** packages and **binaries**:
+There are set of configuration adapters already available as [nuget](https://www.nuget.org/profiles/coherentsolutions) packages and [binaries]():
 
-* Json ([nuget](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.Json/), [binaries]())
-* EnvironmentVariables ([nuget](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables/), [binaries]())
-* KeyPerFile ([nuget](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile/), [binaries]())
+* Json
+* EnvironmentVariables
+* KeyPerFile
+
+The usage of available adapters can be significantely simplified when using [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList]() nuget package:
+
+``` csharp
+WebHost.CreateDefaultBuilder(args)
+  .UseStartup<Startup>()
+  .ConfigureAppConfiguration(
+    config =>
+    {
+      config
+        .AddAnyWhereConfigurationAdapterList()
+        .AddAnyWhereConfiguration();
+    })
+  .Build()
+  .Run();
+```
+
+Please note that `AddAnyWhereConfigurationAdapterList` **must** be called **before** `AddAnyWhereConfiguration` to take effect.
+
+Now when well known adapter list is added we can configure adapters from the list using **NAME** environment variable. Now the **Json** adapter can be configured using the following environment variables:
+
+* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
+* ANYWHERE_ADAPTER_0_NAME=Json
+* ANYWHERE_ADAPTER_0_PATH=/configuration/secrets.json
+* ANYWHERE_ADAPTER_0_OPTIONAL=false
 
 ### Conclusion
 

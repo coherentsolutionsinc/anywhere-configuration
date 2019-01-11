@@ -1,15 +1,18 @@
 # CoherentSolutions.Extensions.Configuration.AnyWhere
 
+[![nuget package](https://img.shields.io/badge/nuget-1.0.2-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)
 
 ## About the project
 
-**CoherentSolutions.Extensions.Configuration.AnyWhere** is the extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration) that allows application to setup it's own configuration engine that is configured using environment variables. This moves the responsibility of configuration management from the application code to the environment configuration.
+**CoherentSolutions.Extensions.Configuration.AnyWhere** is the extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration) that allows application to setup to setup it's configuration sources using environment variables and external adapters. 
 
 ### How it works?
 
 The **CoherentSolutions.Extensions.Configuration.AnyWhere** consists from two parts - configuration engine and configuration adapters. 
 
-The engine is initialized using `AddAnyWhereConfiguration` extention method:
+Engine dynamically locates and loads configuration based on the configuration from environment variables. Adapter in turn is the interface used to plugin the configuration from different source.
+
+The engine is installed as nuget package to the application and is initialized using `AddAnyWhereConfiguration` extention method (this is the extension method for `IConfigurationBuilder`):
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)
@@ -34,11 +37,9 @@ public interface IAnyWhereConfigurationSourceAdapter
 }
 ```
 
-Adapter implementation typically (but not mandatory) located in a separate assembly. 
+Adapter implementation is typically (but not mandatory) located in a separate assembly. 
 
-The purpose of the adapter is to initialize and add additional `IConfigurationSource` to `IConfigurationBuilder`. Adapter is picked up by the engine using the information stored in environment variables. 
-
-All engine recognizable environment variables can be divided into two categories: **GLOBAL** and **ADAPTER**.
+What adapters to used and what parameters they have are described using environment variables. All engine recognizable environment variables can be divided into two categories: **GLOBAL** and **ADAPTER**.
 
 **GLOBAL** variables are consumed by the infrastructure as a whole and have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}** where :
 
@@ -58,7 +59,7 @@ The engine defines the following **GLOBAL** variables:
 
 > When configuring multiple adapters the indexes should be sequential i.e. 0, 1, 2, ..., N. Any gap between indexes is threated as end of adapters list and the rest of adapters is ignored.
 
-Adapter is identified and loaded using values of three variables:
+Adapter is identified and loaded using values of two variables:
 
 * **TYPE_NAME (required)** - the full name of the adapters type i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter`.
 * **ASSEMBLY_NAME (required)** - the name of the assembly where type is located i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile`.
@@ -82,7 +83,7 @@ WebHost.CreateDefaultBuilder(args)
   .Run();
 ```
 
-The application is packed into container should be deployable into local development environment and staging Kubernetes cluster. 
+The application is packed into the container and should be deployable into local development environment and staging Kubernetes cluster. 
 * When deployed to development application consumes secrets from the protected `.json` file.
 * When deployed to staging application consumes secrets from  Azure Key Vault (ASK).
 
@@ -91,8 +92,8 @@ The application is packed into container should be deployable into local develop
 Here is the example adapter implementation for consuming `.json` configuration:
 
 ``` csharp
-// The code is taken from CoherentSolutions.Extensions.Configuration.AnyWhere.json.dll
-// The project has reference to CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions
+// The code is taken from CoherentSolutions.Extensions.Configuration.AnyWhere.Json.dll
+// The project has reference to CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions package
 // The project has reference to Microsoft.Extensions.Configuration.Json package
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
@@ -113,6 +114,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
         throw new ArgumentNullException(nameof(environmentReader));
       }
 
+      // Adding Json configuration source and reading parameters from the environment
       configurationBuilder.AddJsonFile(
         environmentReader.GetString("PATH"),
         environmentReader.GetBool("OPTIONAL", optional: true),
@@ -122,8 +124,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
 }
 ```
 
-\* The **Json** adapter is already implemented and can be downloaded [here].
-
 The environment variables are configured as following:
 
 * ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
@@ -132,17 +132,17 @@ The environment variables are configured as following:
 * ANYWHERE_ADAPTER_0_PATH=/configuration/secrets.json
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 
-> The adapter .dlls should be placed in /adapters directory prior to engine execution.
+> The adapter .dlls should be placed in /adapters directory prior to application execution.
 
 #### Consuming configuration in staging
 
-The Kubernetes can be integrated with AKS using the [flex-volume](https://github.com/Azure/kubernetes-keyvault-flexvol) in a way that all required secrets will be downloaded to this volume in _key-per-file_ format.
+The Kubernetes can be integrated with AKS using the [flex-volume](https://github.com/Azure/kubernetes-keyvault-flexvol) in a way that all required secrets will be downloaded to kuberneters volume in _key-per-file_ format (let's imagine that volume is matched to **/configuration**).
 
 The adapter implementation is the following:
 
 ``` csharp
 // The code is taken from CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.dll
-// The project has reference to CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions
+// The project has reference to CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions package
 // The project has reference to Microsoft.Extensions.Configuration.KeyPerFile package
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
@@ -171,8 +171,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
 }
 ```
 
-\* The **KeyPerFile** adapter is already implemented and can be downloaded [here].
-
 The environment variables are configured as following:
 
 * ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
@@ -181,7 +179,15 @@ The environment variables are configured as following:
 * ANYWHERE_ADAPTER_0_DIRECTORY_PATH=/configuration
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 
-> The adapter .dlls should be placed in /adapters directory prior to engine execution.
+> The adapter .dlls should be placed in /adapters directory prior to application execution.
+
+### Adapters
+
+There are set of configuration adapters already available as **nuget** packages and **binaries**:
+
+* Json ([nuget](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.Json/), [binaries]())
+* EnvironmentVariables ([nuget](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables/), [binaries]())
+* KeyPerFile ([nuget](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile/), [binaries]())
 
 ### Conclusion
 

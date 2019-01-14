@@ -1,6 +1,6 @@
 # Different Configuration Sources
 
-This sample demonstrates a minimalistic console application that consumes configuration from `.json` configuration file or from directory using `key-per-file` approach.
+This sample demonstrates a minimal console application that consumes configuration from `.json` configuration file or from directory using `key-per-file` approach.
 
 ## What is inside?
 

@@ -6,27 +6,24 @@
 
 ## About the project
 
-**CoherentSolutions.Extensions.Configuration.AnyWhere** is the extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration) that allows application to setup it's configuration sources using environment variables. 
+**CoherentSolutions.Extensions.Configuration.AnyWhere** is an extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration). This extension allows application to configure it's configuration sources using environment variables. 
 
 ### How it works?
 
-The **CoherentSolutions.Extensions.Configuration.AnyWhere** consists from two parts - configuration engine and configuration adapters. 
+The **CoherentSolutions.Extensions.Configuration.AnyWhere** is made of two parts: _configuration engine_ and _configuration adapter_.
 
-**Configuration Engine** is configured once in the application source code as additional configuration source using `AddAnyWhereConfiguration` method. After registration configuration engine is responsible for reading required values from environment variables and load of all requested configuration sources.
+**Configuration engine** is configured once in the application code as additional configuration source ([IConfigurationSource](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.configuration.iconfigurationsource?view=aspnetcore-2.2)) using `AddAnyWhereConfiguration` method. After registration configuration engine is responsible for reading required values from environment variables and load all of the requested configuration sources.
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)
-  .UseStartup<Startup>()
   .ConfigureAppConfiguration(
     config =>
     {
       config.AddAnyWhereConfiguration();
     })
-  .Build()
-  .Run();
 ```
 
-**Configuration Adapter** is a "bridge" between configuration engine and configuration source. In code configuration adapter is represented by `IAnyWhereConfigurationAdapter` interface:
+**Configuration adapter** is a "bridge" between configuration engine and configuration source. In code configuration adapter is represented by `IAnyWhereConfigurationAdapter` interface:
 
 ``` csharp
 public interface IAnyWhereConfigurationAdapter
@@ -37,34 +34,39 @@ public interface IAnyWhereConfigurationAdapter
 }
 ```
 
-> Configuration adapter implementation is typically (but not mandatory) located in a separate assembly. 
+> Usually but not mandatory configuration adapter is implemented in the separate assembly.
 
-What configuration adapters are used and what parameters they have are described using environment variables. All configuration engine recognizable environment variables can be divided into two categories: **GLOBAL** and **LOCAL**.
+Coupling between configuration engine and configuration adapters is done using special environment variables. All variables can be divided into two categories: **GLOBAL** and **LOCAL**.
 
-**GLOBAL** variables are consumed by configuration engine. They have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}** where:
+**GLOBAL** variables are consumed only by configuration engine. They have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}**:
 
-* **ANYWHERE_ADAPTER_GLOBAL** is a predefined prefix.
-* **\{VARIABLE_NAME\}** is a name of the actual variable.
+* **ANYWHERE_ADAPTER_GLOBAL** - is a predefined prefix.
+* **\{VARIABLE_NAME\}** - is a name of the variable.
 
-The engine defines the following **GLOBAL** variables:
-* **PROBING_PATH** - the list of paths to search for an adapter assembly i.e. `/configuration-adapters` (the default is _current directory_).
+Currently configuration engine supports the following **GLOBAL** variables:
+
+* **PROBING_PATH** - is the list of paths (separated by [Path.PathSeparator](https://docs.microsoft.com/en-us/dotnet/api/system.io.path.pathseparator?view=netstandard-2.0)) to search for an adapter assembly (by default only _current directory_ is scanned).
 
 > It should be noted that current directory is always scanned during assemblies lookup.
 
-**LOCAL** variables are consumed by both configuration engine and configuration adapter. They have the following format: **ANYWHERE_ADAPTER_\{INDEX\}_\{VARIABLE_NAME\}** where:
+**LOCAL** variables are consumed by both configuration engine and configuration adapters. They have the following format:   **ANYWHERE_ADAPTER\_\{INDEX\}\_\{VARIABLE_NAME\}**:
 
-* **ANYWHERE_ADAPTER** is a predefined prefix, only variables with this prefix are scanned by the engine.
-* **\{INDEX\}** is a zero based index of the adapter being configured.
-* **\{VARIABLE_NAME\}** is a name of the actual variable.
+* **ANYWHERE_ADAPTER** - is a predefined prefix.
+* **\{INDEX\}** - is a zero based index of the adapter being configured.
+* **\{VARIABLE_NAME\}** - is a name of the variable.
 
-> When configuring multiple configuration adapters the indexes should be sequential i.e. 0, 1, 2, ..., N. Any gap between indexes is threated as end of adapters list and the rest of configuration is ignored.
+> When configuring configuration adapters it is critically to understand that configuration adapter's indexes should be sequential and start from 0.
+> 
+> Any space / a gap between indexes is treated as end of list and the rest of configuration is ignored.
+> 
+> Configuration engine identifies configuration adapter using two environment variables:
 
-Configuration engine identifies configuration adapter using two environment variables:
+Configuration adapter is identified and loaded by configuration engine using two variables:
 
-* **TYPE_NAME (required)** - the full type name of the configuration adapters type i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter`.
-* **ASSEMBLY_NAME (required)** - the name of the assembly where type is located i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile`.
+* **TYPE_NAME** - is the full type name of the configuration adapter's type.
+* **ASSEMBLY_NAME** - is the name of the assembly file where configuration adapter type is implemented.
 
-All additional parameters required by the underlying `IConfigurationSource` are passed using the same mechanism and can be consumed using provided `IAnyWhereConfigurationEnvironmentReader`.
+All additional parameters required by the underlying `IConfigurationSource` are passed using the **LOCAL** variables and can be consumed using supplied instance of `IAnyWhereConfigurationEnvironmentReader`.
 
 ### Where it can be used?
 

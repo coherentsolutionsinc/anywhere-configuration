@@ -70,7 +70,7 @@ The following steps will configure the project to use _Json_ configuration adapt
       "ANYWHERE_ADAPTER_0_TYPE_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter",
       "ANYWHERE_ADAPTER_0_ASSEMBLY_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.Json",
       "ANYWHERE_ADAPTER_0_PATH": "different-config-sources/Code/_configs/config.json"
-    //}
+    }
     ```
 
 2. Replace _\<path\>_ with the absolute path to `anywhere-configuration/samples` directory.

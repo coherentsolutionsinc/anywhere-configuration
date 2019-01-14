@@ -29,7 +29,7 @@ WebHost.CreateDefaultBuilder(args)
 The adapter is represented by the implementation of `IAnyWhereConfigurationSourceAdapter` interface:
 
 ``` csharp
-public interface IAnyWhereConfigurationSourceAdapter
+public interface IAnyWhereConfigurationAdapter
 {
   void ConfigureAppConfiguration(
     IConfigurationBuilder configurationBuilder,

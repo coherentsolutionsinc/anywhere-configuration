@@ -63,7 +63,7 @@ The following steps will configure the project to use _Json_ configuration adapt
 
 1. Open `/Code/Properties/launchSettings.json` and uncomment the following lines:
 
-    ``` json
+    ``` javascript
     "workingDirectory": "<path>/anywhere-configuration/samples",
     "environmentVariables": {
       "ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH": "different-config-sources/Code/_adapters/Json",

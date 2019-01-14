@@ -10,9 +10,9 @@
 
 ### How it works?
 
-The **CoherentSolutions.Extensions.Configuration.AnyWhere** consists from two parts - configuration engine and configuration adapters. Engine dynamically locates and loads configuration based on the configuration from environment variables. Adapter in turn is the interface used to plugin the configuration from different source.
+The **CoherentSolutions.Extensions.Configuration.AnyWhere** consists from two parts - configuration engine and configuration adapters. 
 
-The engine is installed as nuget package to the application and is initialized using `AddAnyWhereConfiguration` extention method (this is the extension method for `IConfigurationBuilder`):
+**Configuration Engine** is configured once in the application source code as additional configuration source using `AddAnyWhereConfiguration` method. After registration configuration engine is responsible for reading required values from environment variables and load of all requested configuration sources.
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)
@@ -26,7 +26,7 @@ WebHost.CreateDefaultBuilder(args)
   .Run();
 ```
 
-The adapter is represented by the implementation of `IAnyWhereConfigurationSourceAdapter` interface:
+**Configuration Adapter** is a "bridge" between configuration engine and configuration source. In code configuration adapter is represented by `IAnyWhereConfigurationAdapter` interface:
 
 ``` csharp
 public interface IAnyWhereConfigurationAdapter
@@ -37,13 +37,13 @@ public interface IAnyWhereConfigurationAdapter
 }
 ```
 
-Adapter implementation is typically (but not mandatory) located in a separate assembly. 
+> Configuration adapter implementation is typically (but not mandatory) located in a separate assembly. 
 
-What adapters to used and what parameters they have are described using environment variables. All engine recognizable environment variables can be divided into two categories: **GLOBAL** and **ADAPTER**.
+What configuration adapters are used and what parameters they have are described using environment variables. All configuration engine recognizable environment variables can be divided into two categories: **GLOBAL** and **LOCAL**.
 
-**GLOBAL** variables are consumed by the infrastructure as a whole and have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}** where :
+**GLOBAL** variables are consumed by configuration engine. They have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}** where:
 
-* **ANYWHERE_ADAPTER_GLOBAL** is a predefined prefix, only variables with this prefix are scanned by the engine.
+* **ANYWHERE_ADAPTER_GLOBAL** is a predefined prefix.
 * **\{VARIABLE_NAME\}** is a name of the actual variable.
 
 The engine defines the following **GLOBAL** variables:
@@ -51,17 +51,17 @@ The engine defines the following **GLOBAL** variables:
 
 > It should be noted that current directory is always scanned during assemblies lookup.
 
-**ADAPTER** variables are consumed by the concrete adapter and have the following format: **ANYWHERE_ADAPTER_\{INDEX\}_\{VARIABLE_NAME\}** where:
+**LOCAL** variables are consumed by both configuration engine and configuration adapter. They have the following format: **ANYWHERE_ADAPTER_\{INDEX\}_\{VARIABLE_NAME\}** where:
 
 * **ANYWHERE_ADAPTER** is a predefined prefix, only variables with this prefix are scanned by the engine.
 * **\{INDEX\}** is a zero based index of the adapter being configured.
 * **\{VARIABLE_NAME\}** is a name of the actual variable.
 
-> When configuring multiple adapters the indexes should be sequential i.e. 0, 1, 2, ..., N. Any gap between indexes is threated as end of adapters list and the rest of adapters is ignored.
+> When configuring multiple configuration adapters the indexes should be sequential i.e. 0, 1, 2, ..., N. Any gap between indexes is threated as end of adapters list and the rest of configuration is ignored.
 
-Adapter is identified and loaded using values of two variables:
+Configuration engine identifies configuration adapter using two environment variables:
 
-* **TYPE_NAME (required)** - the full name of the adapters type i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter`.
+* **TYPE_NAME (required)** - the full type name of the configuration adapters type i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter`.
 * **ASSEMBLY_NAME (required)** - the name of the assembly where type is located i.e. `CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile`.
 
 All additional parameters required by the underlying `IConfigurationSource` are passed using the same mechanism and can be consumed using provided `IAnyWhereConfigurationEnvironmentReader`.
@@ -89,7 +89,7 @@ The application is packed into the container and should be deployable into local
 
 #### Consuming configuration in development
 
-Here is the example adapter implementation for consuming `.json` configuration:
+Here is the example configuration adapter implementation for consuming `.json` configuration:
 
 ``` csharp
 // The code is taken from CoherentSolutions.Extensions.Configuration.AnyWhere.Json.dll
@@ -132,13 +132,13 @@ The environment variables are configured as following:
 * ANYWHERE_ADAPTER_0_PATH=/configuration/secrets.json
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 
-> The adapter .dlls should be placed in /adapters directory prior to application execution.
+> The configuration adapter .dlls should be placed in /adapters directory prior to application execution.
 
 #### Consuming configuration in staging
 
 The Kubernetes can be integrated with AKS using the [flex-volume](https://github.com/Azure/kubernetes-keyvault-flexvol) in a way that all required secrets will be downloaded to kuberneters volume in _key-per-file_ format (let's imagine that volume is matched to **/configuration**).
 
-The adapter implementation is the following:
+The configuration adapter implementation is the following:
 
 ``` csharp
 // The code is taken from CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.dll
@@ -179,7 +179,7 @@ The environment variables are configured as following:
 * ANYWHERE_ADAPTER_0_DIRECTORY_PATH=/configuration
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 
-> The adapter .dlls should be placed in /adapters directory prior to application execution.
+> The configuration adapter .dlls should be placed in /adapters directory prior to application execution.
 
 ### Adapters
 
@@ -189,7 +189,7 @@ There are set of configuration adapters already available as [nuget](https://www
 * EnvironmentVariables
 * KeyPerFile
 
-The usage of available adapters can be significantely simplified when using [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList) nuget package:
+The usage of available configuration adapters can be significantely simplified when using [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList) nuget package:
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)
@@ -207,7 +207,7 @@ WebHost.CreateDefaultBuilder(args)
 
 Please note that `AddAnyWhereConfigurationAdapterList` **must** be called **before** `AddAnyWhereConfiguration` to take effect.
 
-Now when well known adapter list is added we can configure adapters from the list using **NAME** environment variable. Now the **Json** adapter can be configured using the following environment variables:
+Now when well known adapter list is added we can configure configuration adapters from the list using **NAME** environment variable. For example the **Json** configuration adapter can be configured using the following environment variables:
 
 * ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
 * ANYWHERE_ADAPTER_0_NAME=Json

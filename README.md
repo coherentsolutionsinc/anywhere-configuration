@@ -70,14 +70,53 @@ All additional parameters required by the underlying `IConfigurationSource` are 
 
 ### Where it can be used?
 
-Imagine a simple application with the entry point configured as following:
-``` csharp
-// The project has reference to CoherentSolutions.Extensions.Configuration.AnyWhere
+Imagine a simplest ASP.NET Core application where entry point is configured as following:
 
+``` csharp
 WebHost.CreateDefaultBuilder(args)
   .UseStartup<Startup>()
+  .Build()
+  .Run();
+```
+
+Application is build into container and deployed into local _development environment_ and _staging Kubernetes cluster hosted using Azure Kubernetes Services_.
+
+In _development environment_ application consumes secrets from shared `.json` configuration file (because everyone trust everyone).
+
+In contrary to _development environment_ in _staging environment_ application secrets are consumed from Azure Key Vault (because no on trust staging).
+
+So the full code snippet is:
+
+``` csharp
+WebHost.CreateDefaultBuilder(args)   
+  .UseStartup&lt;Startup>()
   .ConfigureAppConfiguration(
-    config =>
+     (ctx,config) =>
+     {
+       if (ctx.HostingEnvironment.IsDevelopment())
+       {
+         // Load values from shared .json configuration file
+       }
+       if (ctx.HostingEnvironment.IsStaging())
+       {
+         // Load values from Azure Key Vault
+       }
+     })
+  .Build()
+  .Run();
+```
+
+While this works it requires from the developers to modify startup code each time something is changed. More flexibility can be achieved when using **CoherentSolutions.Extensions.Configuration.AnyWhere**.
+
+#### Updating application code
+
+Using **CoherentSolutions.Extensions.Configuration.AnyWhere** required application entry point to be updated:
+
+``` csharp
+WebHost.CreateDefaultBuilder(args)   
+  .UseStartup<Startup>()
+  .ConfigureAppConfiguration(
+    (ctx,config) =>
     {
       config.AddAnyWhereConfiguration();
     })
@@ -85,9 +124,7 @@ WebHost.CreateDefaultBuilder(args)
   .Run();
 ```
 
-The application is packed into the container and should be deployable into local development environment and staging Kubernetes cluster. 
-* When deployed to development application consumes secrets from the protected `.json` file.
-* When deployed to staging application consumes secrets from  Azure Key Vault (ASK).
+> It is important to understand you can use **CoherentSolutions.Extensions.Configuration.AnyWhere** in combination with other configuration sources.
 
 #### Consuming configuration in development
 

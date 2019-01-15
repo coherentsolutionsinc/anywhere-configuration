@@ -12,7 +12,7 @@
 
 The **CoherentSolutions.Extensions.Configuration.AnyWhere** is made of two parts: _configuration engine_ and _configuration adapter_.
 
-**Configuration engine** is configured once in the application code as additional configuration source ([IConfigurationSource](https://docs.microsoft.com/en-us/dotnet/api/microsoft.extensions.configuration.iconfigurationsource?view=aspnetcore-2.2)) using `AddAnyWhereConfiguration` method. After registration configuration engine is responsible for reading required values from environment variables and load all of the requested configuration sources.
+**Configuration engine** is configured once in the application code using `AddAnyWhereConfiguration` method. The configuration engine then is responsible for reading required values from environment variables and load all of the requested configuration sources.
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)

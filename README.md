@@ -239,7 +239,7 @@ There are set of well known configuration adapters:
 * EnvironmentVariables - package and binary.
 * KeyPerFile - package and binary.
 
-All these configuration adapters make use of **Microsoft.Extensions.Configuration.*** packages to create the configuration source translate parameters from environment variables to configuration source parameters.
+All these configuration adapters make use of **Microsoft.Extensions.Configuration.*** packages to create the configuration source. The implementation mostly translates parameters from environment variables to configuration source parameters.
 
 These configuration adapters available in form of packages and binaries:
 

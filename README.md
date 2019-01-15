@@ -23,7 +23,7 @@ WebHost.CreateDefaultBuilder(args)
     })
 ```
 
-**Configuration adapter** is a "bridge" between configuration engine and configuration source. In code configuration adapter is represented by `IAnyWhereConfigurationAdapter` interface:
+**Configuration adapter** is a "bridge" between configuration engine and configuration source. It is represented by `IAnyWhereConfigurationAdapter` interface:
 
 ``` csharp
 public interface IAnyWhereConfigurationAdapter
@@ -36,9 +36,9 @@ public interface IAnyWhereConfigurationAdapter
 
 > Usually but not mandatory configuration adapter is implemented in the separate assembly.
 
-Coupling between configuration engine and configuration adapters is done using special environment variables. All variables can be divided into two categories: **GLOBAL** and **LOCAL**.
+Coupling between configuration engine and configuration adapters is done using special environment variables. All variables can be divided into **GLOBAL** and **LOCAL**.
 
-**GLOBAL** variables are consumed only by configuration engine. They have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}**:
+**GLOBAL** variables are consumed by configuration engine. They have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}**:
 
 * **ANYWHERE_ADAPTER_GLOBAL** - is a predefined prefix.
 * **\{VARIABLE_NAME\}** - is a name of the variable.
@@ -70,7 +70,7 @@ All additional parameters required by the underlying `IConfigurationSource` are 
 
 ### Where it can be used?
 
-Imagine a simplest ASP.NET Core application where entry point is configured as following:
+Imagine a simplest ASP.NET Core application with entry point configured as following:
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)
@@ -79,17 +79,17 @@ WebHost.CreateDefaultBuilder(args)
   .Run();
 ```
 
-Application is build into container and deployed into local _development environment_ and _staging Kubernetes cluster hosted using Azure Kubernetes Services_.
+Application is build into container and deployed to _development environment_ (developers machine) and _staging_ (Kubernetes cluster in Azure).
 
-In _development environment_ application consumes secrets from shared `.json` configuration file (because everyone trust everyone).
+In _development environment_ application consumes secrets from shared `.json` configuration file (friendly environment).
 
-In contrary to _development environment_ in _staging environment_ application secrets are consumed from Azure Key Vault (because no on trust staging).
+In contrary to _development environment_ in _staging environment_ application secrets are consumed from Azure Key Vault (hostile environment).
 
 So the full code snippet is:
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)   
-  .UseStartup&lt;Startup>()
+  .UseStartup<Startup>()
   .ConfigureAppConfiguration(
      (ctx,config) =>
      {
@@ -106,29 +106,36 @@ WebHost.CreateDefaultBuilder(args)
   .Run();
 ```
 
-While this works it requires from the developers to modify startup code each time something is changed. More flexibility can be achieved when using **CoherentSolutions.Extensions.Configuration.AnyWhere**.
+This works (and there is nothing bad in this approach). The downside of this is a requirement to modify startup code each time something is changed - new environment added, some critical parameters are changed etc.
 
-#### Updating application code
+A bit more flexibility can be achieved by using **CoherentSolutions.Extensions.Configuration.AnyWhere**.
 
-Using **CoherentSolutions.Extensions.Configuration.AnyWhere** required application entry point to be updated:
+#### Updating application
 
-``` csharp
-WebHost.CreateDefaultBuilder(args)   
-  .UseStartup<Startup>()
-  .ConfigureAppConfiguration(
-    (ctx,config) =>
-    {
-      config.AddAnyWhereConfiguration();
-    })
-  .Build()
-  .Run();
-```
-
-> It is important to understand you can use **CoherentSolutions.Extensions.Configuration.AnyWhere** in combination with other configuration sources.
+1. Add reference to <a href="https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/">CoherentSolutions.Extensions.Configuration.AnyWhere</a> nuget package.
+2. Update application entry point:
+  ``` csharp
+  WebHost.CreateDefaultBuilder(args)   
+    .UseStartup<Startup>()
+    .ConfigureAppConfiguration(
+      (ctx,config) =>
+      {
+        config.AddAnyWhereConfiguration();
+      })
+    .Build()
+    .Run();
+  ```
+  > You **can** use **CoherentSolutions.Extensions.Configuration.AnyWhere** in combination with other configuration sources.
 
 #### Consuming configuration in development
 
-Here is the example configuration adapter implementation for consuming `.json` configuration:
+The configuration for `.json` format is already implemented ([Microsoft.Extensions.Configuration.Json](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.Json/)) so all we need to do is to make it available for configuration engine.
+
+> **NOTE**
+>
+> The configuration adapter for `json` configuration is already implemented and available as [package](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.Json/) or [binaries](https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.Json-2.1.0.zip). 
+
+Here is the code for the `.json` configuration adapter:
 
 ``` csharp
 // The code is taken from CoherentSolutions.Extensions.Configuration.AnyWhere.Json.dll
@@ -165,19 +172,25 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
 
 The environment variables are configured as following:
 
-* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
+* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=\<assembly location\>
 * ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter
 * ANYWHERE_ADAPTER_0_ASSEMBLY_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json
-* ANYWHERE_ADAPTER_0_PATH=/configuration/secrets.json
+* ANYWHERE_ADAPTER_0_PATH=\<configuration file location\>
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 
-> The configuration adapter .dlls should be placed in /adapters directory prior to application execution.
+The configuration adapter assembly should be placed either in _current directory_ or it's directory should be specified in **PROBING_PATH** variable (**GLOBAL** scope).
 
 #### Consuming configuration in staging
 
-The Kubernetes can be integrated with AKS using the [flex-volume](https://github.com/Azure/kubernetes-keyvault-flexvol) in a way that all required secrets will be downloaded to kuberneters volume in _key-per-file_ format (let's imagine that volume is matched to **/configuration**).
+The Kubernetes can be integrated with Azure Key Vault using [kubernetes-keyvault-flexvol](https://github.com/Azure/kubernetes-keyvault-flexvol) project. This way all requested secrets are downloaded to Kubernetes volume in `key-per-file` format.
 
-The configuration adapter implementation is the following:
+The configuration for `key-per-file` format is already implemented ([Microsoft.Extensions.Configuration.KeyPerFile](https://www.nuget.org/packages/Microsoft.Extensions.Configuration.KeyPerFile/)) so all we need to do is to make it available for configuration engine.
+
+> **NOTE**
+>
+> The configuration adapter for `key-per-file` configuration is already implemented and available as [package](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile/) or [binaries](https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile-2.1.0.zip). 
+
+Here is the code for the `key-per-file` configuration adapter:
 
 ``` csharp
 // The code is taken from CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.dll
@@ -212,23 +225,44 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
 
 The environment variables are configured as following:
 
-* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
+* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=\<assembly location\>
 * ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter
 * ANYWHERE_ADAPTER_0_ASSEMBLY_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
-* ANYWHERE_ADAPTER_0_DIRECTORY_PATH=/configuration
+* ANYWHERE_ADAPTER_0_DIRECTORY_PATH=\<volume mapping location\>
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 
-> The configuration adapter .dlls should be placed in /adapters directory prior to application execution.
+### Well-known configuration adapters
 
-### Adapters
+There are set of well known configuration adapters:
 
-There are set of configuration adapters already available as [nuget](https://www.nuget.org/profiles/coherentsolutions) packages and [binaries](https://github.com/coherentsolutionsinc/anywhere-configuration/releases):
+* Json - package and binary.
+* EnvironmentVariables - package and binary.
+* KeyPerFile - package and binary.
 
-* Json
-* EnvironmentVariables
-* KeyPerFile
+All these configuration adapters make use of **Microsoft.Extensions.Configuration.*** packages to create the configuration source translate parameters from environment variables to configuration source parameters.
 
-The usage of available configuration adapters can be significantely simplified when using [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList) nuget package:
+These configuration adapters available in form of packages and binaries:
+
+| Name | Package | Binary |
+|:-----|:-------:|:------:|
+| Json | [![package][100]][101] | [![binary][102]][103] |
+| EnvironmentVariables | [![package][104]][105] | [![binary][106]][107] |
+| KeyPerFile | [![package][108]][109] | [![binary][110]][111] |
+
+[100]: https://img.shields.io/badge/nuget-2.1.0-blue.svg
+[101]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.Json/
+[102]: https://img.shields.io/badge/binary-2.1.0-brightgreen.svg
+[103]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.Json-2.1.0.zip
+[104]: https://img.shields.io/badge/nuget-2.1.0-blue.svg
+[105]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables/
+[106]: https://img.shields.io/badge/binary-2.1.0-brightgreen.svg
+[107]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables-2.1.0.zip
+[108]: https://img.shields.io/badge/nuget-2.1.0-blue.svg
+[109]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile/
+[110]: https://img.shields.io/badge/binary-2.1.0-brightgreen.svg
+[111]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile-2.1.0.zip
+
+Well known configuration adapters are defined in [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList) package and configured using `AddAnyWhereConfigurationAdapterList` method:
 
 ``` csharp
 WebHost.CreateDefaultBuilder(args)
@@ -244,13 +278,13 @@ WebHost.CreateDefaultBuilder(args)
   .Run();
 ```
 
-Please note that `AddAnyWhereConfigurationAdapterList` **must** be called **before** `AddAnyWhereConfiguration` to take effect.
+> `AddAnyWhereConfigurationAdapterList` **must** be called **before** `AddAnyWhereConfiguration`.
 
-Now when well known adapter list is added we can configure configuration adapters from the list using **NAME** environment variable. For example the **Json** configuration adapter can be configured using the following environment variables:
+This well-known configuration adapters can be configured in the simplified fashion. Instead of using **TYPE_NAME** and **ASSEMBLY_NAME** variables you can simply use **NAME** variable:
 
-* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=/adapters
+* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=\<assembly location\>
 * ANYWHERE_ADAPTER_0_NAME=Json
-* ANYWHERE_ADAPTER_0_PATH=/configuration/secrets.json
+* ANYWHERE_ADAPTER_0_PATH=\<configuration location\>
 * ANYWHERE_ADAPTER_0_OPTIONAL=false
 
 ### Conclusion

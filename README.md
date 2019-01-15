@@ -280,7 +280,7 @@ WebHost.CreateDefaultBuilder(args)
 
 > `AddAnyWhereConfigurationAdapterList` **must** be called **before** `AddAnyWhereConfiguration`.
 
-This well-known configuration adapters can be configured in the simplified fashion. Instead of using **TYPE_NAME** and **ASSEMBLY_NAME** variables you can simply use **NAME** variable:
+These well-known configuration adapters can be configured in the simplified fashion. Instead of using **TYPE_NAME** and **ASSEMBLY_NAME** variables you can simply use **NAME** variable:
 
 * ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=\<assembly location\>
 * ANYWHERE_ADAPTER_0_NAME=Json

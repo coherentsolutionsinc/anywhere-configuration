@@ -1,6 +1,6 @@
 # Different Configuration Sources
 
-This sample demonstrates a minimalistic console application that consumes configuration from `.json` configuration file or from directory using `key-per-file` approach.
+This sample demonstrates a minimal console application that consumes configuration from `.json` configuration file or from directory using `key-per-file` approach.
 
 ## What is inside?
 
@@ -63,14 +63,14 @@ The following steps will configure the project to use _Json_ configuration adapt
 
 1. Open `/Code/Properties/launchSettings.json` and uncomment the following lines:
 
-    ``` json
+    ``` javascript
     "workingDirectory": "<path>/anywhere-configuration/samples",
     "environmentVariables": {
       "ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH": "different-config-sources/Code/_adapters/Json",
       "ANYWHERE_ADAPTER_0_TYPE_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter",
       "ANYWHERE_ADAPTER_0_ASSEMBLY_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.Json",
       "ANYWHERE_ADAPTER_0_PATH": "different-config-sources/Code/_configs/config.json"
-    //}
+    }
     ```
 
 2. Replace _\<path\>_ with the absolute path to `anywhere-configuration/samples` directory.

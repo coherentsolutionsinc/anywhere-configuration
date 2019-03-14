@@ -1,30 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Authors>Coherent Solutions, Inc</Authors>
-    <Company>Coherent Solutions, Inc</Company>
-    <Copyright>2019 Coherent Solutions, Inc</Copyright>
-    <PackageLicenseUrl>https://opensource.org/licenses/MS-PL</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
-    <RepositoryType>Git</RepositoryType>
-    <PackageTags>configuration, anywhere, adapter, azure, keyvault</PackageTags>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
-    <Description>This package represents Configuration.AzureKeyVault adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/AzureKeyVault-Adapter for details.</Description>
-    <Version>2.1.0</Version>
-    <LangVersion>7.2</LangVersion>
-    <PackageId>CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault</PackageId>
-    <AssemblyName>CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault</AssemblyName>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Authors>Coherent Solutions, Inc</Authors>
+        <Company>Coherent Solutions, Inc</Company>
+        <Copyright>2019 Coherent Solutions, Inc</Copyright>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <PackageTags>configuration, anywhere, adapter, azure, keyvault</PackageTags>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
+        <Description>This package represents Configuration.AzureKeyVault adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/AzureKeyVault-Adapter for details.</Description>
+        <Version>2.1.1</Version>
+        <LangVersion>7.2</LangVersion>
+        <PackageId>CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault</PackageId>
+        <AssemblyName>CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault</AssemblyName>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.0" />
-    <PackageReference Include="Polly" Version="7.0.3" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.0" />
+        <PackageReference Include="Polly" Version="7.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="" />
+    </ItemGroup>
 
 </Project>

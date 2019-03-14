@@ -7,7 +7,7 @@
         <Version>1.0.3</Version>
         <Authors>Coherent Solutions, Inc</Authors>
         <Copyright>2019 Coherent Solutions, Inc</Copyright>
-        <PackageLicenseUrl>https://opensource.org/licenses/MS-PL</PackageLicenseUrl>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
         <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
@@ -21,6 +21,10 @@
         <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.0" />
         <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="" />
     </ItemGroup>
 
 </Project>

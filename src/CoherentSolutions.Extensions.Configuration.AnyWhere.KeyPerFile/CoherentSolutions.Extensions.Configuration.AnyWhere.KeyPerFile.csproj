@@ -1,26 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>2.1.0</Version>
-    <Authors>Coherent Solutions, Inc</Authors>
-    <Copyright>2019 Coherent Solutions, Inc</Copyright>
-    <PackageLicenseUrl>https://opensource.org/licenses/MS-PL</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
-    <RepositoryType>Git</RepositoryType>
-    <PackageTags>configuration, anywhere, adapter, keyperfile</PackageTags>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <Description>This package represents Configuration.KeyPerFile adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/KeyPerFile-Adapter for details.</Description>
-    <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
-    <LangVersion>7.2</LangVersion>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Version>2.1.1</Version>
+        <Authors>Coherent Solutions, Inc</Authors>
+        <Copyright>2019 Coherent Solutions, Inc</Copyright>
+        <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <PackageTags>configuration, anywhere, adapter, keyperfile</PackageTags>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <Description>This package represents Configuration.KeyPerFile adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/KeyPerFile-Adapter for details.</Description>
+        <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
+        <LangVersion>7.2</LangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.KeyPerFile" Version="2.1.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.KeyPerFile" Version="2.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\LICENSE.md" Pack="true" PackagePath="" />
+    </ItemGroup>
 
 </Project>

@@ -53,7 +53,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                .AppendFormat("Cannot load adapter type '{0}' from assembly '{1}'.", typeName, assemblyPath)
                .AppendLine();
 
-            if (arguments == null || arguments.Count == 0)
+            if (arguments is null || arguments.Count == 0)
             {
                 return stringBuilder.ToString();
             }

@@ -15,6 +15,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <Description>This package represents Configuration.KeyPerFile adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/KeyPerFile-Adapter for details.</Description>
     <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -19,11 +19,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             string defaultValue = null,
             bool optional = false)
         {
-            return this.Environment.GetValue(
-                name,
-                s => (s, true),
-                defaultValue,
-                optional);
+            return this.Environment.GetValue(name, null, defaultValue, optional);
         }
 
         public bool GetBool(
@@ -31,15 +27,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             bool defaultValue = false,
             bool optional = false)
         {
-            return this.Environment.GetValue(
-                name,
-                s =>
-                {
-                    var converted = bool.TryParse(s, out var value);
-                    return (value, converted);
-                },
-                defaultValue,
-                optional);
+            return this.Environment.GetValue(name, ConvertBool, defaultValue, optional);
         }
 
         public int GetInt(
@@ -47,15 +35,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             int defaultValue = 0,
             bool optional = false)
         {
-            return this.Environment.GetValue(
-                name,
-                s =>
-                {
-                    var converted = int.TryParse(s, out var value);
-                    return (value, converted);
-                },
-                defaultValue,
-                optional);
+            return this.Environment.GetValue(name, ConvertInt, defaultValue, optional);
         }
 
         public long GetLong(
@@ -63,15 +43,28 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             long defaultValue = 0,
             bool optional = false)
         {
-            return this.Environment.GetValue(
-                name,
-                s =>
-                {
-                    var converted = long.TryParse(s, out var value);
-                    return (value, converted);
-                },
-                defaultValue,
-                optional);
+            return this.Environment.GetValue(name, ConvertLong, defaultValue, optional);
+        }
+
+        private static (bool value, bool converted) ConvertBool(
+            string s)
+        {
+            var converted = bool.TryParse(s, out var value);
+            return (value, converted);
+        }
+
+        private static (int value, bool converted) ConvertInt(
+            string s)
+        {
+            var converted = int.TryParse(s, out var value);
+            return (value, converted);
+        }
+
+        private static (long value, bool converted) ConvertLong(
+            string s)
+        {
+            var converted = long.TryParse(s, out var value);
+            return (value, converted);
         }
     }
 }

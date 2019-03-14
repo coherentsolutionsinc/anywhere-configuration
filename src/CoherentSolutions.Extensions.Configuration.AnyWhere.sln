@@ -24,6 +24,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherentSolutions.Extension
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables", "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables\CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables.csproj", "{13024772-38EA-4615-8C7B-B6B48A739B0B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault", "CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault\CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault.csproj", "{D90C7FBF-BE78-4AE9-B434-A4AA72458275}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,12 @@ Global
 		{13024772-38EA-4615-8C7B-B6B48A739B0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13024772-38EA-4615-8C7B-B6B48A739B0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{13024772-38EA-4615-8C7B-B6B48A739B0B}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

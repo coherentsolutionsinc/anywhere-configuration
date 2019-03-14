@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
@@ -52,7 +51,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         public T GetValue<T>(
             string name,
             Func<string, (T value, bool converted)> convertFunc,
-            T defaultValue = default(T),
+            T defaultValue = default,
             bool optional = false)
         {
             if (string.IsNullOrWhiteSpace(name))
@@ -70,7 +69,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 }
             }
 
-            if (value == null)
+            if (value is null)
             {
                 if (!optional)
                 {
@@ -80,20 +79,30 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 return defaultValue;
             }
 
-            var result = convertFunc(value);
-            if (!result.converted)
+            if (convertFunc is null)
             {
-                throw new InvalidCastException($"The '{name}' values '{value}' cannot be converted to {nameof(T)}.");
+                if (value is T v)
+                {
+                    return v;
+                }
+
+                throw new InvalidCastException($"The '{name}' value '{value}' cannot be converted to {nameof(T)}.");
             }
 
-            return result.value;
+            var (result, converted) = convertFunc(value);
+            if (!converted)
+            {
+                throw new InvalidCastException($"The '{name}' value '{value}' cannot be converted to {nameof(T)}.");
+            }
+
+            return result;
         }
 
         public IEnumerable<KeyValuePair<string, string>> GetValues()
         {
             var set = new HashSet<string>();
 
-            foreach (var storage in this.storages.Reverse())
+            foreach (var storage in this.storages)
             {
                 foreach (var kv in storage.GetValues())
                 {

@@ -19,7 +19,10 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList
                     "CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile"),
                 ("EnvironmentVariables",
                     "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables.AnyWhereEnvironmentVariablesConfigurationSourceAdapter",
-                    "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables")
+                    "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables"),
+                ("AzureKeyVault",
+                    "CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault.AnyWhereAzureKeyVaultConfigurationSourceAdapter",
+                    "CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault")
             };
 
             return configurationBuilder;

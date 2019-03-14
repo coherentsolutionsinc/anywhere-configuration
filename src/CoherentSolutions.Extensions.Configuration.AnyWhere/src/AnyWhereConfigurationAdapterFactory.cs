@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 

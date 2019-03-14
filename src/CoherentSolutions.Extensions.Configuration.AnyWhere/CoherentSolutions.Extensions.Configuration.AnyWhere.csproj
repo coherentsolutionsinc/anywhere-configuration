@@ -1,25 +1,26 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <Version>1.0.2</Version>
-    <Authors>Coherent Solutions, Inc</Authors>
-    <Copyright>2019 Coherent Solutions, Inc</Copyright>
-    <PackageLicenseUrl>https://opensource.org/licenses/MS-PL</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
-    <RepositoryType>Git</RepositoryType>
-    <PackageTags>configuration, anywhere</PackageTags>
-    <Description>This project is an extension to Microsoft.Extensions.Configuration that allows application to setup it's configuration sources using environment variables and external adapters.</Description>
-    <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <Version>1.0.3</Version>
+        <Authors>Coherent Solutions, Inc</Authors>
+        <Copyright>2019 Coherent Solutions, Inc</Copyright>
+        <PackageLicenseUrl>https://opensource.org/licenses/MS-PL</PackageLicenseUrl>
+        <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
+        <RepositoryType>Git</RepositoryType>
+        <PackageTags>configuration, anywhere</PackageTags>
+        <Description>This project is an extension to Microsoft.Extensions.Configuration that allows application to setup it's configuration sources using environment variables and external adapters.</Description>
+        <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
+        <LangVersion>7.2</LangVersion>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.0" />
-    <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.0.0" />
+        <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
+    </ItemGroup>
 
 </Project>

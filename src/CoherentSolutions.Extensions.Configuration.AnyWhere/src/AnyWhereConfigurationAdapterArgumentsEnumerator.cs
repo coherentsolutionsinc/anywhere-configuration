@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
@@ -63,8 +62,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     this.environment,
                     this.index.ToString()));
 
-            string adapterTypeName = null;
-            string adapterAssemblyName = null;
+            string adapterTypeName;
+            string adapterAssemblyName;
 
             var adapterName = adapterEnvironmentReader.GetString(ANYWHERE_ADAPTER_NAME_PARAMETER_NAME, optional: true);
             if (adapterName != null)
@@ -82,9 +81,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 adapterTypeName = adapterEnvironmentReader.GetString(ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME, optional: true);
                 adapterAssemblyName = adapterEnvironmentReader.GetString(ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME, optional: true);
 
-                if (adapterTypeName == null && adapterAssemblyName == null)
+                if (adapterTypeName is null && adapterAssemblyName is null)
                 {
-                    this.current = default(AnyWhereConfigurationAdapterArgument);
+                    this.current = default;
                     this.completed = true;
                     return false;
                 }

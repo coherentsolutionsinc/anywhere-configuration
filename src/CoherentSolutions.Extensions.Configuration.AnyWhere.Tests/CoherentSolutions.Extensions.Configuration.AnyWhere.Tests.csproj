@@ -18,6 +18,8 @@
     <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
 
     <RepositoryType>Git</RepositoryType>
+
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,6 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault\CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault.csproj" />
     <ProjectReference Include="..\CoherentSolutions.Extensions.Configuration.AnyWhere\CoherentSolutions.Extensions.Configuration.AnyWhere.csproj" />
   </ItemGroup>
 

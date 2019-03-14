@@ -30,7 +30,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                         It.IsAny<bool>()))
                .Returns(
                     string.Join(
-                        Path.PathSeparator, 
+                        Path.PathSeparator,
                         Path.GetDirectoryName(Assembly.GetExecutingAssembly().GetAssemblyLocation()),
                         Path.GetDirectoryName(assembly)));
 

@@ -11,17 +11,20 @@
     <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
     <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageTags>configuration, anywhere, adapter, environment variables</PackageTags>
+    <PackageTags>configuration, anywhere, adapter, azure, keyvault</PackageTags>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PackageReleaseNotes>Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/version-history for details.</PackageReleaseNotes>
-    <Description>This package represents Configuration.EnvironmentVariables adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/EnvironmentVariables-Adapter for details.</Description>
+    <Description>This package represents Configuration.AzureKeyVault adapter for AnyWhere configuration engine. Please visit https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/AzureKeyVault-Adapter for details.</Description>
     <Version>2.1.0</Version>
     <LangVersion>7.2</LangVersion>
+    <PackageId>CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault</PackageId>
+    <AssemblyName>CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="2.1.0" />
+    <PackageReference Include="Polly" Version="7.0.3" />
   </ItemGroup>
 
 </Project>

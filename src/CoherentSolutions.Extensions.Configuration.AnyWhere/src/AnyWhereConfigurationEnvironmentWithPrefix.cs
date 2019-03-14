@@ -28,7 +28,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         public T GetValue<T>(
             string name,
             Func<string, (T value, bool converted)> convertFunc,
-            T defaultValue = default(T),
+            T defaultValue = default,
             bool optional = false)
         {
             return this.environment.GetValue($"{this.prefix}_{name}", convertFunc, defaultValue, optional);
@@ -36,7 +36,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         public IEnumerable<KeyValuePair<string, string>> GetValues()
         {
-            return this.environment.GetValues().Where(kv => kv.Key.StartsWith($"{this.prefix}_"));
+            var length = this.prefix.Length + 1;
+            return this.environment
+               .GetValues()
+               .Where(
+                    kv =>
+                    {
+                        var value = kv.Key;
+                        return value.Length > length
+                         && value[this.prefix.Length] == '_'
+                         && value.StartsWith(this.prefix, StringComparison.Ordinal);
+                    });
         }
     }
 }

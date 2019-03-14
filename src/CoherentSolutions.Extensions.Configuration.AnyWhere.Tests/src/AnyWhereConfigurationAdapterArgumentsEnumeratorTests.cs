@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 

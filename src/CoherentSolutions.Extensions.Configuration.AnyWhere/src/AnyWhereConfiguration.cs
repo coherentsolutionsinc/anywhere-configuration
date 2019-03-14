@@ -26,12 +26,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             IConfigurationBuilder configurationBuilder,
             IAnyWhereConfigurationEnvironment environment)
         {
-            if (configurationBuilder == null)
+            if (configurationBuilder is null)
             {
                 throw new ArgumentNullException(nameof(configurationBuilder));
             }
 
-            if (environment == null)
+            if (environment is null)
             {
                 throw new ArgumentNullException(nameof(environment));
             }

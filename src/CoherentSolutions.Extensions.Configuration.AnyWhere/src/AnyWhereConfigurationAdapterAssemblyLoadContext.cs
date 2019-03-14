@@ -20,19 +20,19 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             try
             {
                 // We always prefer assemblies from the default context over the adapter assembly dependency.
-                return AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
+                return Default.LoadFromAssemblyName(assemblyName);
             }
             catch
             {
-                // There is no 'try' overload for assembly loading no assembly can be loaded then we need
+                // There is no 'try' overload for assembly loading, if assembly cannot be loaded then we need
                 // to use **assemblyLocator**
                 var candidateAssemblyPath = this.assemblyLocator.FindAssembly(assemblyName.Name);
-                if (candidateAssemblyPath == null)
+                if (candidateAssemblyPath is null)
                 {
                     return null;
                 }
 
-                var candidateAssemblyName = AssemblyLoadContext.GetAssemblyName(candidateAssemblyPath);
+                var candidateAssemblyName = GetAssemblyName(candidateAssemblyPath);
                 if (!AssemblyName.ReferenceMatchesDefinition(assemblyName, candidateAssemblyName))
                 {
                     return null;

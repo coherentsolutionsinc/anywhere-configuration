@@ -19,7 +19,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             var adapterList = Enumerable.Empty<(string adapterName, string typeName, string assemblyName)>();
             if (configurationBuilder.Properties.TryGetValue(ANYWHERE_ADAPTER_LIST_PROPERTY, out var propertyValue))
             {
-                adapterList = (IEnumerable<(string adapterName, string typeName, string assemblyPath)>)propertyValue;
+                adapterList = (IEnumerable<(string adapterName, string typeName, string assemblyPath)>) propertyValue;
             }
 
             var environment = new AnyWhereConfigurationEnvironment();
@@ -29,7 +29,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     environment,
                     ANYWHERE_ADAPTER_PARAMETER_PREFIX);
 
-            var adapterGlobalConfigurationEnvironment = 
+            var adapterGlobalConfigurationEnvironment =
                 new AnyWhereConfigurationEnvironmentWithPrefix(
                     environment,
                     ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX);

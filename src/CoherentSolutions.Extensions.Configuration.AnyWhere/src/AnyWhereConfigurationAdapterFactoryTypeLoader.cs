@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
@@ -54,10 +55,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
                 foreach (var probingPath in this.assemblyLocator.GetProbingPaths())
                 {
-                    sb.AppendLine("- ").Append(probingPath);
+                    sb.Append("- ").AppendLine(probingPath);
                 }
 
-                throw new FileNotFoundException(sb.ToString(), e.FileName, e);
+                throw new FileNotFoundException(
+                    sb.ToString(),
+                    e.FileName,
+                    ExceptionDispatchInfo.Capture(e).SourceException);
             }
         }
     }

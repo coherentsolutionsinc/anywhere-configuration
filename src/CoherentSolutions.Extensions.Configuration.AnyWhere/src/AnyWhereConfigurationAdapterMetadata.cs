@@ -2,7 +2,7 @@
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereConfigurationAdapterMetadata
+    public struct AnyWhereConfigurationAdapterMetadata
     {
         public string Name { get; }
 

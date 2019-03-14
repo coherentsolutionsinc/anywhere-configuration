@@ -36,11 +36,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     {
                         yield return Path.GetFullPath(path);
                     }
+
                     yield return path;
                 }
             }
 
-            if (environment == null)
+            if (environment is null)
             {
                 throw new ArgumentNullException(nameof(environment));
             }

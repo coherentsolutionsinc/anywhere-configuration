@@ -303,7 +303,7 @@ This project is owned and maintained by [Coherent Solutions][4].
 
 ## License
 
-This project is licensed under the MS-PL License - see the [LICENSE.md][5] for details.
+This project is licensed under the MIT License - see the [LICENSE.md][5] for details.
 
 [3]:  CONTRIBUTING.md "Contributing"
 [4]:  https://www.coherentsolutions.com/ "Coherent Solutions Inc."

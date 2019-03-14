@@ -4,6 +4,8 @@
 |:---:|:---:|:---:|
 |![build & test](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiMnNkK0VHRHprQWNmdHQwU0hVMU1DYXBFSnZ0WHhUcUxPcjZmemhOWkM5cXRqZXBidnpFRnJnalRnWHdTTzVkQXgzUUJFZUtqNTR3ZlpnMjd2K2NUa0RjPSIsIml2UGFyYW1ldGVyU3BlYyI6InVOcGYxcGxtYlRBazZCR2EiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)|[![nuget package](https://img.shields.io/badge/nuget-1.0.2-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)|[![nuget package](https://img.shields.io/badge/nuget-1.0.0-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList/)
 
+_For list of available configuration adapters please see [the list](https://github.com/coherentsolutionsinc/anywhere-configuration/blob/master/README.md#well-known-configuration-adapters)_
+
 ## About the project
 
 **CoherentSolutions.Extensions.Configuration.AnyWhere** is an extension to [Microsoft.Extensions.Configuration](https://www.nuget.org/packages/Microsoft.Extensions.Configuration). This extension allows application to configure it's configuration sources using environment variables. 

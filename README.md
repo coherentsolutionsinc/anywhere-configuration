@@ -2,7 +2,7 @@
 
 | Build & Tests | Engine | Adapters List |
 |:---:|:---:|:---:|
-|![build & test](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiMnNkK0VHRHprQWNmdHQwU0hVMU1DYXBFSnZ0WHhUcUxPcjZmemhOWkM5cXRqZXBidnpFRnJnalRnWHdTTzVkQXgzUUJFZUtqNTR3ZlpnMjd2K2NUa0RjPSIsIml2UGFyYW1ldGVyU3BlYyI6InVOcGYxcGxtYlRBazZCR2EiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)|[![nuget package](https://img.shields.io/badge/nuget-1.0.2-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)|[![nuget package](https://img.shields.io/badge/nuget-1.0.0-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList/)
+|![build & test](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiMnNkK0VHRHprQWNmdHQwU0hVMU1DYXBFSnZ0WHhUcUxPcjZmemhOWkM5cXRqZXBidnpFRnJnalRnWHdTTzVkQXgzUUJFZUtqNTR3ZlpnMjd2K2NUa0RjPSIsIml2UGFyYW1ldGVyU3BlYyI6InVOcGYxcGxtYlRBazZCR2EiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)|[![nuget package](https://img.shields.io/badge/nuget-1.0.3-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)|[![nuget package](https://img.shields.io/badge/nuget-1.1.1-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList/)
 
 _For list of available configuration adapters please see [the list](https://github.com/coherentsolutionsinc/anywhere-configuration/blob/master/README.md#well-known-configuration-adapters)_
 
@@ -135,7 +135,7 @@ The configuration for `.json` format is already implemented ([Microsoft.Extensio
 
 > **NOTE**
 >
-> The configuration adapter for `json` configuration is already implemented and available as [package](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.Json/) or [binaries](https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.Json-2.1.0.zip). 
+> The configuration adapter for `json` configuration is already implemented and available as [package](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.Json/) or [binaries](https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.3/CoherentSolutions.Extensions.Configuration.AnyWhere.Json-2.1.1.zip). 
 
 Here is the code for the `.json` configuration adapter:
 
@@ -190,7 +190,7 @@ The configuration for `key-per-file` format is already implemented ([Microsoft.E
 
 > **NOTE**
 >
-> The configuration adapter for `key-per-file` configuration is already implemented and available as [package](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile/) or [binaries](https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile-2.1.0.zip). 
+> The configuration adapter for `key-per-file` configuration is already implemented and available as [package](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile/) or [binaries](https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.3/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile-2.1.1.zip). 
 
 Here is the code for the `key-per-file` configuration adapter:
 
@@ -237,11 +237,14 @@ The environment variables are configured as following:
 
 There are set of well known configuration adapters:
 
-* Json - package and binary.
-* EnvironmentVariables - package and binary.
-* KeyPerFile - package and binary.
+* [Json](https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/Json-Adapter)
+* [EnvironmentVariables](https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/EnvironmentVariables-Adapter)
+* [KeyPerFile](https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/KeyPerFile-Adapter)
+* [AzureKeyVault](https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/AzureKeyVault-Adapter)
 
-All these configuration adapters make use of **Microsoft.Extensions.Configuration.*** packages to create the configuration source. The implementation mostly translates parameters from environment variables to configuration source parameters.
+The `Json`, `EnvironmentVariables` and `KeyPerFile` configuration adapters make use of corresponding **Microsoft.Extensions.Configuration.*** packages to create the configuration source. The implementation translates parameters from environment variables to configuration source parameters.
+
+The `AzureKeyVault` configuration adapter implements workflow for obtaining Secrets from Azure Key Vault in managed identity scenarios.
 
 These configuration adapters available in form of packages and binaries:
 
@@ -250,19 +253,24 @@ These configuration adapters available in form of packages and binaries:
 | Json | [![package][100]][101] | [![binary][102]][103] |
 | EnvironmentVariables | [![package][104]][105] | [![binary][106]][107] |
 | KeyPerFile | [![package][108]][109] | [![binary][110]][111] |
+| AzureKeyVault | [![package][112]][113] | [![binary][114]][115] |
 
-[100]: https://img.shields.io/badge/nuget-2.1.0-blue.svg
+[100]: https://img.shields.io/badge/nuget-2.1.1-blue.svg
 [101]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.Json/
-[102]: https://img.shields.io/badge/binary-2.1.0-brightgreen.svg
-[103]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.Json-2.1.0.zip
-[104]: https://img.shields.io/badge/nuget-2.1.0-blue.svg
+[102]: https://img.shields.io/badge/binary-2.1.1-brightgreen.svg
+[103]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.3/CoherentSolutions.Extensions.Configuration.AnyWhere.Json-2.1.1.zip
+[104]: https://img.shields.io/badge/nuget-2.1.1-blue.svg
 [105]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables/
-[106]: https://img.shields.io/badge/binary-2.1.0-brightgreen.svg
-[107]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables-2.1.0.zip
-[108]: https://img.shields.io/badge/nuget-2.1.0-blue.svg
+[106]: https://img.shields.io/badge/binary-2.1.1-brightgreen.svg
+[107]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.3/CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables-2.1.1.zip
+[108]: https://img.shields.io/badge/nuget-2.1.1-blue.svg
 [109]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile/
-[110]: https://img.shields.io/badge/binary-2.1.0-brightgreen.svg
-[111]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.2/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile-2.1.0.zip
+[110]: https://img.shields.io/badge/binary-2.1.1-brightgreen.svg
+[111]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.3/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile-2.1.1.zip
+[112]: https://img.shields.io/badge/nuget-2.1.1-blue.svg
+[113]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault/
+[114]: https://img.shields.io/badge/binary-2.1.1-brightgreen.svg
+[115]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.3/CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault-2.1.1.zip
 
 Well known configuration adapters are defined in [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList) package and configured using `AddAnyWhereConfigurationAdapterList` method:
 
@@ -280,6 +288,8 @@ WebHost.CreateDefaultBuilder(args)
   .Run();
 ```
 
+> **NOTE**
+>
 > `AddAnyWhereConfigurationAdapterList` **must** be called **before** `AddAnyWhereConfiguration`.
 
 These well-known configuration adapters can be configured in the simplified fashion. Instead of using **TYPE_NAME** and **ASSEMBLY_NAME** variables you can simply use **NAME** variable:
@@ -305,6 +315,11 @@ This project is owned and maintained by [Coherent Solutions][4].
 
 This project is licensed under the MIT License - see the [LICENSE.md][5] for details.
 
+## Third-Party Notice
+
+The `AzureKeyVault` configuration adapter uses [Polly][6] for request-retry strategy implementation.
+
 [3]:  CONTRIBUTING.md "Contributing"
 [4]:  https://www.coherentsolutions.com/ "Coherent Solutions Inc."
 [5]:  LICENSE.md "License"
+[6]:  https://github.com/App-vNext/Polly "Polly"

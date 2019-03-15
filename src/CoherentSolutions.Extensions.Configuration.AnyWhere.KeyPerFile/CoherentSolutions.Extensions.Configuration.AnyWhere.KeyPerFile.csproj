@@ -6,6 +6,7 @@
         <Version>2.1.1</Version>
         <Authors>Coherent Solutions, Inc</Authors>
         <Copyright>2019 Coherent Solutions, Inc</Copyright>
+        <PackageIconUrl>https://github.com/coherentsolutionsinc/anywhere-configuration/blob/master/favicon.png?raw=true</PackageIconUrl>
         <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
@@ -19,7 +20,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.1" />
+        <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions" Version="1.0.2" />
         <PackageReference Include="Microsoft.Extensions.Configuration.KeyPerFile" Version="2.1.0" />
     </ItemGroup>
 

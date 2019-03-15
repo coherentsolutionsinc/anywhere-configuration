@@ -7,6 +7,7 @@
         <Authors>Coherent Solutions, Inc</Authors>
         <Copyright>2019 Coherent Solutions, Inc</Copyright>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageIconUrl>https://github.com/coherentsolutionsinc/anywhere-configuration/blob/master/favicon.png?raw=true</PackageIconUrl>
         <PackageProjectUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</PackageProjectUrl>
         <RepositoryUrl>https://github.com/coherentsolutionsinc/anywhere-configuration</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>

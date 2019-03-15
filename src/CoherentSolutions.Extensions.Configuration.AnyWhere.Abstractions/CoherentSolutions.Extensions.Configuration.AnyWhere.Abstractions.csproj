@@ -5,6 +5,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Version>1.0.2</Version>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+        <PackageIconUrl>https://github.com/coherentsolutionsinc/anywhere-configuration/blob/master/favicon.png?raw=true</PackageIconUrl>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <Copyright>2019 Coherent Solutions, Inc</Copyright>
         <Authors>Coherent Solutions, Inc</Authors>

@@ -160,9 +160,15 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
                 foreach (var secret in new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerable(secretsString.AsSpan()))
                 {
                     var name = secret.Name;
+                    var alias = secret.Alias;
                     var version = secret.Version;
 
-                    values[name] = client.GetSecretAsync(vaultBaseUri, name, version, CancellationToken.None)
+                    if (string.IsNullOrEmpty(alias))
+                    {
+                        alias = name;
+                    }
+
+                    values[alias] = client.GetSecretAsync(vaultBaseUri, name, version, CancellationToken.None)
                        .GetAwaiter()
                        .GetResult()
                        .Value;

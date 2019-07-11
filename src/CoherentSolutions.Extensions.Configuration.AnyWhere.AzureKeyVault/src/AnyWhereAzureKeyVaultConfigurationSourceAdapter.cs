@@ -10,18 +10,17 @@ using System.Web;
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Clients.ActiveDirectory;
 
 using Newtonsoft.Json.Linq;
-
-using Polly;
-using Polly.Retry;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
 {
     public class AnyWhereAzureKeyVaultConfigurationSourceAdapter : IAnyWhereConfigurationAdapter
     {
-        private sealed class KeyVault
+        private static class KeyVault
         {
             private sealed class Connection
             {
@@ -32,8 +31,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
                 private const string ERROR_DESCRIPTION = "error_description";
 
                 private readonly HttpClient http;
-
-                private readonly AsyncRetryPolicy<string> policy;
 
                 private string accessToken;
 
@@ -47,10 +44,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
                     string apiVersion)
                 {
                     this.http = http ?? throw new ArgumentNullException(nameof(http));
-
-                    this.policy = Policy<string>
-                       .Handle<HttpRequestException>()
-                       .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
 
                     this.ApiEndpoint = apiEndpoint ?? throw new ArgumentNullException(nameof(apiEndpoint));
                     this.ApiVersion = apiVersion ?? throw new ArgumentNullException(nameof(apiVersion));
@@ -70,41 +63,34 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
                       + $"?api-version={this.ApiVersion}"
                       + $"&resource={HttpUtility.UrlEncode(resource)}";
 
-                    var result = await this.policy.ExecuteAndCaptureAsync(
-                        async () =>
-                        {
-                            var response = await this.http.GetAsync(uri);
-                            if (response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == (HttpStatusCode) 429 /* Too many requests */)
-                            {
-                                throw new HttpRequestException($"The AIMS returned '{response.StatusCode}' status code, retrying if possible.");
-                            }
+                    var response = await this.http.GetAsync(uri);
+                    if (response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == (HttpStatusCode) 429 /* Too many requests */)
+                    {
+                        throw new HttpRequestException($"The AIMS returned '{response.StatusCode}' status code, retrying if possible.");
+                    }
 
-                            var content = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync();
 
-                            JObject resultObject;
-                            try
-                            {
-                                resultObject = JObject.Parse(content);
-                            }
-                            catch (Exception e)
-                            {
-                                throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterException(
-                                    "Invalid JSON response received from AIMS",
-                                    ExceptionDispatchInfo.Capture(e).SourceException);
-                            }
+                    JObject resultObject;
+                    try
+                    {
+                        resultObject = JObject.Parse(content);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterException(
+                            "Invalid JSON response received from AIMS",
+                            ExceptionDispatchInfo.Capture(e).SourceException);
+                    }
 
-                            if (response.StatusCode == HttpStatusCode.OK)
-                            {
-                                return resultObject[ACCESS_TOKEN].Value<string>();
-                            }
+                    if (response.StatusCode != HttpStatusCode.OK)
+                    {
+                        throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterException(
+                            $"The AIMS returned '{response.StatusCode}' status code with the following error: "
+                          + $"'{resultObject[ERROR_IDENTIFIER].Value<string>()}'/'{resultObject[ERROR_DESCRIPTION].Value<string>()}'");
+                    }
 
-                            throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterException(
-                                $"The AIMS returned '{response.StatusCode}' status code with the following error: "
-                              + $"'{resultObject[ERROR_IDENTIFIER].Value<string>()}'/'{resultObject[ERROR_DESCRIPTION].Value<string>()}'");
-                        });
-
-                    this.accessToken = result.Result;
-
+                    this.accessToken = resultObject[ACCESS_TOKEN].Value<string>();
                     return this.accessToken;
                 }
             }
@@ -113,7 +99,23 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
 
             private const string AIMS_VERSION = "2018-10-01";
 
-            public static KeyVaultClient GetClient()
+            public static KeyVaultClient CreateClientUsingServicePrinciple(
+                string clientId,
+                string clientSecret)
+            {
+                return new KeyVaultClient(
+                    async (
+                        authority,
+                        resource,
+                        scope) =>
+                    {
+                        var authenticationContext = new AuthenticationContext(authority);
+                        var credentials = new ClientCredential(clientId, clientSecret);
+                        return (await authenticationContext.AcquireTokenAsync(resource, credentials)).AccessToken;
+                    });
+            }
+
+            public static KeyVaultClient CreateClientUsingManagedIdentity()
             {
                 var http = new HttpClient
                 {
@@ -149,13 +151,18 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
             var vaultBaseUri = environmentReader.GetString("VAULT");
             var secretsString = environmentReader.GetString("SECRETS");
 
+            var clientId = environmentReader.GetString("CLIENT_ID", optional: true);
+            var clientSecret = environmentReader.GetString("CLIENT_SECRET", optional: true);
+
             if (string.IsNullOrWhiteSpace(secretsString))
             {
                 return;
             }
 
             var values = new Dictionary<string, string>();
-            using (var client = KeyVault.GetClient())
+            using (var client = string.IsNullOrWhiteSpace(clientId) || string.IsNullOrWhiteSpace(clientSecret)
+                ? KeyVault.CreateClientUsingManagedIdentity()
+                : KeyVault.CreateClientUsingServicePrinciple(clientId, clientSecret))
             {
                 foreach (var secret in new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerable(secretsString.AsSpan()))
                 {

@@ -5,15 +5,13 @@ using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereConfigurationAdapterArguments : IAnyWhereConfigurationAdapterArguments
+    public struct AnyWhereConfigurationAdapterArgumentEnumerable
     {
         private readonly IAnyWhereConfigurationEnvironment environment;
 
         private readonly IReadOnlyDictionary<string, AnyWhereConfigurationAdapterDefinition> knownAdapters;
 
-        public IAnyWhereConfigurationEnvironment Environment => this.environment;
-
-        public AnyWhereConfigurationAdapterArguments(
+        public AnyWhereConfigurationAdapterArgumentEnumerable(
             IAnyWhereConfigurationEnvironment environment,
             IReadOnlyDictionary<string, AnyWhereConfigurationAdapterDefinition> knownAdapters)
         {
@@ -21,12 +19,11 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             this.knownAdapters = knownAdapters ?? throw new ArgumentNullException(nameof(knownAdapters));
         }
 
-        public IEnumerable<AnyWhereConfigurationAdapterArgument> Enumerate()
+        public AnyWhereConfigurationAdapterArgumentEnumerator GetEnumerator()
         {
-            foreach (var arg in new AnyWhereConfigurationAdapterArgumentEnumerable(this.environment, this.knownAdapters))
-            {
-                yield return arg;
-            }
+            return new AnyWhereConfigurationAdapterArgumentEnumerator(
+                this.environment,
+                this.knownAdapters);
         }
     }
 }

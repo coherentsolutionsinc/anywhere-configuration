@@ -6,6 +6,10 @@ using System.Text;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
+    public class AnyWhereConfigurationAdapterException : Exception
+    {
+    }
+
     public class AnyWhereConfigurationException : Exception
     {
         private const string UNKNOWN_ASSEMBLY_PATH = "<unknown>";

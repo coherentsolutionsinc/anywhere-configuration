@@ -1,10 +1,10 @@
-﻿using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
+﻿using System.Collections.Generic;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public interface IAnyWhereConfigurationAdapterFactory
     {
-        IAnyWhereConfigurationAdapter Create(
-            AnyWhereConfigurationAdapterArgument adapterArg);
+        IEnumerable<AnyWhereConfigurationAdapterProxy> CreateProxies(
+            IAnyWhereConfigurationAdapterArguments adapterArguments);
     }
 }

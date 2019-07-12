@@ -1,23 +1,24 @@
-﻿using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
+﻿using System;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public struct AnyWhereConfigurationAdapterArgument
     {
-        public IAnyWhereConfigurationEnvironmentReader AdapterEnvironmentReader { get; }
+        public AnyWhereConfigurationAdapterDefinition Definition { get; }
 
-        public string AdapterTypeName { get; }
-
-        public string AdapterAssemblyName { get; }
+        public string Key { get; }
 
         public AnyWhereConfigurationAdapterArgument(
-            IAnyWhereConfigurationEnvironmentReader adapterEnvironmentReader,
-            string adapterTypeName,
-            string adapterAssemblyName)
+            AnyWhereConfigurationAdapterDefinition definition,
+            string key)
         {
-            this.AdapterEnvironmentReader = adapterEnvironmentReader;
-            this.AdapterTypeName = adapterTypeName;
-            this.AdapterAssemblyName = adapterAssemblyName;
+            if (string.IsNullOrWhiteSpace(key))
+            {
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
+            }
+
+            this.Definition = definition;
+            this.Key = key;
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Runtime.ExceptionServices;
-
-using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 using Microsoft.Extensions.Configuration;
 
@@ -10,51 +6,29 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public class AnyWhereConfiguration
     {
-        private readonly IAnyWhereConfigurationAdapterArgumentsReader adapterArgumentsReader;
+        private readonly IAnyWhereConfigurationAdapterArguments adapterArguments;
 
         private readonly IAnyWhereConfigurationAdapterFactory adapterFactory;
 
         public AnyWhereConfiguration(
-            IAnyWhereConfigurationAdapterArgumentsReader adapterArgumentsReader,
+            IAnyWhereConfigurationAdapterArguments adapterArguments,
             IAnyWhereConfigurationAdapterFactory adapterFactory)
         {
-            this.adapterArgumentsReader = adapterArgumentsReader ?? throw new ArgumentNullException(nameof(adapterArgumentsReader));
+            this.adapterArguments = adapterArguments ?? throw new ArgumentNullException(nameof(adapterArguments));
             this.adapterFactory = adapterFactory ?? throw new ArgumentNullException(nameof(adapterFactory));
         }
 
         public void ConfigureAppConfiguration(
-            IConfigurationBuilder configurationBuilder,
-            IAnyWhereConfigurationEnvironment environment)
+            IConfigurationBuilder configurationBuilder)
         {
             if (configurationBuilder is null)
             {
                 throw new ArgumentNullException(nameof(configurationBuilder));
             }
 
-            if (environment is null)
+            foreach (var adapterProxy in this.adapterFactory.CreateProxies(this.adapterArguments))
             {
-                throw new ArgumentNullException(nameof(environment));
-            }
-
-            foreach (var adapterArg in this.adapterArgumentsReader.Read(environment))
-            {
-                try
-                {
-                    var adapter = this.adapterFactory.Create(adapterArg);
-
-                    adapter.ConfigureAppConfiguration(
-                        configurationBuilder,
-                        adapterArg.AdapterEnvironmentReader);
-                }
-                catch (Exception exception)
-                {
-                    var arguments = adapterArg.AdapterEnvironmentReader.Environment.GetValues().ToDictionary(kv => kv.Key, kv => kv.Value);
-                    throw new AnyWhereConfigurationException(
-                        adapterArg.AdapterTypeName,
-                        adapterArg.AdapterAssemblyName,
-                        arguments,
-                        ExceptionDispatchInfo.Capture(exception).SourceException);
-                }
+                adapterProxy.ConfigureAppConfiguration(configurationBuilder);
             }
         }
     }

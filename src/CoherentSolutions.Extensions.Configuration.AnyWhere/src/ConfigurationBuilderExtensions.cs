@@ -35,17 +35,19 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX);
 
             var configuration = new AnyWhereConfiguration(
-                new AnyWhereConfigurationAdapterArgumentsReader(
+                new AnyWhereConfigurationAdapterArguments(
+                    adapterConfigurationEnvironment,
                     adapterList.ToDictionary(
                         v => v.adapterName,
-                        v => new AnyWhereConfigurationAdapterMetadata(v.adapterName, v.typeName, v.assemblyName))),
+                        v => new AnyWhereConfigurationAdapterDefinition(v.typeName, v.assemblyName))),
                 new AnyWhereConfigurationAdapterFactory(
-                    new AnyWhereConfigurationAdapterFactoryTypeLoader(
-                        new AnyWhereConfigurationAdapterAssemblyLocator(adapterGlobalConfigurationEnvironment))));
+                    new AnyWhereConfigurationFiles(
+                        new AnyWhereConfigurationFileSystem(),
+                        new AnyWhereConfigurationPaths(
+                            adapterGlobalConfigurationEnvironment,
+                            ""))));
 
-            configuration.ConfigureAppConfiguration(
-                configurationBuilder,
-                adapterConfigurationEnvironment);
+            configuration.ConfigureAppConfiguration(configurationBuilder);
 
             return configurationBuilder;
         }

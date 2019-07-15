@@ -58,32 +58,33 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     for (;;)
                     {
                         var index = this.inputValue.IndexOf(Path.PathSeparator);
-                        if (index >= 0)
-                        {
-                            this.inputValue = this.inputValue.TrimStart();
-                            if (this.inputValue[0] == Path.PathSeparator)
-                            {
-                                this.inputValue = this.inputValue.Slice(1);
-                                continue;
-                            }
-                        }
 
-                        if (this.inputValue.IsEmpty || this.inputValue.IsWhiteSpace())
+                        pathString = index >= 0
+                            ? this.inputValue.Slice(0, index)
+                            : this.inputValue;
+
+                        pathString = pathString.Trim();
+
+                        index++;
+
+                        if (index == 0 || this.inputValue.Length == index)
                         {
+                            this.inputValue = ReadOnlySpan<char>.Empty;
                             this.inputState = State.Closed;
-                            return false;
-                        }
-
-                        if (index > 0)
-                        {
-                            this.inputValue = this.inputValue.Slice(0, index);
                         }
                         else
                         {
-                            this.inputState = State.Closed;
+                            this.inputValue = this.inputValue.Slice(index);
                         }
 
-                        pathString = this.inputValue;
+                        if (pathString.IsEmpty)
+                        {
+                            if (this.inputState == State.Closed)
+                            {
+                                return false;
+                            }
+                            continue;
+                        }
                         break;
                     }
 

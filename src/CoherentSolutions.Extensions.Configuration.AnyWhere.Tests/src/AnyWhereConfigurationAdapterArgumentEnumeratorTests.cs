@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Text;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Utilz;
 
@@ -90,7 +92,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 
             public Case()
             {
+                this.EnvironmentKeyValues = Array.Empty<EnvironmentKeyValue>();
                 this.KnownAdapterDefinitions = Array.Empty<KnownAdapterDefinition>();
+                this.ExpectedResults = Array.Empty<ExpectedResult>();
             }
 
             public void Serialize(
@@ -107,6 +111,29 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                 this.EnvironmentKeyValues = info.GetValue<EnvironmentKeyValue[]>(nameof(this.EnvironmentKeyValues));
                 this.KnownAdapterDefinitions = info.GetValue<KnownAdapterDefinition[]>(nameof(this.KnownAdapterDefinitions));
                 this.ExpectedResults = info.GetValue<ExpectedResult[]>(nameof(this.ExpectedResults));
+            }
+
+            public override string ToString()
+            {
+                var sb = new StringBuilder();
+
+                if (this.EnvironmentKeyValues.Length > 0)
+                {
+                    sb.Append("env: ")
+                       .AppendJoin(',', this.EnvironmentKeyValues.Select(v => $"{v.Key}={v.Value}"));
+                }
+                if (this.KnownAdapterDefinitions.Length > 0)
+                {
+                    if (sb.Length > 0)
+                    {
+                        sb.Append(" / ");
+                    }
+
+                    sb.Append("adapters: ")
+                        .AppendJoin(',', this.KnownAdapterDefinitions.Select(v => v.Name));
+                }
+
+                return sb.ToString();
             }
         }
 
@@ -157,7 +184,170 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                             Assembly = "TwoAssembly"
                         }
                     }
-                },
+                }
+            };
+            yield return new object[]
+            {
+                new Case()
+                {
+                    EnvironmentKeyValues = new[]
+                    {
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"0_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
+                            Value = "OneType"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"0_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
+                            Value = "OneAssembly"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"1_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
+                            Value = "TwoType"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"1_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
+                            Value = "TwoAssembly"
+                        }
+                    },
+                    ExpectedResults = new[]
+                    {
+                        new Case.ExpectedResult()
+                        {
+                            Type = "OneType",
+                            Assembly = "OneAssembly"
+                        }, 
+                        new Case.ExpectedResult()
+                        {
+                            Type = "TwoType",
+                            Assembly = "TwoAssembly"
+                        }
+                    }
+                }
+            };
+            yield return new object[]
+            {
+                new Case()
+                {
+                    EnvironmentKeyValues = new[]
+                    {
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"1_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
+                            Value = "TwoAssembly"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"1_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
+                            Value = "TwoType"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"0_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
+                            Value = "OneType"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"0_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
+                            Value = "OneAssembly"
+                        }
+                    },
+                    ExpectedResults = new[]
+                    {
+                        new Case.ExpectedResult()
+                        {
+                            Type = "OneType",
+                            Assembly = "OneAssembly"
+                        }, 
+                        new Case.ExpectedResult()
+                        {
+                            Type = "TwoType",
+                            Assembly = "TwoAssembly"
+                        }
+                    }
+                }
+            };
+            yield return new object[]
+            {
+                new Case()
+                {
+                    EnvironmentKeyValues = new[]
+                    {
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"0_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}",
+                            Value = "One"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"2_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}",
+                            Value = "Three"
+                        }
+                    },
+                    KnownAdapterDefinitions = new[]
+                    {
+                        new Case.KnownAdapterDefinition()
+                        {
+                            Name = "One",
+                            Type = "OneType",
+                            Assembly = "OneAssembly"
+                        }, 
+                        new Case.KnownAdapterDefinition()
+                        {
+                            Name = "Three",
+                            Type = "ThreeType",
+                            Assembly = "ThreeAssembly"
+                        }
+                    },
+                    ExpectedResults = new[]
+                    {
+                        new Case.ExpectedResult()
+                        {
+                            Type = "OneType",
+                            Assembly = "OneAssembly"
+                        }
+                    }
+                }
+            };
+            yield return new object[]
+            {
+                new Case()
+                {
+                    EnvironmentKeyValues = new[]
+                    {
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"0_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
+                            Value = "OneType"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"0_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
+                            Value = "OneAssembly"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"2_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
+                            Value = "ThreeType"
+                        },
+                        new Case.EnvironmentKeyValue()
+                        {
+                            Key = $"2_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
+                            Value = "ThreeAssembly"
+                        }
+                    },
+                    ExpectedResults = new[]
+                    {
+                        new Case.ExpectedResult()
+                        {
+                            Type = "OneType",
+                            Assembly = "OneAssembly"
+                        }
+                    }
+                }
             };
         }
 
@@ -186,147 +376,34 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             Assert.False(enumerator.MoveNext());
         }
 
-        //[Fact]
-        //public void Should_enumerate_all_adapters_When_adapter_identified_by_type_and_assembly_names_and_isnt_preconfigured()
-        //{
-        //    var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
-        //        new[]
-        //        {
-        //            new[]
-        //            {
-        //                ($"0_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}", "ZeroAdapterType")
-        //            },
-        //            new[]
-        //            {
-        //                ($"0_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}", "ZeroAdapterAssembly")
-        //            },
-        //            new[]
-        //            {
-        //                ($"1_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}", "FirstAdapterType")
-        //            },
-        //            new[]
-        //            {
-        //                ($"1_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}", "FirstAdapterAssembly")
-        //            }
-        //        });
+        [Fact]
+        public void Should_throw_InvalidOperationException_When_accessing_Current_on_stale_enumerator()
+        {
+            Assert.Throws<InvalidOperationException>(
+                () =>
+                {
+                    _ = new AnyWhereConfigurationAdapterArgumentEnumerator().Current;
+                });
+        }
 
-        //    var adapters = new Dictionary<string, AnyWhereConfigurationAdapterDefinition>();
+        [Fact]
+        public void Should_throw_InvalidOperationException_When_unknown_adapter_name_used()
+        {
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+                new[]
+                {
+                    ($"0_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}", "MyAdapter")
+                });
 
-        //    var expectedArgs = new[]
-        //    {
-        //        new AnyWhereConfigurationAdapterArgument(
-        //            new Mock<IAnyWhereConfigurationEnvironmentReader>().Object,
-        //            "ZeroAdapterType",
-        //            "ZeroAdapterAssembly"),
-        //        new AnyWhereConfigurationAdapterArgument(
-        //            new Mock<IAnyWhereConfigurationEnvironmentReader>().Object,
-        //            "FirstAdapterType",
-        //            "FirstAdapterAssembly")
-        //    };
+            var enumerator = new AnyWhereConfigurationAdapterArgumentEnumerator(
+                environment.Object,
+                new Dictionary<string, AnyWhereConfigurationAdapterDefinition>());
 
-        //    var enumerator = new AnyWhereConfigurationAdapterArgumentEnumerator(
-        //        environment.Object,
-        //        adapters);
-
-        //    foreach (var arg in expectedArgs)
-        //    {
-        //        Assert.True(enumerator.MoveNext());
-        //        Assert.Equal(arg.AdapterTypeName, enumerator.Current.AdapterTypeName);
-        //        Assert.Equal(arg.AdapterAssemblyName, enumerator.Current.AdapterAssemblyName);
-        //    }
-
-        //    Assert.False(enumerator.MoveNext());
-        //}
-
-        //[Fact]
-        //public void Should_enumerate_only_continues_adapters_When_adapter_identified_by_name_and_is_preconfigured()
-        //{
-        //    var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
-        //        new[]
-        //        {
-        //            new[]
-        //            {
-        //                ($"0_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}", "ZeroAdapter")
-        //            },
-        //            new[]
-        //            {
-        //                ($"2_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}", "FirstAdapter")
-        //            }
-        //        });
-
-        //    var adapters = new Dictionary<string, AnyWhereConfigurationAdapterDefinition>
-        //    {
-        //        ["ZeroAdapter"] = new AnyWhereConfigurationAdapterDefinition("ZeroAdapter", "ZeroAdapterType", "ZeroAdapterAssembly")
-        //    };
-
-        //    var expectedArgs = new[]
-        //    {
-        //        new AnyWhereConfigurationAdapterArgument(
-        //            new Mock<IAnyWhereConfigurationEnvironmentReader>().Object,
-        //            "ZeroAdapterType",
-        //            "ZeroAdapterAssembly")
-        //    };
-
-        //    var enumerator = new AnyWhereConfigurationAdapterArgumentEnumerator(
-        //        environment.Object,
-        //        adapters);
-
-        //    foreach (var arg in expectedArgs)
-        //    {
-        //        Assert.True(enumerator.MoveNext());
-        //        Assert.Equal(arg.AdapterTypeName, enumerator.Current.AdapterTypeName);
-        //        Assert.Equal(arg.AdapterAssemblyName, enumerator.Current.AdapterAssemblyName);
-        //    }
-
-        //    Assert.False(enumerator.MoveNext());
-        //}
-
-        //[Fact]
-        //public void Should_enumerate_only_continues_adapters_When_adapter_identified_by_type_and_assembly_names_and_isnt_preconfigured()
-        //{
-        //    var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
-        //        new[]
-        //        {
-        //            new[]
-        //            {
-        //                ($"0_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}", "ZeroAdapterType")
-        //            },
-        //            new[]
-        //            {
-        //                ($"0_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}", "ZeroAdapterAssembly")
-        //            },
-        //            new[]
-        //            {
-        //                ($"2_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}", "FirstAdapterType")
-        //            },
-        //            new[]
-        //            {
-        //                ($"2_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}", "FirstAdapterAssembly")
-        //            }
-        //        });
-
-        //    var adapters = new Dictionary<string, AnyWhereConfigurationAdapterDefinition>();
-
-        //    var expectedArgs = new[]
-        //    {
-        //        new AnyWhereConfigurationAdapterArgument(
-        //            new Mock<IAnyWhereConfigurationEnvironmentReader>().Object,
-        //            "ZeroAdapterType",
-        //            "ZeroAdapterAssembly")
-        //    };
-
-        //    var enumerator = new AnyWhereConfigurationAdapterArgumentEnumerator(
-        //        environment.Object,
-        //        adapters);
-
-        //    foreach (var arg in expectedArgs)
-        //    {
-        //        Assert.True(enumerator.MoveNext());
-        //        Assert.Equal(arg.AdapterTypeName, enumerator.Current.AdapterTypeName);
-        //        Assert.Equal(arg.AdapterAssemblyName, enumerator.Current.AdapterAssemblyName);
-        //    }
-
-        //    Assert.False(enumerator.MoveNext());
-        //}
+            Assert.Throws<InvalidOperationException>(
+                () =>
+                {
+                    enumerator.MoveNext();
+                });
+        }
     }
 }

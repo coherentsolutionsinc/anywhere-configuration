@@ -9,11 +9,5 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         {
             return File.Exists(path);
         }
-
-        public bool DirectoryExists(
-            string path)
-        {
-            return Directory.Exists(path);
-        }
     }
 }

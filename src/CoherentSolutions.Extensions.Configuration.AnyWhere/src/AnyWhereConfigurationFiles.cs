@@ -36,21 +36,27 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            var output = new List<string>(
-                extensions.Length == 0
-                    ? 2
-                    : extensions.Length + 1);
+            if (this.directories.Count == 0)
+            {
+                return Array.Empty<string>();
+            }
 
             var result = new string[extensions.Length == 0
                 ? 1
                 : extensions.Length];
+
+            List<string> output = null;
             foreach (var directory in this.directories)
             {
-                this.FindInternal(result, directory, name, extensions);
-
-                if (result.All(i => i is null))
+                var changed = this.FindInternal(result, directory, name, extensions);
+                if (changed == 0)
                 {
                     continue;
+                }
+
+                if (output is null)
+                {
+                    output = new List<string>(result.Length + 1);
                 }
 
                 output.AddRange(result);
@@ -84,12 +90,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 ? 1
                 : extensions.Length];
 
-            this.FindInternal(result, directory, name, extensions);
-
-            return result;
+            var changed = this.FindInternal(result, directory, name, extensions);
+            return changed == 0
+                ? Array.Empty<string>()
+                : result;
         }
 
-        private void FindInternal(
+        private int FindInternal(
             string[] result,
             string directory,
             string name,
@@ -97,16 +104,34 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         {
             var file = Path.Combine(directory, name);
 
-            foreach (var (index, path) in extensions
-               .Select(
-                    (
-                        extension,
-                        index) => (index, path: Path.ChangeExtension(file, extension))))
+            if (extensions.Length == 0)
             {
-                result[index] = this.fs.FileExists(path)
-                    ? path
-                    : null;
+                if (this.fs.FileExists(file))
+                {
+                    result[0] = file;
+                    return 1;
+                }
+
+                result[0] = null;
+                return 0;
             }
+
+            var count = 0;
+            foreach (var (index, path) in extensions
+               .Select((extension, index) => (index, path: Path.ChangeExtension(file, extension))))
+            {
+                if (this.fs.FileExists(path))
+                {
+                    result[index] = path;
+                    count++;
+                }
+                else
+                {
+                    result[index] = null;
+                }
+            }
+
+            return count;
         }
     }
 }

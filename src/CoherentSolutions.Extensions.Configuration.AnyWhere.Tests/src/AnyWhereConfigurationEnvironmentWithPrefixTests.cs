@@ -39,9 +39,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     ("PREFIX_two", "two true")
                 });
 
-            var prefixed = new AnyWhereConfigurationEnvironmentWithPrefix(environment.Object, "PREFIX");
+            var env = new AnyWhereConfigurationEnvironmentWithPrefix(environment.Object, "PREFIX");
 
-            var values = prefixed.GetValues().ToArray();
+            var values = env.GetValues().ToArray();
             Assert.Equal(2, values.Length);
             
             Assert.Equal("one", values[0].Key);

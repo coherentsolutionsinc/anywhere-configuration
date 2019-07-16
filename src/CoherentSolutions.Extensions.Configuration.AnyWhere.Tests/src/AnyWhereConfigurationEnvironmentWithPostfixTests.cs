@@ -39,9 +39,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     ("two_POSTFIX", "two true")
                 });
 
-            var prefixed = new AnyWhereConfigurationEnvironmentWithPostfix(environment.Object, "POSTFIX");
+            var env = new AnyWhereConfigurationEnvironmentWithPostfix(environment.Object, "POSTFIX");
 
-            var values = prefixed.GetValues().ToArray();
+            var values = env.GetValues().ToArray();
             Assert.Equal(2, values.Length);
             
             Assert.Equal("one", values[0].Key);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
@@ -20,6 +21,10 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools
                    .Returns(value)
                    .Verifiable();
             }
+
+            environment
+               .Setup(i => i.GetValues())
+               .Returns(values.Select(kv => new KeyValuePair<string, string>(kv.key, kv.value)));
 
             return environment;
         }

@@ -22,7 +22,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 adapterList = (IEnumerable<(string adapterName, string typeName, string assemblyPath)>) propertyValue;
             }
 
-            var environment = new AnyWhereConfigurationEnvironment();
+            var environment = new AnyWhereConfigurationEnvironment(
+                new AnyWhereConfigurationEnvironmentFromProcessEnvironment());
 
             var configuration = new AnyWhereConfiguration(
                 new AnyWhereConfigurationAdapterArguments(

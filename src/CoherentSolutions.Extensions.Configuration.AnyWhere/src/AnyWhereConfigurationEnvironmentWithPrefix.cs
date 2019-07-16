@@ -31,6 +31,11 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             T defaultValue = default,
             bool optional = false)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
+            }
+
             return this.environment.GetValue($"{this.prefix}_{name}", convertFunc, defaultValue, optional);
         }
 
@@ -46,7 +51,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                         return value.Length > length
                          && value[this.prefix.Length] == '_'
                          && value.StartsWith(this.prefix, StringComparison.Ordinal);
-                    });
+                    })
+               .Select(
+                    kv => new KeyValuePair<string, string>(kv.Key.Substring(length), kv.Value));
         }
     }
 }

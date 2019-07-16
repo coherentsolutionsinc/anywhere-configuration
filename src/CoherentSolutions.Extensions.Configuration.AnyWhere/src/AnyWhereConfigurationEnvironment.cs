@@ -8,12 +8,16 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public class AnyWhereConfigurationEnvironment : IAnyWhereConfigurationEnvironment
     {
-        private readonly IAnyWhereConfigurationEnvironmentSource[] sources;
+        private readonly Stack<IAnyWhereConfigurationEnvironmentSource> sources;
 
         public AnyWhereConfigurationEnvironment(
             params IAnyWhereConfigurationEnvironmentSource[] sources)
         {
-            this.sources = sources;
+            this.sources = new Stack<IAnyWhereConfigurationEnvironmentSource>(sources.Length);
+            foreach (var source in sources)
+            {
+                this.sources.Push(source);
+            }
         }
 
         public T GetValue<T>(

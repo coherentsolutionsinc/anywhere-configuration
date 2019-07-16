@@ -57,10 +57,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             }
 
             var adapterKey = this.index.ToString();
-            var adapterEnvironmentReader = new AnyWhereConfigurationEnvironmentReader(
-                new AnyWhereConfigurationEnvironmentWithPrefix(
-                    this.environment,
-                    adapterKey));
+            var adapterEnvironment = new AnyWhereConfigurationEnvironmentWithPrefix(this.environment, adapterKey);
+            var adapterEnvironmentReader = new AnyWhereConfigurationEnvironmentReader(adapterEnvironment);
 
             var adapterName = adapterEnvironmentReader.GetString(ANYWHERE_ADAPTER_NAME_PARAMETER_NAME, optional: true);
             if (adapterName is null)
@@ -77,7 +75,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
                 this.current = new AnyWhereConfigurationAdapterArgument(
                     new AnyWhereConfigurationAdapterDefinition(adapterTypeName, adapterAssemblyName),
-                    adapterKey);
+                    adapterEnvironment);
             }
             else
             {
@@ -88,7 +86,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
                 this.current = new AnyWhereConfigurationAdapterArgument(
                     adapterDefinition,
-                    adapterKey);
+                    adapterEnvironment);
             }
 
             this.index++;

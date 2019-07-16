@@ -11,7 +11,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         private const string ANYWHERE_ADAPTER_PARAMETER_PREFIX = "ANYWHERE_ADAPTER";
 
-        private const string ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX = "ANYWHERE_ADAPTER_GLOBAL";
+        private const string ANYWHERE_ADAPTER_GLOBAL_PROBING_PARAMETER_PREFIX = "ANYWHERE_ADAPTER_GLOBAL_PROBING";
 
         public static IConfigurationBuilder AddAnyWhereConfiguration(
             this IConfigurationBuilder configurationBuilder)
@@ -24,19 +24,11 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
             var environment = new AnyWhereConfigurationEnvironment();
 
-            var adapterConfigurationEnvironment =
-                new AnyWhereConfigurationEnvironmentWithPrefix(
-                    environment,
-                    ANYWHERE_ADAPTER_PARAMETER_PREFIX);
-
-            var adapterGlobalConfigurationEnvironment =
-                new AnyWhereConfigurationEnvironmentWithPrefix(
-                    environment,
-                    ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX);
-
             var configuration = new AnyWhereConfiguration(
                 new AnyWhereConfigurationAdapterArguments(
-                    adapterConfigurationEnvironment,
+                    new AnyWhereConfigurationEnvironmentWithPrefix(
+                        environment,
+                        ANYWHERE_ADAPTER_PARAMETER_PREFIX),
                     adapterList.ToDictionary(
                         v => v.adapterName,
                         v => new AnyWhereConfigurationAdapterDefinition(v.typeName, v.assemblyName))),
@@ -44,8 +36,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     new AnyWhereConfigurationFiles(
                         new AnyWhereConfigurationFileSystem(),
                         new AnyWhereConfigurationPaths(
-                            adapterGlobalConfigurationEnvironment,
-                            ""))));
+                            new AnyWhereConfigurationEnvironmentWithPrefix(
+                                environment,
+                                ANYWHERE_ADAPTER_GLOBAL_PROBING_PARAMETER_PREFIX)))));
 
             configuration.ConfigureAppConfiguration(configurationBuilder);
 

@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
-using CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Utilz;
+using CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools;
 
 using Xunit;
 using Xunit.Abstractions;

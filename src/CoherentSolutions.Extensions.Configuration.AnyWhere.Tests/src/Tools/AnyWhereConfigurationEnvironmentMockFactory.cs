@@ -5,7 +5,7 @@ using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 using Moq;
 
-namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Utilz
+namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools
 {
     public static class AnyWhereConfigurationEnvironmentMockFactory
     {

@@ -11,8 +11,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         private readonly IReadOnlyDictionary<string, AnyWhereConfigurationAdapterDefinition> knownAdapters;
 
-        public IAnyWhereConfigurationEnvironment Environment => this.environment;
-
         public AnyWhereConfigurationAdapterArguments(
             IAnyWhereConfigurationEnvironment environment,
             IReadOnlyDictionary<string, AnyWhereConfigurationAdapterDefinition> knownAdapters)

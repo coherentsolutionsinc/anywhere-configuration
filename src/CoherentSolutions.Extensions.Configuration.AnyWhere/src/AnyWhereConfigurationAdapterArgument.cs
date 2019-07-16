@@ -1,24 +1,21 @@
 ﻿using System;
 
+using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
+
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public struct AnyWhereConfigurationAdapterArgument
     {
         public AnyWhereConfigurationAdapterDefinition Definition { get; }
 
-        public string Key { get; }
+        public IAnyWhereConfigurationEnvironment Environment { get; }
 
         public AnyWhereConfigurationAdapterArgument(
             AnyWhereConfigurationAdapterDefinition definition,
-            string key)
+            IAnyWhereConfigurationEnvironment environment)
         {
-            if (string.IsNullOrWhiteSpace(key))
-            {
-                throw new ArgumentException("Value cannot be null or whitespace.", nameof(key));
-            }
-
             this.Definition = definition;
-            this.Key = key;
+            this.Environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
     }
 }

@@ -5,8 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-using CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Utilz;
-
 using Moq;
 
 using Xunit;

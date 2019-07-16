@@ -1,22 +1,23 @@
 ﻿using System;
 
+using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
+
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public struct AnyWhereConfigurationPathEnumerable
     {
-        private readonly string pathString;
+        private readonly IAnyWhereConfigurationEnvironment environment;
+
 
         public AnyWhereConfigurationPathEnumerable(
-            string pathString)
+            IAnyWhereConfigurationEnvironment environment)
         {
-            this.pathString = pathString;
+            this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
         public AnyWhereConfigurationPathEnumerator GetEnumerator()
         {
-            return string.IsNullOrWhiteSpace(this.pathString)
-                ? default
-                : new AnyWhereConfigurationPathEnumerator(this.pathString.AsSpan());
+            return new AnyWhereConfigurationPathEnumerator(this.environment);
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
 
+using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
+
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public ref struct AnyWhereConfigurationPathEnumerator
+    public struct AnyWhereConfigurationPathEnumerator
     {
         private enum State
         {
@@ -14,22 +16,27 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             Closed = 2
         }
 
-        private readonly ReadOnlySpan<char> value;
+        public const string PATH_PARAMETER_NAME = "PATH";
+
+        private readonly IAnyWhereConfigurationEnvironment environment;
 
         private AnyWhereConfigurationPath current;
 
-        private ReadOnlySpan<char> inputValue;
+        private int inputIndex;
+        
+        private string inputValue;
 
         private State inputState;
 
         public AnyWhereConfigurationPathEnumerator(
-            ReadOnlySpan<char> value)
+            IAnyWhereConfigurationEnvironment environment)
         {
-            this.value = value;
+            this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
 
             this.current = default;
 
-            this.inputValue = value;
+            this.inputIndex = 0;
+            this.inputValue = null;
             this.inputState = State.None;
         }
 
@@ -51,33 +58,44 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             switch (this.inputState)
             {
                 case State.None:
-                    this.inputState = State.Open;
-                    goto case State.Open;
+                    if (this.environment != null)
+                    {
+                        var env = new AnyWhereConfigurationEnvironmentReader(this.environment);
+                        
+                        this.inputValue = env.GetString(PATH_PARAMETER_NAME, optional: true);
+                        if (this.inputValue != null)
+                        {
+                            this.inputState = State.Open;
+                            goto case State.Open;
+                        }
+                    }
+                    this.inputState = State.Closed;
+                    return false;
                 case State.Open:
-                    ReadOnlySpan<char> pathString;
+                    ReadOnlySpan<char> output;
                     for (;;)
                     {
-                        var index = this.inputValue.IndexOf(Path.PathSeparator);
+                        var input = this.inputValue.AsSpan(this.inputIndex);
+                        var index = input.IndexOf(Path.PathSeparator);
 
-                        pathString = index >= 0
-                            ? this.inputValue.Slice(0, index)
-                            : this.inputValue;
+                        output = index >= 0
+                            ? input.Slice(0, index)
+                            : input;
 
-                        pathString = pathString.Trim();
+                        output = output.Trim();
 
                         index++;
 
-                        if (index == 0 || this.inputValue.Length == index)
+                        if (index == 0 || input.Length == index)
                         {
-                            this.inputValue = ReadOnlySpan<char>.Empty;
                             this.inputState = State.Closed;
                         }
                         else
                         {
-                            this.inputValue = this.inputValue.Slice(index);
+                            this.inputIndex += index;
                         }
 
-                        if (pathString.IsEmpty)
+                        if (output.IsEmpty)
                         {
                             if (this.inputState == State.Closed)
                             {
@@ -88,7 +106,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                         break;
                     }
 
-                    this.current = new AnyWhereConfigurationPath(pathString.ToString());
+                    this.current = new AnyWhereConfigurationPath(output.ToString());
                     return true;
                 case State.Closed:
                     return false;
@@ -101,7 +119,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         {
             this.current = default;
 
-            this.inputValue = this.value;
+            this.inputIndex = 0;
+            this.inputValue = null;
             this.inputState = State.None;
         }
     }

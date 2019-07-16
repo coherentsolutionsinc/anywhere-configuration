@@ -109,10 +109,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                         $"{adapterType.FullName} : type doesn't implement '{nameof(IAnyWhereConfigurationAdapter)}'");
                 }
 
-                var adapterEnvironment = new AnyWhereConfigurationEnvironmentWithPostfix(
-                    adapterArguments.Environment,
-                    arg.Key);
-
                 IAnyWhereConfigurationAdapter adapterInstance;
                 try
                 {
@@ -125,10 +121,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                         ExceptionDispatchInfo.Capture(e).SourceException);
                 }
 
-                yield return new AnyWhereConfigurationAdapterProxy(
-                    adapterInstance,
-                    adapterEnvironment,
-                    arg.Definition);
+                yield return new AnyWhereConfigurationAdapterProxy(adapterInstance, arg.Environment, arg.Definition);
             }
         }
 

@@ -12,7 +12,7 @@ using Xunit.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 {
-    public class AnyWhereConfigurationFilesTests
+    public class AnyWhereConfigurationFileSearchTests
     {
         public class CaseFilesInDirectory : IXunitSerializable
         {
@@ -98,19 +98,40 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 
         public class CaseFilesInDirectories : IXunitSerializable
         {
+            public class ExpectedResult : IXunitSerializable
+            {
+                public string Directory { get; set; }
+
+                public string[] Files { get; set; }
+
+                public void Serialize(
+                    IXunitSerializationInfo info)
+                {
+                    info.AddValue(nameof(this.Directory), this.Directory);
+                    info.AddValue(nameof(this.Files), this.Files);
+                }
+
+                public void Deserialize(
+                    IXunitSerializationInfo info)
+                {
+                    this.Directory = info.GetValue<string>(nameof(this.Directory));
+                    this.Files = info.GetValue<string[]>(nameof(this.Files));
+                }
+            }
+
             public string File { get; set; }
 
             public string[] Extensions { get; set; }
 
             public string[] Files { get; set; }
 
-            public string[] ExpectedResults { get; set; }
+            public ExpectedResult[] ExpectedResults { get; set; }
 
             public CaseFilesInDirectories()
             {
                 this.Extensions = Array.Empty<string>();
                 this.Files = Array.Empty<string>();
-                this.ExpectedResults = Array.Empty<string>();
+                this.ExpectedResults = Array.Empty<ExpectedResult>();
             }
 
             public void Serialize(
@@ -128,7 +149,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                 this.File = info.GetValue<string>(nameof(this.File));
                 this.Extensions = info.GetValue<string[]>(nameof(this.Extensions));
                 this.Files = info.GetValue<string[]>(nameof(this.Files));
-                this.ExpectedResults = info.GetValue<string[]>(nameof(this.ExpectedResults));
+                this.ExpectedResults = info.GetValue<ExpectedResult[]>(nameof(this.ExpectedResults));
             }
 
             public override string ToString()
@@ -286,7 +307,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                 new CaseFilesInDirectories()
                 {
                     File = "assembly",
-                    ExpectedResults = Array.Empty<string>()
+                    ExpectedResults = Array.Empty<CaseFilesInDirectories.ExpectedResult>()
                 }
             };
             yield return new object[]
@@ -300,8 +321,14 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        $"bin{Path.DirectorySeparatorChar}assembly",
-                        "bin"
+                        new CaseFilesInDirectories.ExpectedResult()
+                        { 
+                            Directory = "bin",
+                            Files = new []
+                            {
+                                $"bin{Path.DirectorySeparatorChar}assembly"
+                            }
+                        }
                     }
                 }
             };
@@ -314,7 +341,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     {
                         ".exe"
                     },
-                    ExpectedResults = Array.Empty<string>()
+                    ExpectedResults = Array.Empty<CaseFilesInDirectories.ExpectedResult>()
                 }
             };
             yield return new object[]
@@ -332,8 +359,14 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        $"bin{Path.DirectorySeparatorChar}assembly.exe",
-                        "bin"
+                        new CaseFilesInDirectories.ExpectedResult()
+                        { 
+                            Directory = "bin",
+                            Files = new []
+                            {
+                                $"bin{Path.DirectorySeparatorChar}assembly.exe"
+                            }
+                        }
                     }
                 }
             };
@@ -353,9 +386,15 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        $"bin{Path.DirectorySeparatorChar}assembly.exe",
-                        null,
-                        "bin"
+                        new CaseFilesInDirectories.ExpectedResult()
+                        { 
+                            Directory = "bin",
+                            Files = new []
+                            {
+                                $"bin{Path.DirectorySeparatorChar}assembly.exe",
+                                null
+                            }
+                        }
                     }
                 }
             };
@@ -376,9 +415,15 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        $"bin{Path.DirectorySeparatorChar}assembly.exe",
-                        $"bin{Path.DirectorySeparatorChar}assembly.dll",
-                        "bin"
+                        new CaseFilesInDirectories.ExpectedResult()
+                        { 
+                            Directory = "bin",
+                            Files = new []
+                            {
+                                $"bin{Path.DirectorySeparatorChar}assembly.exe",
+                                $"bin{Path.DirectorySeparatorChar}assembly.dll",
+                            }
+                        }
                     }
                 }
             };
@@ -399,12 +444,24 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        $"bin{Path.DirectorySeparatorChar}assembly.exe",
-                        null,
-                        "bin",
-                        null,
-                        $"vars{Path.DirectorySeparatorChar}assembly.dll",
-                        "vars"
+                        new CaseFilesInDirectories.ExpectedResult()
+                        { 
+                            Directory = "bin",
+                            Files = new []
+                            {
+                                $"bin{Path.DirectorySeparatorChar}assembly.exe",
+                                null
+                            }
+                        },
+                        new CaseFilesInDirectories.ExpectedResult()
+                        { 
+                            Directory = "vars",
+                            Files = new []
+                            {
+                                null,
+                                $"vars{Path.DirectorySeparatorChar}assembly.dll",
+                            }
+                        }
                     }
                 }
             };
@@ -422,14 +479,15 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                    .Returns(true);
             }
 
-            var paths = new Mock<IAnyWhereConfigurationPaths>();
-            paths.Setup(instance => instance.Enumerate())
-               .Returns(@case.Files.Select(v => new AnyWhereConfigurationPath(Path.GetDirectoryName(v))));
-
-            var result = new AnyWhereConfigurationFiles(fs.Object, paths.Object)
+            var result = new AnyWhereConfigurationFileSearch(fs.Object)
                .Find(@case.Directory, @case.File, @case.Extensions);
 
-            Assert.Equal(@case.ExpectedResults?.ToArray(), result?.ToArray());
+            Assert.Equal(@case.ExpectedResults.Length, result.Count);
+
+            for (var i = 0; i < @case.ExpectedResults.Length; ++i)
+            {
+                Assert.Equal(@case.ExpectedResults[i], result[i]?.Path);
+            }
         }
 
         [Theory]
@@ -444,34 +502,25 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                    .Returns(true);
             }
 
-            var paths = new Mock<IAnyWhereConfigurationPaths>();
-            paths.Setup(instance => instance.Enumerate())
-               .Returns(@case.Files.Select(v => new AnyWhereConfigurationPath(Path.GetDirectoryName(v))));
+            var directories = @case.Files
+               .Select(Path.GetDirectoryName)
+               .Distinct()
+               .ToArray();
 
-            var result = new AnyWhereConfigurationFiles(fs.Object, paths.Object)
-               .Find(@case.File, @case.Extensions);
+            var result = new AnyWhereConfigurationFileSearch(fs.Object)
+               .Find(directories, @case.File, @case.Extensions);
 
-            Assert.Equal(@case.ExpectedResults?.ToArray(), result?.ToArray());
-        }
+            Assert.Equal(@case.ExpectedResults.Length, result.Count);
 
-        [Fact]
-        public void Should_throw_InvalidOperationException_When_Find_is_requested_on_directory_not_in_directory_list()
-        {
-            var fs = new Mock<IAnyWhereConfigurationFileSystem>();
-            var paths = new Mock<IAnyWhereConfigurationPaths>();
-            paths.Setup(instance => instance.Enumerate())
-               .Returns(new[]
+            for (var i = 0; i < @case.ExpectedResults.Length; ++i)
+            {
+                Assert.Equal(@case.ExpectedResults[i].Directory, result[i].Directory);
+                Assert.Equal(@case.ExpectedResults[i].Files.Length, result[i].Files.Count);
+                for (var j = 0; j < @case.ExpectedResults[i].Files.Length; ++j)
                 {
-                    new AnyWhereConfigurationPath("bin")
-                });
-
-            var files = new AnyWhereConfigurationFiles(fs.Object, paths.Object);
-
-            Assert.Throws<InvalidOperationException>(
-                () =>
-                {
-                    files.Find("var", "assembly");
-                });
+                    Assert.Equal(@case.ExpectedResults[i].Files[j], result[i].Files[j]?.Path);
+                }
+            }
         }
     }
 }

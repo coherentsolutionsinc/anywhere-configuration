@@ -1,23 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereConfigurationPaths : IAnyWhereConfigurationPaths
+    public class AnyWhereConfigurationAdapterProbingPaths : IAnyWhereConfigurationAdapterProbingPaths
     {
         private readonly IAnyWhereConfigurationEnvironment environment;
 
-        public AnyWhereConfigurationPaths(
+        public AnyWhereConfigurationAdapterProbingPaths(
             IAnyWhereConfigurationEnvironment environment)
         {
             this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
-        public IEnumerable<AnyWhereConfigurationPath> Enumerate()
+        public IEnumerable<AnyWhereConfigurationDataPath> Enumerate()
         {
-            foreach (var path in new AnyWhereConfigurationPathEnumerable(this.environment))
+            yield return new AnyWhereConfigurationDataPath(Directory.GetCurrentDirectory());
+
+            foreach (var path in new AnyWhereConfigurationAdapterProbingPathEnumerable(this.environment))
             {
                 yield return path;
             }

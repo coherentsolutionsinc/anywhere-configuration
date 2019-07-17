@@ -10,7 +10,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools
 {
     public static class AnyWhereConfigurationEnvironmentMockFactory
     {
-        public static Mock<IAnyWhereConfigurationEnvironment> CreateEnvironmentMock(
+        public static IAnyWhereConfigurationEnvironment Create(
+            params (string key, string value)[] values)
+        {
+            return Create((IEnumerable<(string key, string value)>) values);
+        }
+
+        public static IAnyWhereConfigurationEnvironment Create(
             IEnumerable<(string key, string value)> values)
         {
             var environment = new Mock<IAnyWhereConfigurationEnvironment>();
@@ -26,7 +32,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools
                .Setup(i => i.GetValues())
                .Returns(values.Select(kv => new KeyValuePair<string, string>(kv.key, kv.value)));
 
-            return environment;
+            return environment.Object;
         }
     }
 }

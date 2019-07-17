@@ -432,9 +432,43 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
         }
 
-        public static IEnumerable<object[]> GetBadlyFormattedData()
+        public static IEnumerable<object[]> GetBadData()
         {
-            return Array.Empty<object[]>();
+            yield return new object[]
+            {
+                new Case()
+                {
+                    DataString = "keyvalue",
+                }
+            };
+            yield return new object[]
+            {
+                new Case()
+                {
+                    DataString = "key=",
+                }
+            };
+            yield return new object[]
+            {
+                new Case()
+                {
+                    DataString = "key=  ",
+                }
+            };
+            yield return new object[]
+            {
+                new Case()
+                {
+                    DataString = "=value",
+                }
+            };
+            yield return new object[]
+            {
+                new Case()
+                {
+                    DataString = "  =value",
+                }
+            };
         }
 
         [Theory]
@@ -455,15 +489,15 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             Assert.False(enumerator.MoveNext());
         }
 
-        //[Theory]
-        //[MemberData(nameof(GetBadlyFormattedData))]
-        //public void Should_throw_exception_When_data_string_is_badly_formatted(
-        //    Case @case)
-        //{
-        //    var enumerator = new AnyWhereConfigurationDataKeyValueEnumerator(@case.DataString);
+        [Theory]
+        [MemberData(nameof(GetBadData))]
+        public void Should_throw_exception_From_bad_data_string(
+            Case @case)
+        {
+            var enumerator = new AnyWhereConfigurationDataKeyValueEnumerator(@case.DataString);
 
-        //    Assert.Throws<InvalidOperationException>(() => { enumerator.MoveNext(); });
-        //}
+            Assert.Throws<InvalidOperationException>(() => { enumerator.MoveNext(); });
+        }
 
         [Fact]
         public void Should_enumerate_nothing_When_initialized_as_default_struct()

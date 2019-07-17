@@ -2,15 +2,14 @@
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public interface IAnyWhereConfigurationFiles
+    public interface IAnyWhereConfigurationFileSearch
     {
-        IEnumerable<string> Directories { get; }
-
-        IReadOnlyList<string> Find(
+        IReadOnlyList<IAnyWhereConfigurationFileSearchResult> Find(
+            IReadOnlyCollection<string> directories,
             string name,
             params string[] extensions);
 
-        IReadOnlyList<string> Find(
+        IReadOnlyList<IAnyWhereConfigurationFile> Find(
             string directory,
             string name,
             params string[] extensions);

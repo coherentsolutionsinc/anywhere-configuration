@@ -1,10 +1,10 @@
 ﻿namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public struct AnyWhereConfigurationPath
+    public struct AnyWhereConfigurationDataPath
     {
         public string Value { get; }
 
-        public AnyWhereConfigurationPath(
+        public AnyWhereConfigurationDataPath(
             string path)
         {
             this.Value = path;

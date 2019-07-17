@@ -15,14 +15,14 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         [Fact]
         public void Should_get_value_of_item_with_postfix_When_called_GetValue_with_item_name_without_postfix()
         {
-            var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("name", "false"),
                     ("name_POSTFIX", "true")
                 });
 
-            var env = new AnyWhereConfigurationEnvironmentWithPostfix(environment.Object, "POSTFIX");
+            var env = new AnyWhereConfigurationEnvironmentWithPostfix(environment, "POSTFIX");
 
             Assert.Equal("true", env.GetValue("name", s => (s, true)));
         }
@@ -30,7 +30,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         [Fact]
         public void Should_get_values_of_items_with_postfix_When_called_GetValues()
         {
-            var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("one", "one false"),
@@ -39,7 +39,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     ("two_POSTFIX", "two true")
                 });
 
-            var env = new AnyWhereConfigurationEnvironmentWithPostfix(environment.Object, "POSTFIX");
+            var env = new AnyWhereConfigurationEnvironmentWithPostfix(environment, "POSTFIX");
 
             var values = env.GetValues().ToArray();
             Assert.Equal(2, values.Length);

@@ -11,7 +11,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         private const string ANYWHERE_ADAPTER_PARAMETER_PREFIX = "ANYWHERE_ADAPTER";
 
-        private const string ANYWHERE_ADAPTER_GLOBAL_PROBING_PARAMETER_PREFIX = "ANYWHERE_ADAPTER_GLOBAL_PROBING";
+        private const string ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX = "ANYWHERE_ADAPTER_GLOBAL";
 
         public static IConfigurationBuilder AddAnyWhereConfiguration(
             this IConfigurationBuilder configurationBuilder)
@@ -33,13 +33,10 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     adapterList.ToDictionary(
                         v => v.adapterName,
                         v => new AnyWhereConfigurationAdapterDefinition(v.typeName, v.assemblyName))),
-                new AnyWhereConfigurationAdapterFactory(
-                    new AnyWhereConfigurationFiles(
-                        new AnyWhereConfigurationFileSystem(),
-                        new AnyWhereConfigurationPaths(
-                            new AnyWhereConfigurationEnvironmentWithPrefix(
-                                environment,
-                                ANYWHERE_ADAPTER_GLOBAL_PROBING_PARAMETER_PREFIX)))));
+                new AnyWhereConfigurationAdapterProbingPaths(
+                    new AnyWhereConfigurationEnvironmentWithPrefix(
+                        environment,
+                        ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX)));
 
             configuration.ConfigureAppConfiguration(configurationBuilder);
 

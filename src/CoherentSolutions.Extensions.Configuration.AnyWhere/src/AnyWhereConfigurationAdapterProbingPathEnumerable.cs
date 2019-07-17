@@ -4,20 +4,19 @@ using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public struct AnyWhereConfigurationPathEnumerable
+    public struct AnyWhereConfigurationAdapterProbingPathEnumerable
     {
         private readonly IAnyWhereConfigurationEnvironment environment;
 
-
-        public AnyWhereConfigurationPathEnumerable(
+        public AnyWhereConfigurationAdapterProbingPathEnumerable(
             IAnyWhereConfigurationEnvironment environment)
         {
             this.environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
 
-        public AnyWhereConfigurationPathEnumerator GetEnumerator()
+        public AnyWhereConfigurationAdapterProbingPathEnumerator GetEnumerator()
         {
-            return new AnyWhereConfigurationPathEnumerator(this.environment);
+            return new AnyWhereConfigurationAdapterProbingPathEnumerator(this.environment);
         }
     }
 }

@@ -356,11 +356,11 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         public void Should_enumerate_all_adapters_From_environment(
             Case @case)
         {
-            var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 @case.EnvironmentKeyValues.Select(i => (i.Key, i.Value)));
 
             var enumerator = new AnyWhereConfigurationAdapterArgumentEnumerator(
-                environment.Object,
+                environment,
                 @case.KnownAdapterDefinitions.ToDictionary(
                     i => i.Name, 
                     i => new AnyWhereConfigurationAdapterDefinition(i.Type, i.Assembly)));
@@ -389,14 +389,14 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         [Fact]
         public void Should_throw_InvalidOperationException_When_unknown_adapter_name_used()
         {
-            var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ($"0_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}", "MyAdapter")
                 });
 
             var enumerator = new AnyWhereConfigurationAdapterArgumentEnumerator(
-                environment.Object,
+                environment,
                 new Dictionary<string, AnyWhereConfigurationAdapterDefinition>());
 
             Assert.Throws<InvalidOperationException>(

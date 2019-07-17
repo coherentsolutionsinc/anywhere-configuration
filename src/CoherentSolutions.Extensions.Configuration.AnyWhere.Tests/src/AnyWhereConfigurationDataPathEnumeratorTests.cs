@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 {
-    public class AnyWhereConfigurationPathEnumeratorTests
+    public class AnyWhereConfigurationDataPathEnumeratorTests
     {
         public class Case : IXunitSerializable
         {
@@ -464,13 +464,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         public void Should_enumerate_all_paths_From_path_string(
             Case @case)
         {
-            var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
-                new[]
-                {
-                    (AnyWhereConfigurationPathEnumerator.PATH_PARAMETER_NAME, @case.PathValue)
-                });
-
-            var enumerator = new AnyWhereConfigurationPathEnumerator(environment.Object);
+            var enumerator = new AnyWhereConfigurationDataPathEnumerator(@case.PathValue);
 
             foreach (var expectedResult in @case.ExpectedResults)
             {
@@ -480,19 +474,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             }
 
             Assert.False(enumerator.MoveNext());
-        }
-
-        [Fact]
-        public void Should_enumerate_nothing_When_initialized_as_default_struct()
-        {
-            Assert.False(new AnyWhereConfigurationPathEnumerator().MoveNext());
-        }
-
-        [Fact]
-        public void Should_throw_InvalidOperationException_When_accessing_Current_on_stale_enumerator()
-        {
-            Assert.Throws<InvalidOperationException>(
-                () => { _ = new AnyWhereConfigurationPathEnumerator().Current; });
         }
     }
 }

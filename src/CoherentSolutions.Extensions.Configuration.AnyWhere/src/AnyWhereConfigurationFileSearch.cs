@@ -5,29 +5,18 @@ using System.Linq;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereConfigurationFiles : IAnyWhereConfigurationFiles
+    public class AnyWhereConfigurationFileSearch : IAnyWhereConfigurationFileSearch
     {
         private readonly IAnyWhereConfigurationFileSystem fs;
 
-        private readonly HashSet<string> directories;
-
-        public IEnumerable<string> Directories => this.directories;
-
-        public AnyWhereConfigurationFiles(
-            IAnyWhereConfigurationFileSystem fs,
-            IAnyWhereConfigurationPaths paths)
+        public AnyWhereConfigurationFileSearch(
+            IAnyWhereConfigurationFileSystem fs)
         {
             this.fs = fs ?? throw new ArgumentNullException(nameof(fs));
-
-            this.directories = new HashSet<string>();
-
-            foreach (var path in paths.Enumerate())
-            {
-                this.directories.Add(path.Value);
-            }
         }
 
-        public IReadOnlyList<string> Find(
+        public IReadOnlyList<IAnyWhereConfigurationFileSearchResult> Find(
+            IReadOnlyCollection<string> directories,
             string name,
             params string[] extensions)
         {
@@ -36,18 +25,24 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            if (this.directories.Count == 0)
+            if (directories.Count == 0)
             {
-                return Array.Empty<string>();
+                return Array.Empty<IAnyWhereConfigurationFileSearchResult>();
             }
 
-            var result = new string[extensions.Length == 0
+            var resultSz = extensions.Length == 0
                 ? 1
-                : extensions.Length];
+                : extensions.Length;
 
-            List<string> output = null;
-            foreach (var directory in this.directories)
+            IAnyWhereConfigurationFile[] result = null;
+            List<IAnyWhereConfigurationFileSearchResult> output = null;
+            foreach (var directory in directories)
             {
+                if (result is null)
+                {
+                    result = new IAnyWhereConfigurationFile[resultSz];
+                }
+
                 var changed = this.FindInternal(result, directory, name, extensions);
                 if (changed == 0)
                 {
@@ -56,17 +51,21 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
                 if (output is null)
                 {
-                    output = new List<string>(result.Length + 1);
+                    output = new List<IAnyWhereConfigurationFileSearchResult>(1);
                 }
 
-                output.AddRange(result);
-                output.Add(directory);
+                output.Add(
+                    new AnyWhereConfigurationFileSearchResult(
+                        directory, 
+                        result));
+
+                result = null;
             }
 
             return output;
         }
 
-        public IReadOnlyList<string> Find(
+        public IReadOnlyList<IAnyWhereConfigurationFile> Find(
             string directory,
             string name,
             params string[] extensions)
@@ -81,34 +80,29 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
             }
 
-            if (!this.directories.Contains(directory))
-            {
-                throw new InvalidOperationException($"Unknown '{directory}' directory.");
-            }
-
-            var result = new string[extensions.Length == 0
+            var result = new IAnyWhereConfigurationFile[extensions.Length == 0
                 ? 1
                 : extensions.Length];
 
             var changed = this.FindInternal(result, directory, name, extensions);
             return changed == 0
-                ? Array.Empty<string>()
+                ? Array.Empty<IAnyWhereConfigurationFile>()
                 : result;
         }
 
         private int FindInternal(
-            string[] result,
+            IList<IAnyWhereConfigurationFile> result,
             string directory,
             string name,
             params string[] extensions)
         {
-            var file = Path.Combine(directory, name);
 
             if (extensions.Length == 0)
             {
-                if (this.fs.FileExists(file))
+                var path = Path.Combine(directory, name);
+                if (this.fs.FileExists(path))
                 {
-                    result[0] = file;
+                    result[0] = new AnyWhereConfigurationFile(this.fs, name, directory, path);
                     return 1;
                 }
 
@@ -117,12 +111,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             }
 
             var count = 0;
-            foreach (var (index, path) in extensions
-               .Select((extension, index) => (index, path: Path.ChangeExtension(file, extension))))
+            foreach (var (index, file) in extensions
+               .Select((extension, index) => (index, path: Path.ChangeExtension(name, extension))))
             {
+                var path = Path.Combine(directory, file);
                 if (this.fs.FileExists(path))
                 {
-                    result[index] = path;
+                    result[index] = new AnyWhereConfigurationFile(this.fs, name, directory, path);
                     count++;
                 }
                 else

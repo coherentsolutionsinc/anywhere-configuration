@@ -10,18 +10,18 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         [Fact]
         public void Should_get_value_of_item_from_extension_When_called_GetValue_when_source_doesnt_contain_requested_item()
         {
-            var source = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var source = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("name", "false")
                 });
-            var extension = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var extension = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("extension", "true")
                 });
 
-            var env = new AnyWhereConfigurationEnvironmentWithExtension(source.Object, extension.Object);
+            var env = new AnyWhereConfigurationEnvironmentWithExtension(source, extension);
 
             Assert.Equal("true", env.GetValue("extension", s => (s, true)));
         }
@@ -29,18 +29,18 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         [Fact]
         public void Should_get_value_of_item_from_extension_When_called_GetValue_when_source_contains_requested_item()
         {
-            var source = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var source = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("name", "false")
                 });
-            var extension = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var extension = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("name", "true")
                 });
 
-            var env = new AnyWhereConfigurationEnvironmentWithExtension(source.Object, extension.Object);
+            var env = new AnyWhereConfigurationEnvironmentWithExtension(source, extension);
 
             Assert.Equal("true", env.GetValue("name", s => (s, true)));
         }
@@ -48,20 +48,20 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         [Fact]
         public void Should_get_values_of_items_from_extension_and_then_source_When_called_GetValues()
         {
-            var source = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var source = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("name", "name false"),
                     ("source", "source true")
                 });
-            var extension = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var extension = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("name", "name true"),
                     ("extension", "extension true")
                 });
 
-            var env = new AnyWhereConfigurationEnvironmentWithExtension(source.Object, extension.Object);
+            var env = new AnyWhereConfigurationEnvironmentWithExtension(source, extension);
 
             var values = env.GetValues().ToArray();
             Assert.Equal(3, values.Length);

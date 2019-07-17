@@ -15,32 +15,32 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         private const char KEY_VALUE_SEPARATOR_CHAR = '=';
 
+        private readonly string inputValue;
+
         private AnyWhereConfigurationDataKeyValue current;
 
-        private int inputLine;
+        private int currentLine;
 
-        private int inputIndex;
+        private int currentIndex;
 
-        private string inputValue;
-
-        private State inputState;
+        private State currentState;
 
         public AnyWhereConfigurationDataKeyValueEnumerator(
             string inputValue)
         {
-            this.current = default;
-
-            this.inputLine = -1;
-            this.inputIndex = 0;
             this.inputValue = inputValue;
-            this.inputState = State.None;
+
+            this.current = default;
+            this.currentLine = -1;
+            this.currentIndex = 0;
+            this.currentState = State.None;
         }
 
         public AnyWhereConfigurationDataKeyValue Current
         {
             get
             {
-                if (this.inputState == State.None)
+                if (this.currentState == State.None)
                 {
                     throw new InvalidOperationException("The enumeration wasn't started.");
                 }
@@ -51,24 +51,24 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         public bool MoveNext()
         {
-            switch (this.inputState)
+            switch (this.currentState)
             {
                 case State.None:
                     if (string.IsNullOrWhiteSpace(this.inputValue))
                     {
-                        this.inputState = State.Closed;
+                        this.currentState = State.Closed;
                         return false;
                     }
 
-                    this.inputState = State.Open;
+                    this.currentState = State.Open;
                     goto case State.Open;
                 case State.Open:
                     var nl = Environment.NewLine.AsSpan();
                     for (;;)
                     {
-                        this.inputLine++;
+                        this.currentLine++;
 
-                        var input = this.inputValue.AsSpan(this.inputIndex);
+                        var input = this.inputValue.AsSpan(this.currentIndex);
                         var index = input.IndexOf(nl);
 
                         var output = index >= 0
@@ -90,16 +90,16 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
                         if (index == (nl.Length - 1) || input.Length == index)
                         {
-                            this.inputState = State.Closed;
+                            this.currentState = State.Closed;
                         }
                         else
                         {
-                            this.inputIndex += index;
+                            this.currentIndex += index;
                         }
 
                         if (output.IsEmpty)
                         {
-                            if (this.inputState == State.Closed)
+                            if (this.currentState == State.Closed)
                             {
                                 return false;
                             }
@@ -111,17 +111,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                         if (index < 0)
                         {
                             throw new InvalidOperationException(
-                                $"Expected '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.inputLine}, {ch})");
+                                $"Expected '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.currentLine}, {ch})");
                         }
                         if (index == 0)
                         {
                             throw new InvalidOperationException(
-                                $"Expected 'a key' before '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.inputLine}, {ch})");
+                                $"Expected 'a key' before '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.currentLine}, {ch})");
                         }
-                        if (output.Length - 1 == 0)
+                        if (output.Length - 1 == index)
                         {
                             throw new InvalidOperationException(
-                                $"Expected 'a value' after '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.inputLine}. {ch + 1})");
+                                $"Expected 'a value' after '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.currentLine}, {ch + index + 1})");
                         }
 
                         this.current = new AnyWhereConfigurationDataKeyValue(
@@ -141,10 +141,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         {
             this.current = default;
 
-            this.inputLine = -1;
-            this.inputIndex = 0;
-            this.inputValue = null;
-            this.inputState = State.None;
+            this.currentLine = -1;
+            this.currentIndex = 0;
+            this.currentState = State.None;
         }
     }
 }

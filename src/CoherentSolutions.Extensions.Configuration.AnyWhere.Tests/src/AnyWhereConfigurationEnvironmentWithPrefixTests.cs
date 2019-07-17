@@ -15,14 +15,14 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         [Fact]
         public void Should_get_value_of_item_with_prefix_When_called_GetValue_with_item_name_without_prefix()
         {
-            var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("name", "false"),
                     ("PREFIX_name", "true")
                 });
 
-            var env = new AnyWhereConfigurationEnvironmentWithPrefix(environment.Object, "PREFIX");
+            var env = new AnyWhereConfigurationEnvironmentWithPrefix(environment, "PREFIX");
 
             Assert.Equal("true", env.GetValue("name", s => (s, true)));
         }
@@ -30,7 +30,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         [Fact]
         public void Should_get_values_of_items_with_prefix_When_called_GetValues()
         {
-            var environment = AnyWhereConfigurationEnvironmentMockFactory.CreateEnvironmentMock(
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 new[]
                 {
                     ("one", "one false"),
@@ -39,7 +39,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     ("PREFIX_two", "two true")
                 });
 
-            var env = new AnyWhereConfigurationEnvironmentWithPrefix(environment.Object, "PREFIX");
+            var env = new AnyWhereConfigurationEnvironmentWithPrefix(environment, "PREFIX");
 
             var values = env.GetValues().ToArray();
             Assert.Equal(2, values.Length);

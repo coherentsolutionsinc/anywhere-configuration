@@ -40,22 +40,22 @@ public interface IAnyWhereConfigurationAdapter
 
 Coupling between configuration engine and configuration adapters is done using special environment variables. All variables can be divided into **GLOBAL** and **LOCAL**.
 
-**GLOBAL** variables are consumed by configuration engine. They have the following format: **ANYWHERE_ADAPTER_GLOBAL_\{VARIABLE_NAME\}**:
+**GLOBAL** variables are consumed by configuration engine. They have the following format: **ANYWHERE\_ADAPTER\_GLOBAL_\{VARIABLE_NAME\}**:
 
-* **ANYWHERE_ADAPTER_GLOBAL** - is a predefined prefix.
+* **ANYWHERE\_ADAPTER\_GLOBAL** - is a predefined prefix.
 * **\{VARIABLE_NAME\}** - is a name of the variable.
 
 Currently configuration engine supports the following **GLOBAL** variables:
 
-* **PROBING_PATH** - is the list of paths (separated by [Path.PathSeparator](https://docs.microsoft.com/en-us/dotnet/api/system.io.path.pathseparator?view=netstandard-2.0)) to search for an adapter assembly (by default only _current directory_ is scanned).
+* **PROBING\_PATH** - is the list of paths (separated by [Path.PathSeparator](https://docs.microsoft.com/en-us/dotnet/api/system.io.path.pathseparator?view=netstandard-2.0)) to search for an adapter assembly (by default only _current directory_ is scanned).
 
 > It should be noted that current directory is always scanned during assemblies lookup.
 
-**LOCAL** variables are consumed by both configuration engine and configuration adapters. They have the following format:   **ANYWHERE_ADAPTER\_\{INDEX\}\_\{VARIABLE_NAME\}**:
+**LOCAL** variables are consumed by both configuration engine and configuration adapters. They have the following format:   **ANYWHERE\_ADAPTER\_\{INDEX\}\_\{VARIABLE_NAME\}**:
 
-* **ANYWHERE_ADAPTER** - is a predefined prefix.
+* **ANYWHERE\_ADAPTER** - is a predefined prefix.
 * **\{INDEX\}** - is a zero based index of the adapter being configured.
-* **\{VARIABLE_NAME\}** - is a name of the variable.
+* **\{VARIABLE\_NAME\}** - is a name of the variable.
 
 > When configuring configuration adapters it is critically to understand that configuration adapter's indexes should be sequential and start from 0.
 > 
@@ -63,8 +63,8 @@ Currently configuration engine supports the following **GLOBAL** variables:
 
 Configuration adapter is identified and loaded by configuration engine using two variables:
 
-* **TYPE_NAME** - is the full type name of the configuration adapter's type.
-* **ASSEMBLY_NAME** - is the name of the assembly file where configuration adapter type is implemented.
+* **TYPE\_NAME** - is the full type name of the configuration adapter's type.
+* **ASSEMBLY\_NAME** - is the name of the assembly file where configuration adapter type is implemented.
 
 All additional parameters required by the underlying `IConfigurationSource` are passed using the **LOCAL** variables and can be consumed using supplied instance of `IAnyWhereConfigurationEnvironmentReader`.
 
@@ -172,13 +172,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Json
 
 The environment variables are configured as following:
 
-* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=\<assembly location\>
-* ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter
-* ANYWHERE_ADAPTER_0_ASSEMBLY_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json
-* ANYWHERE_ADAPTER_0_PATH=\<configuration file location\>
-* ANYWHERE_ADAPTER_0_OPTIONAL=false
+* ANYWHERE\_ADAPTER\_GLOBAL\_PROBING\_PATH=\<locations\>
+* ANYWHERE\_ADAPTER\_0\_TYPE\_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter
+* ANYWHERE\_ADAPTER\_0\_ASSEMBLY\_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.Json
+* ANYWHERE\_ADAPTER\_0\_PATH=\<configuration file location\>
+* ANYWHERE\_ADAPTER\_0\_OPTIONAL=false
 
-The configuration adapter assembly should be placed either in _current directory_ or it's directory should be specified in **PROBING_PATH** variable (**GLOBAL** scope).
+The configuration adapter assembly should be placed either in _current directory_ or it's directory should be specified in **PROBING\_PATH** variable (**GLOBAL** scope).
 
 #### Consuming configuration in staging
 
@@ -225,11 +225,11 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
 
 The environment variables are configured as following:
 
-* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=\<assembly location\>
-* ANYWHERE_ADAPTER_0_TYPE_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter
-* ANYWHERE_ADAPTER_0_ASSEMBLY_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
-* ANYWHERE_ADAPTER_0_DIRECTORY_PATH=\<volume mapping location\>
-* ANYWHERE_ADAPTER_0_OPTIONAL=false
+* ANYWHERE\_ADAPTER\_GLOBAL\_PROBING\_PATH=\<locations\>
+* ANYWHERE\_ADAPTER\_0\_TYPE\_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile.AnyWhereKeyPerFileConfigurationSourceAdapter
+* ANYWHERE\_ADAPTER\_0\_ASSEMBLY\_NAME=CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile
+* ANYWHERE\_ADAPTER\_0\_DIRECTORY\_PATH=\<volume mapping location\>
+* ANYWHERE\_ADAPTER\_0\_OPTIONAL=false
 
 ### Well-known configuration adapters
 
@@ -290,12 +290,12 @@ WebHost.CreateDefaultBuilder(args)
 >
 > `AddAnyWhereConfigurationAdapterList` **must** be called **before** `AddAnyWhereConfiguration`.
 
-These well-known configuration adapters can be configured in the simplified fashion. Instead of using **TYPE_NAME** and **ASSEMBLY_NAME** variables you can simply use **NAME** variable:
+These well-known configuration adapters can be configured in the simplified fashion. Instead of using **TYPE\_NAME** and **ASSEMBLY\_NAME** variables you can simply use **NAME** variable:
 
-* ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH=\<assembly location\>
-* ANYWHERE_ADAPTER_0_NAME=Json
-* ANYWHERE_ADAPTER_0_PATH=\<configuration location\>
-* ANYWHERE_ADAPTER_0_OPTIONAL=false
+* ANYWHERE\_ADAPTER\_GLOBAL\_PROBING\_PATH=\<locations\>
+* ANYWHERE\_ADAPTER\_0\_NAME=Json
+* ANYWHERE\_ADAPTER\_0\_PATH=\<configuration location\>
+* ANYWHERE\_ADAPTER\_0\_OPTIONAL=false
 
 ### Conclusion
 

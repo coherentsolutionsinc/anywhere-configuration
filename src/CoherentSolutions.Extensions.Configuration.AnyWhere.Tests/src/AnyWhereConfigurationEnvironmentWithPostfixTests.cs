@@ -2,6 +2,7 @@
 using System.Linq;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
+using CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools;
 
 using Moq;
 
@@ -12,30 +13,42 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
     public class AnyWhereConfigurationEnvironmentWithPostfixTests
     {
         [Fact]
-        public void Should_get_environment_values_When_value_is_postfixed()
+        public void Should_get_value_of_item_with_postfix_When_called_GetValue_with_item_name_without_postfix()
         {
-            var environment = new Mock<IAnyWhereConfigurationEnvironment>();
-            environment
-               .Setup(instance => instance.GetValues())
-               .Returns(
-                    new[]
-                    {
-                        new KeyValuePair<string, string>("value", "value"),
-                        new KeyValuePair<string, string>("value1", "value"),
-                        new KeyValuePair<string, string>("value2", "value"),
-                        new KeyValuePair<string, string>("_POSTFIX", "value"),
-                        new KeyValuePair<string, string>("value_POSTFIX", "value"),
-                        new KeyValuePair<string, string>("value1_POSTFIX", "value"),
-                        new KeyValuePair<string, string>("value2_POSTFIX", "value")
-                    });
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
+                new[]
+                {
+                    ("name", "false"),
+                    ("name_POSTFIX", "true")
+                });
 
-            var prefixed = new AnyWhereConfigurationEnvironmentWithPostfix(environment.Object, "POSTFIX");
+            var env = new AnyWhereConfigurationEnvironmentWithPostfix(environment, "POSTFIX");
 
-            var values = prefixed.GetValues().ToArray();
-            Assert.Equal(3, values.Length);
-            Assert.Equal("value_POSTFIX", values[0].Key);
-            Assert.Equal("value1_POSTFIX", values[1].Key);
-            Assert.Equal("value2_POSTFIX", values[2].Key);
+            Assert.Equal("true", env.GetValue("name", s => (s, true)));
+        }
+
+        [Fact]
+        public void Should_get_values_of_items_with_postfix_When_called_GetValues()
+        {
+            var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
+                new[]
+                {
+                    ("one", "one false"),
+                    ("two", "two false"),
+                    ("one_POSTFIX", "one true"),
+                    ("two_POSTFIX", "two true")
+                });
+
+            var env = new AnyWhereConfigurationEnvironmentWithPostfix(environment, "POSTFIX");
+
+            var values = env.GetValues().ToArray();
+            Assert.Equal(2, values.Length);
+            
+            Assert.Equal("one", values[0].Key);
+            Assert.Equal("one true", values[0].Value);
+
+            Assert.Equal("two", values[1].Key);
+            Assert.Equal("two true", values[1].Value);
         }
     }
 }

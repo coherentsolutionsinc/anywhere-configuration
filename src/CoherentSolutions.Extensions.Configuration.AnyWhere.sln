@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherentSolutions.Extensions.Configuration.AnyWhere", "CoherentSolutions.Extensions.Configuration.AnyWhere\CoherentSolutions.Extensions.Configuration.AnyWhere.csproj", "{4A900718-1358-4806-955B-FF5B03E31F73}"
 EndProject
@@ -26,6 +26,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables", "CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables\CoherentSolutions.Extensions.Configuration.AnyWhere.EnvironmentVariables.csproj", "{13024772-38EA-4615-8C7B-B6B48A739B0B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault", "CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault\CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault.csproj", "{D90C7FBF-BE78-4AE9-B434-A4AA72458275}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5FA5EF55-9AEB-4FDE-8CD9-9ACDDC935384}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{841B78AD-E16A-4154-9864-C5C56474E840}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Adapters", "CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Adapters\CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Adapters.csproj", "{C19641A7-4C9C-4F06-84B1-33767FEED6AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -76,9 +82,26 @@ Global
 		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Test|Any CPU.ActiveCfg = Debug|Any CPU
 		{D90C7FBF-BE78-4AE9-B434-A4AA72458275}.Test|Any CPU.Build.0 = Debug|Any CPU
+		{C19641A7-4C9C-4F06-84B1-33767FEED6AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C19641A7-4C9C-4F06-84B1-33767FEED6AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C19641A7-4C9C-4F06-84B1-33767FEED6AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C19641A7-4C9C-4F06-84B1-33767FEED6AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C19641A7-4C9C-4F06-84B1-33767FEED6AD}.Test|Any CPU.ActiveCfg = Debug|Any CPU
+		{C19641A7-4C9C-4F06-84B1-33767FEED6AD}.Test|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4A900718-1358-4806-955B-FF5B03E31F73} = {5FA5EF55-9AEB-4FDE-8CD9-9ACDDC935384}
+		{A288E456-7BBB-4292-92A0-4C9620A695B0} = {5FA5EF55-9AEB-4FDE-8CD9-9ACDDC935384}
+		{6D81625E-33DC-42ED-ABEF-5B00CE3AB89C} = {841B78AD-E16A-4154-9864-C5C56474E840}
+		{275D9D4F-FF00-430E-919E-7D91DD5D030F} = {5FA5EF55-9AEB-4FDE-8CD9-9ACDDC935384}
+		{8513A6E4-7E7C-4CD6-9F99-321EE6DAE237} = {5FA5EF55-9AEB-4FDE-8CD9-9ACDDC935384}
+		{D63E1765-26F4-4F13-B3D4-9850BAAC9277} = {5FA5EF55-9AEB-4FDE-8CD9-9ACDDC935384}
+		{13024772-38EA-4615-8C7B-B6B48A739B0B} = {5FA5EF55-9AEB-4FDE-8CD9-9ACDDC935384}
+		{D90C7FBF-BE78-4AE9-B434-A4AA72458275} = {5FA5EF55-9AEB-4FDE-8CD9-9ACDDC935384}
+		{C19641A7-4C9C-4F06-84B1-33767FEED6AD} = {841B78AD-E16A-4154-9864-C5C56474E840}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E7C15202-0CA6-4145-83AC-10DC945996FE}

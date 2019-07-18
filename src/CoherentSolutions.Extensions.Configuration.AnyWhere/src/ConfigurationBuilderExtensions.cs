@@ -22,30 +22,23 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 adapterList = (IEnumerable<(string adapterName, string typeName, string assemblyPath)>) propertyValue;
             }
 
-            var environment = new AnyWhereConfigurationEnvironment();
-
-            var adapterConfigurationEnvironment =
-                new AnyWhereConfigurationEnvironmentWithPrefix(
-                    environment,
-                    ANYWHERE_ADAPTER_PARAMETER_PREFIX);
-
-            var adapterGlobalConfigurationEnvironment =
-                new AnyWhereConfigurationEnvironmentWithPrefix(
-                    environment,
-                    ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX);
+            var environment = new AnyWhereConfigurationEnvironment(
+                new AnyWhereConfigurationEnvironmentFromProcessEnvironment());
 
             var configuration = new AnyWhereConfiguration(
-                new AnyWhereConfigurationAdapterArgumentsReader(
+                new AnyWhereConfigurationAdapterArguments(
+                    new AnyWhereConfigurationEnvironmentWithPrefix(
+                        environment,
+                        ANYWHERE_ADAPTER_PARAMETER_PREFIX),
                     adapterList.ToDictionary(
                         v => v.adapterName,
-                        v => new AnyWhereConfigurationAdapterMetadata(v.adapterName, v.typeName, v.assemblyName))),
-                new AnyWhereConfigurationAdapterFactory(
-                    new AnyWhereConfigurationAdapterFactoryTypeLoader(
-                        new AnyWhereConfigurationAdapterAssemblyLocator(adapterGlobalConfigurationEnvironment))));
+                        v => new AnyWhereConfigurationAdapterDefinition(v.typeName, v.assemblyName))),
+                new AnyWhereConfigurationAdapterProbingPaths(
+                    new AnyWhereConfigurationEnvironmentWithPrefix(
+                        environment,
+                        ANYWHERE_ADAPTER_GLOBAL_PARAMETER_PREFIX)));
 
-            configuration.ConfigureAppConfiguration(
-                configurationBuilder,
-                adapterConfigurationEnvironment);
+            configuration.ConfigureAppConfiguration(configurationBuilder);
 
             return configurationBuilder;
         }

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
@@ -8,44 +8,16 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public class AnyWhereConfigurationEnvironment : IAnyWhereConfigurationEnvironment
     {
-        private interface IValueStorage
-        {
-            string Get(
-                string name);
+        private readonly Stack<IAnyWhereConfigurationEnvironmentSource> sources;
 
-            IEnumerable<KeyValuePair<string, string>> GetValues();
-        }
-
-        private sealed class ProcessEnvironmentValueStorage : IValueStorage
+        public AnyWhereConfigurationEnvironment(
+            params IAnyWhereConfigurationEnvironmentSource[] sources)
         {
-            public string Get(
-                string name)
+            this.sources = new Stack<IAnyWhereConfigurationEnvironmentSource>(sources.Length);
+            foreach (var source in sources)
             {
-                if (string.IsNullOrWhiteSpace(name))
-                {
-                    throw new ArgumentException("Value cannot be null or whitespace.", nameof(name));
-                }
-
-                return Environment.GetEnvironmentVariable(name);
+                this.sources.Push(source);
             }
-
-            public IEnumerable<KeyValuePair<string, string>> GetValues()
-            {
-                foreach (DictionaryEntry entry in Environment.GetEnvironmentVariables())
-                {
-                    yield return new KeyValuePair<string, string>(entry.Key as string, entry.Value as string);
-                }
-            }
-        }
-
-        private readonly IValueStorage[] storages;
-
-        public AnyWhereConfigurationEnvironment()
-        {
-            this.storages = new IValueStorage[]
-            {
-                new ProcessEnvironmentValueStorage()
-            };
         }
 
         public T GetValue<T>(
@@ -60,7 +32,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             }
 
             string value = null;
-            foreach (var storage in this.storages)
+            foreach (var storage in this.sources)
             {
                 value = storage.Get(name);
                 if (value != null)
@@ -102,7 +74,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         {
             var set = new HashSet<string>();
 
-            foreach (var storage in this.storages)
+            foreach (var storage in this.sources)
             {
                 foreach (var kv in storage.GetValues())
                 {

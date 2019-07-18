@@ -1,23 +1,21 @@
-﻿using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
+﻿using System;
+
+using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public struct AnyWhereConfigurationAdapterArgument
     {
-        public IAnyWhereConfigurationEnvironmentReader AdapterEnvironmentReader { get; }
+        public AnyWhereConfigurationAdapterDefinition Definition { get; }
 
-        public string AdapterTypeName { get; }
-
-        public string AdapterAssemblyName { get; }
+        public IAnyWhereConfigurationEnvironment Environment { get; }
 
         public AnyWhereConfigurationAdapterArgument(
-            IAnyWhereConfigurationEnvironmentReader adapterEnvironmentReader,
-            string adapterTypeName,
-            string adapterAssemblyName)
+            AnyWhereConfigurationAdapterDefinition definition,
+            IAnyWhereConfigurationEnvironment environment)
         {
-            this.AdapterEnvironmentReader = adapterEnvironmentReader;
-            this.AdapterTypeName = adapterTypeName;
-            this.AdapterAssemblyName = adapterAssemblyName;
+            this.Definition = definition;
+            this.Environment = environment ?? throw new ArgumentNullException(nameof(environment));
         }
     }
 }

@@ -60,8 +60,6 @@ Currently configuration engine supports the following **GLOBAL** variables:
 > When configuring configuration adapters it is critically to understand that configuration adapter's indexes should be sequential and start from 0.
 > 
 > Any space / a gap between indexes is treated as end of list and the rest of configuration is ignored.
-> 
-> Configuration engine identifies configuration adapter using two environment variables:
 
 Configuration adapter is identified and loaded by configuration engine using two variables:
 

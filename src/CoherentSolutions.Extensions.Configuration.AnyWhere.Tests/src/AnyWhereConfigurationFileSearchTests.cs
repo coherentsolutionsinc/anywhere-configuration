@@ -257,6 +257,26 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             {
                 new CaseFilesInDirectory()
                 {
+                    File = "assembly.assembly",
+                    Directory = "bin",
+                    Extensions = new[]
+                    {
+                        ".exe"
+                    },
+                    Files = new[]
+                    {
+                        $"bin{Path.DirectorySeparatorChar}assembly.assembly.exe"
+                    },
+                    ExpectedResults = new[]
+                    {
+                        $"bin{Path.DirectorySeparatorChar}assembly.assembly.exe",
+                    }
+                }
+            };
+            yield return new object[]
+            {
+                new CaseFilesInDirectory()
+                {
                     File = "assembly",
                     Directory = "bin",
                     Extensions = new[]
@@ -365,6 +385,32 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                             Files = new []
                             {
                                 $"bin{Path.DirectorySeparatorChar}assembly.exe"
+                            }
+                        }
+                    }
+                }
+            };
+            yield return new object[]
+            {
+                new CaseFilesInDirectories()
+                {
+                    File = "assembly.assembly",
+                    Extensions = new[]
+                    {
+                        ".exe"
+                    },
+                    Files = new[]
+                    {
+                        $"bin{Path.DirectorySeparatorChar}assembly.assembly.exe"
+                    },
+                    ExpectedResults = new[]
+                    {
+                        new CaseFilesInDirectories.ExpectedResult()
+                        { 
+                            Directory = "bin",
+                            Files = new []
+                            {
+                                $"bin{Path.DirectorySeparatorChar}assembly.assembly.exe"
                             }
                         }
                     }

@@ -112,7 +112,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
             var count = 0;
             foreach (var (index, file) in extensions
-               .Select((extension, index) => (index, path: Path.ChangeExtension(name, extension))))
+               .Select((extension, index) => (index, path: string.Concat(name, extension))))
             {
                 var path = Path.Combine(directory, file);
                 if (this.fs.FileExists(path))

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CoherentSolutions.Extensions.Configuration.AnyWhere">
+      <HintPath>..\..\..\src\CoherentSolutions.Extensions.Configuration.AnyWhere\bin\Debug\netstandard2.0\CoherentSolutions.Extensions.Configuration.AnyWhere.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

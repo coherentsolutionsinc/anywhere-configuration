@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "Code": {
+      "commandName": "Project"
+      // In order to debug uncomment the following section and 
+      // replace <path> with the absolute path to anywhere-configuration/samples directory
+      //,
+      //"workingDirectory": "<path>/anywhere-configuration/samples",
+      //"environmentVariables": {
+      //  "ANYWHERE_ADAPTER_GLOBAL_PROBING_PATH": "different-config-sources/Code/_adapters/Json",
+      //  "ANYWHERE_ADAPTER_0_TYPE_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.Json.AnyWhereJsonConfigurationSourceAdapter",
+      //  "ANYWHERE_ADAPTER_0_ASSEMBLY_NAME": "CoherentSolutions.Extensions.Configuration.AnyWhere.Json",
+      //  "ANYWHERE_ADAPTER_0_PATH": "different-config-sources/Code/_configs/config.json"
+      //}
+    }
+  }
+}

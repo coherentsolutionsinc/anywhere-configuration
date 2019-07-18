@@ -2,6 +2,6 @@
 {
     public interface IAnyWhereConfigurationType
     {
-        T CreateInstance<T>();
+        object CreateInstance();
     }
 }

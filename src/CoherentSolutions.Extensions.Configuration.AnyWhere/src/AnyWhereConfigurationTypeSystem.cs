@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 
@@ -9,10 +8,23 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
     {
         private class TypeSystemLoadContext : AssemblyLoadContext
         {
+            private const int EXE_EXTENSION = 0;
+
+            private const int DLL_EXTENSION = 1;
+
+            private static readonly string[] extensions = new[]
+            {
+                ".exe",
+                ".dll"
+            };
+
+            private readonly IAnyWhereConfigurationFileSearch search;
+
             private readonly string basePath;
 
             public TypeSystemLoadContext(
-                string basePath)
+                string basePath,
+                IAnyWhereConfigurationFileSearch search)
             {
                 if (string.IsNullOrWhiteSpace(basePath))
                 {
@@ -20,35 +32,38 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 }
 
                 this.basePath = basePath;
+                this.search = search ?? throw new ArgumentNullException(nameof(search));
             }
 
             protected override Assembly Load(
                 AssemblyName assemblyName)
             {
-                var path = Path.Combine(this.basePath, assemblyName.Name);
-                
-                var candidatePath = Path.ChangeExtension(path, ".exe");
-                if (!File.Exists(candidatePath))
+                var results = this.search.Find(this.basePath, assemblyName.Name, extensions);
+                if (results is null || results.Count == 0)
                 {
-                    candidatePath = Path.ChangeExtension(candidatePath, ".dll");
-                    if (!File.Exists(candidatePath))
-                    {
-                        // If no file can be found for assembly, try to load assembly from default context.
-                        return Default.LoadFromAssemblyName(assemblyName);
-                    }
+                    return Default.LoadFromAssemblyName(assemblyName);
                 }
 
-                return !AssemblyName.ReferenceMatchesDefinition(assemblyName, GetAssemblyName(candidatePath))
+                var assembly = results[EXE_EXTENSION] ?? results[DLL_EXTENSION];
+                return !AssemblyName.ReferenceMatchesDefinition(assemblyName, GetAssemblyName(assembly.Path))
                     ? null
-                    : this.LoadFromAssemblyPath(candidatePath);
+                    : this.LoadFromAssemblyPath(assembly.Path);
             }
+        }
+
+        private readonly IAnyWhereConfigurationFileSearch search;
+
+        public AnyWhereConfigurationTypeSystem(
+            IAnyWhereConfigurationFileSearch search)
+        {
+            this.search = search ?? throw new ArgumentNullException(nameof(search));
         }
 
         public IAnyWhereConfigurationType Get(
             IAnyWhereConfigurationFile assembly,
             string name)
         {
-            var lc = new TypeSystemLoadContext(assembly.Directory);
+            var lc = new TypeSystemLoadContext(assembly.Directory, this.search);
             try
             {
                 return new AnyWhereConfigurationType(

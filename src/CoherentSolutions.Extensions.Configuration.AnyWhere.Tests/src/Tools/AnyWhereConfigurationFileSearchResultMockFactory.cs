@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 
 using Moq;
@@ -47,21 +46,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools
                     continue;
                 }
 
-                var file = new Mock<IAnyWhereConfigurationFile>();
-                file
-                   .Setup(instance => instance.Name)
-                   .Returns(name);
-                file
-                   .Setup(instance => instance.Directory)
-                   .Returns(directory);
-                file
-                   .Setup(instance => instance.Path)
-                   .Returns(Path.Combine(directory, name));
-                file
-                   .Setup(instance => instance.GetContentAsString())
-                   .Returns(content);
-
-                files.Add(file.Object);
+                files.Add(AnyWhereConfigurationFileMockFactory.Create(directory, name, content));
             }
 
             result

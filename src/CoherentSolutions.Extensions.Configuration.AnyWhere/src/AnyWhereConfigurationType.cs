@@ -12,9 +12,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             this.type = type ?? throw new ArgumentNullException(nameof(type));
         }
 
-        public T CreateInstance<T>()
+        public object CreateInstance()
         {
-            return (T) Activator.CreateInstance(this.type);
+            return Activator.CreateInstance(this.type);
         }
     }
 }

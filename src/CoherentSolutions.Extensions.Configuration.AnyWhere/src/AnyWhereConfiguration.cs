@@ -43,7 +43,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 
         protected virtual IAnyWhereConfigurationTypeSystem GetTypeSystem()
         {
-            return new AnyWhereConfigurationTypeSystem();
+            return new AnyWhereConfigurationTypeSystem(
+                new AnyWhereConfigurationFileSearch(
+                    new AnyWhereConfigurationFileSystem()));
         }
 
         public void ConfigureAppConfiguration(
@@ -83,14 +85,14 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 if (results is null || results.Count == 0)
                 {
                     throw new InvalidOperationException(
-                        AnyWhereConfigurationExceptions.GetEmptySearchResultsMessage(
+                        AnyWhereConfigurationExceptions.EmptySearchResultsMessage(
                             arg.Definition.AssemblyName, 
                             directories));
                 }
                 if (results.Count > 1)
                 {
                     throw new InvalidOperationException(
-                        AnyWhereConfigurationExceptions.GetAmbiguousSearchResultsMessage(results));
+                        AnyWhereConfigurationExceptions.AmbiguousSearchResultsMessage(results));
                 }
 
                 var assembly = results[0].Files[EXE_EXTENSION] ?? results[0].Files[DLL_EXTENSION];
@@ -112,7 +114,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     catch (Exception e)
                     {
                         throw new InvalidOperationException(
-                            AnyWhereConfigurationExceptions.GetBadEnvironmentConfigurationMessage(config.Path),
+                            AnyWhereConfigurationExceptions.ErrorLoadingEnvironmentConfigurationMessage(config.Path),
                             e);
                     }
 
@@ -122,12 +124,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                             new AnyWhereConfigurationEnvironmentFromMemory(values)));
                 }
 
-                var instance = system
-                   .Get(assembly, arg.Definition.TypeName)
-                   .CreateInstance<IAnyWhereConfigurationAdapter>();
-
                 try
                 {
+                    var instance = (IAnyWhereConfigurationAdapter) system.Get(assembly, arg.Definition.TypeName).CreateInstance();
                     instance.ConfigureAppConfiguration(
                         configurationBuilder,
                         new AnyWhereConfigurationEnvironmentReader(environment));
@@ -135,7 +134,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                 catch (Exception e)
                 {
                     throw new InvalidOperationException(
-                        AnyWhereConfigurationExceptions.GetBadConfigurationInjectionMessage(arg.Definition),
+                        AnyWhereConfigurationExceptions.ErrorLoadingConfigurationMessage(arg.Definition),
                         e);
                 }
             }

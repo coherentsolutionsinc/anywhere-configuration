@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+
+using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public static class AnyWhereConfigurationExceptions
     {
-        public static string GetEmptySearchResultsMessage(
+        public static string EmptySearchResultsMessage(
             string path,
             IEnumerable<string> directories)
         {
@@ -22,7 +25,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             return sb.ToString();
         }
 
-        public static string GetAmbiguousSearchResultsMessage(
+        public static string AmbiguousSearchResultsMessage(
             IEnumerable<IAnyWhereConfigurationFileSearchResult> results)
         {
             var sb = new StringBuilder()
@@ -39,16 +42,22 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             return sb.ToString();
         }
 
-        public static string GetBadEnvironmentConfigurationMessage(
+        public static string ErrorLoadingEnvironmentConfigurationMessage(
             string path)
         {
-            return $"Unable to load environment configuration from '{path}'. Please see inner exception for details.";
+            return $"Error loading environment configuration from '{path}'. Please see inner exception for details.";
         }
 
-        public static string GetBadConfigurationInjectionMessage(
+        public static string ErrorLoadingConfigurationMessage(
             AnyWhereConfigurationAdapterDefinition adapterDefinition)
         {
-            return $"Unable to inject configuration from ({adapterDefinition.TypeName}). Please see inner exception for details.";
+            var sb = new StringBuilder()
+               .AppendLine("Error loading configuration:")
+               .Append("- ").AppendLine(adapterDefinition.AssemblyName)
+               .Append("- ").AppendLine(adapterDefinition.TypeName)
+               .AppendLine("Please see inner exception for more details.");
+
+            return sb.ToString();
         }
     }
 }

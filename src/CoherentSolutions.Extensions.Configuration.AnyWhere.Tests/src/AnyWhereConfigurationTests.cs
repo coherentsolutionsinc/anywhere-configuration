@@ -93,7 +93,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             {
                 Assert.Equal(
                     e.Message, 
-                    AnyWhereConfigurationExceptions.GetEmptySearchResultsMessage(
+                    AnyWhereConfigurationExceptions.EmptySearchResultsMessage(
                         argDefinition.AssemblyName, 
                         new []
                         {
@@ -154,7 +154,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             {
                 Assert.Equal(
                     e.Message, 
-                    AnyWhereConfigurationExceptions.GetAmbiguousSearchResultsMessage(searchResults));
+                    AnyWhereConfigurationExceptions.AmbiguousSearchResultsMessage(searchResults));
             }
 
             args.VerifyAll();
@@ -212,7 +212,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 
             var type = new Mock<IAnyWhereConfigurationType>();
             type
-               .Setup(instance => instance.CreateInstance<IAnyWhereConfigurationAdapter>())
+               .Setup(instance => instance.CreateInstance())
                .Returns(adapter.Object)
                .Verifiable();
 
@@ -284,7 +284,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             {
                 Assert.Equal(
                     e.Message, 
-                    AnyWhereConfigurationExceptions.GetBadEnvironmentConfigurationMessage(searchResult.Files[2].Path));
+                    AnyWhereConfigurationExceptions.ErrorLoadingEnvironmentConfigurationMessage(searchResult.Files[2].Path));
             }
 
             args.VerifyAll();
@@ -349,7 +349,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 
             var type = new Mock<IAnyWhereConfigurationType>();
             type
-               .Setup(instance => instance.CreateInstance<IAnyWhereConfigurationAdapter>())
+               .Setup(instance => instance.CreateInstance())
                .Returns(adapter.Object)
                .Verifiable();
 

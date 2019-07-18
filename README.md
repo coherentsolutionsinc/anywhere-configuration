@@ -66,7 +66,9 @@ Configuration adapter is identified and loaded by configuration engine using two
 * **TYPE\_NAME** - is the full type name of the configuration adapter's type.
 * **ASSEMBLY\_NAME** - is the name of the assembly file where configuration adapter type is implemented.
 
-All additional parameters required by the underlying `IConfigurationSource` are passed using the **LOCAL** variables and can be consumed using supplied instance of `IAnyWhereConfigurationEnvironmentReader`.
+All additional parameters required by the underlying `IConfigurationSource` are passed using the **LOCAL** variables or with help of **CONFIGURATION FILE** and consumed using supplied instance of `IAnyWhereConfigurationEnvironmentReader`.
+
+_Please see [documentation](https://github.com/coherentsolutionsinc/anywhere-configuration/wiki/Passing-Arguments-to-Configuration-Source) for more details_
 
 ### Where it can be used?
 
@@ -78,6 +80,10 @@ WebHost.CreateDefaultBuilder(args)
   .Build()
   .Run();
 ```
+
+> **NOTE**
+>
+> This section doesn't present and explains all features / aspects of the CoherentSolutions.Extensions.Configuration.AnyWhere. The complete documentation is available on [project wiki](https://github.com/coherentsolutionsinc/anywhere-configuration/wiki).
 
 Application is build into container and deployed to _development environment_ (developers machine) and _staging_ (Kubernetes cluster in Azure).
 

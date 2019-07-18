@@ -38,16 +38,23 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             protected override Assembly Load(
                 AssemblyName assemblyName)
             {
-                var results = this.search.Find(this.basePath, assemblyName.Name, extensions);
-                if (results is null || results.Count == 0)
+                try
                 {
                     return Default.LoadFromAssemblyName(assemblyName);
                 }
+                catch
+                {
+                    var results = this.search.Find(this.basePath, assemblyName.Name, extensions);
+                    if (results is null || results.Count == 0)
+                    {
+                        return null;
+                    }
 
-                var assembly = results[EXE_EXTENSION] ?? results[DLL_EXTENSION];
-                return !AssemblyName.ReferenceMatchesDefinition(assemblyName, GetAssemblyName(assembly.Path))
-                    ? null
-                    : this.LoadFromAssemblyPath(assembly.Path);
+                    var assembly = results[EXE_EXTENSION] ?? results[DLL_EXTENSION];
+                    return !AssemblyName.ReferenceMatchesDefinition(assemblyName, GetAssemblyName(assembly.Path))
+                        ? null
+                        : this.LoadFromAssemblyPath(assembly.Path);
+                }
             }
         }
 

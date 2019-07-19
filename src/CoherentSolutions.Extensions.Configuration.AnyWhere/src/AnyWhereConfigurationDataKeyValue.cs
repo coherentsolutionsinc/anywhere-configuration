@@ -9,8 +9,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         public readonly string Value;
 
         public AnyWhereConfigurationDataKeyValue(
-            string key,
-            string value)
+            in string key,
+            in string value)
         {
             if (string.IsNullOrWhiteSpace(key))
             {

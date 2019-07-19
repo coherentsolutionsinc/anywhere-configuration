@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-
-using CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools;
 
 using Xunit;
 using Xunit.Abstractions;
@@ -11,7 +8,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 {
     public class AnyWhereConfigurationDataKeyValueEnumeratorTests
     {
-        public class Case : IXunitSerializable
+        public class SuccessCase : IXunitSerializable
         {
             public class KeyValue : IXunitSerializable
             {
@@ -38,7 +35,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 
             public KeyValue[] ExpectedResults { get; set; }
 
-            public Case()
+            public SuccessCase()
             {
                 this.ExpectedResults = Array.Empty<KeyValue>();
             }
@@ -63,16 +60,46 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             }
         }
 
-        public static IEnumerable<object[]> GetData()
+        public class ErrorCase : IXunitSerializable
+        {
+            public string DataString { get; set; }
+
+            public int Line { get; set; }
+
+            public int Position { get; set; }
+
+            public override string ToString()
+            {
+                return this.DataString.Replace(Environment.NewLine, "{nl}");
+            }
+
+            public void Serialize(
+                IXunitSerializationInfo info)
+            {
+                info.AddValue(nameof(this.DataString), this.DataString);
+                info.AddValue(nameof(this.Line), this.Line);
+                info.AddValue(nameof(this.Position), this.Position);
+            }
+
+            public void Deserialize(
+                IXunitSerializationInfo info)
+            {
+                this.DataString = info.GetValue<string>(nameof(this.DataString));
+                this.Line = info.GetValue<int>(nameof(this.Line));
+                this.Position = info.GetValue<int>(nameof(this.Position));
+            }
+        }
+
+        public static IEnumerable<object[]> GetSuccessData()
         {
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key=value",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -82,12 +109,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "  key=value",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -97,12 +124,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key  =value",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -112,12 +139,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "  key  =value",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -127,12 +154,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key=  value",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -142,12 +169,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key=value  ",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -157,12 +184,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key=  value  ",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -172,12 +199,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "  key=  value",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -187,12 +214,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "  key=value  ",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -202,12 +229,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "  key=  value  ",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -217,12 +244,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key  =  value",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -232,12 +259,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key  =value  ",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -247,12 +274,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key  =  value  ",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -262,12 +289,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = "key  =  value  ",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -277,12 +304,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = $"{Environment.NewLine}key=value",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -292,12 +319,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = $"key=value{Environment.NewLine}",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "key",
                             Value = "value"
@@ -307,17 +334,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = $"name=vname{Environment.NewLine}fam=vfam",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "name",
                             Value = "vname"
                         },
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "fam",
                             Value = "vfam"
@@ -327,17 +354,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = $"name=vname  {Environment.NewLine}fam=vfam",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "name",
                             Value = "vname"
                         },
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "fam",
                             Value = "vfam"
@@ -347,17 +374,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = $"name=vname{Environment.NewLine}  fam=vfam",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "name",
                             Value = "vname"
                         },
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "fam",
                             Value = "vfam"
@@ -367,17 +394,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = $"name=vname  {Environment.NewLine}  fam=vfam",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "name",
                             Value = "vname"
                         },
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "fam",
                             Value = "vfam"
@@ -387,17 +414,17 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = $"name=vname{Environment.NewLine}{Environment.NewLine}fam=vfam",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "name",
                             Value = "vname"
                         },
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "fam",
                             Value = "vfam"
@@ -407,22 +434,22 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     DataString = $"name=vname{Environment.NewLine}fam=vfam{Environment.NewLine}raw=vraw",
                     ExpectedResults = new[]
                     {
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "name",
                             Value = "vname"
                         },
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "fam",
                             Value = "vfam"
                         },
-                        new Case.KeyValue()
+                        new SuccessCase.KeyValue()
                         {
                             Key = "raw",
                             Value = "vraw"
@@ -432,49 +459,104 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
         }
 
-        public static IEnumerable<object[]> GetBadData()
+        public static IEnumerable<object[]> GetErrorData()
         {
             yield return new object[]
             {
-                new Case()
+                new ErrorCase()
                 {
                     DataString = "keyvalue",
+                    Line = 0,
+                    Position = 0
                 }
             };
             yield return new object[]
             {
-                new Case()
+                new ErrorCase()
                 {
                     DataString = "key=",
+                    Line = 0,
+                    Position = 4
                 }
             };
             yield return new object[]
             {
-                new Case()
+                new ErrorCase()
                 {
                     DataString = "key=  ",
+                    Line = 0,
+                    Position = 4
                 }
             };
             yield return new object[]
             {
-                new Case()
+                new ErrorCase()
                 {
                     DataString = "=value",
+                    Line = 0,
+                    Position = 0
                 }
             };
             yield return new object[]
             {
-                new Case()
+                new ErrorCase()
                 {
                     DataString = "  =value",
+                    Line = 0,
+                    Position = 2
+                }
+            };
+            yield return new object[]
+            {
+                new ErrorCase()
+                {
+                    DataString = $"key=value{Environment.NewLine}keyvalue",
+                    Line = 1,
+                    Position = 0
+                }
+            };
+            yield return new object[]
+            {
+                new ErrorCase()
+                {
+                    DataString = $"key=value{Environment.NewLine}key=",
+                    Line = 1,
+                    Position = 4
+                }
+            };
+            yield return new object[]
+            {
+                new ErrorCase()
+                {
+                    DataString = $"key=value{Environment.NewLine}key=  ",
+                    Line = 1,
+                    Position = 4
+                }
+            };
+            yield return new object[]
+            {
+                new ErrorCase()
+                {
+                    DataString = $"key=value{Environment.NewLine}=value",
+                    Line = 1,
+                    Position = 0
+                }
+            };
+            yield return new object[]
+            {
+                new ErrorCase()
+                {
+                    DataString = $"key=value{Environment.NewLine}  =value",
+                    Line = 1,
+                    Position = 2
                 }
             };
         }
 
         [Theory]
-        [MemberData(nameof(GetData))]
-        public void Should_enumerate_all_key_values_From_data_string(
-            Case @case)
+        [MemberData(nameof(GetSuccessData))]
+        public void Should_enumerate_all_key_values_When_success_data_string(
+            SuccessCase @case)
         {
             var enumerator = new AnyWhereConfigurationDataKeyValueEnumerator(@case.DataString);
 
@@ -490,13 +572,23 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         }
 
         [Theory]
-        [MemberData(nameof(GetBadData))]
-        public void Should_throw_exception_From_bad_data_string(
-            Case @case)
+        [MemberData(nameof(GetErrorData))]
+        public void Should_throw_exception_When_error_data_string(
+            ErrorCase @case)
         {
             var enumerator = new AnyWhereConfigurationDataKeyValueEnumerator(@case.DataString);
 
-            Assert.Throws<InvalidOperationException>(() => { enumerator.MoveNext(); });
+            try
+            {
+                while (enumerator.MoveNext())
+                {
+                }
+            }
+            catch (AnyWhereConfigurationParseException e)
+            {
+                Assert.Equal(@case.Line, e.Line);
+                Assert.Equal(@case.Position, e.Position);
+            }
         }
 
         [Fact]

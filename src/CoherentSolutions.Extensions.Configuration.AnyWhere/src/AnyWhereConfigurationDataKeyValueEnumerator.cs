@@ -26,7 +26,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         private State currentState;
 
         public AnyWhereConfigurationDataKeyValueEnumerator(
-            string inputValue)
+            in string inputValue)
         {
             this.inputValue = inputValue;
 
@@ -85,10 +85,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                         }
 
                         output = output.TrimEnd();
-
                         index += nl.Length;
 
-                        if (index == (nl.Length - 1) || input.Length == index)
+                        if (index == nl.Length - 1 || input.Length == index)
                         {
                             this.currentState = State.Closed;
                         }
@@ -110,18 +109,20 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                         index = output.IndexOf(KEY_VALUE_SEPARATOR_CHAR);
                         if (index < 0)
                         {
-                            throw new InvalidOperationException(
-                                $"Expected '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.currentLine}, {ch})");
+                            throw new AnyWhereConfigurationParseException(
+                                $"Expected '{KEY_VALUE_SEPARATOR_CHAR}'.", this.currentLine, ch);
                         }
+
                         if (index == 0)
                         {
-                            throw new InvalidOperationException(
-                                $"Expected 'a key' before '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.currentLine}, {ch})");
+                            throw new AnyWhereConfigurationParseException(
+                                $"Expected 'a key' before '{KEY_VALUE_SEPARATOR_CHAR}'", this.currentLine, ch);
                         }
+
                         if (output.Length - 1 == index)
                         {
-                            throw new InvalidOperationException(
-                                $"Expected 'a value' after '{KEY_VALUE_SEPARATOR_CHAR}' at ({this.currentLine}, {ch + index + 1})");
+                            throw new AnyWhereConfigurationParseException(
+                                $"Expected 'a value' after '{KEY_VALUE_SEPARATOR_CHAR}'", this.currentLine, ch + index + 1);
                         }
 
                         this.current = new AnyWhereConfigurationDataKeyValue(
@@ -140,7 +141,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         public void Reset()
         {
             this.current = default;
-
             this.currentLine = -1;
             this.currentIndex = 0;
             this.currentState = State.None;

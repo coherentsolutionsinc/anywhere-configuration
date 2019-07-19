@@ -3,31 +3,49 @@
 using CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault;
 
 using Xunit;
+using Xunit.Abstractions;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.AzureKeyVault
 {
     public class AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretTests
     {
-        public class Case
+        public class Case : IXunitSerializable
         {
-            public string SecretString { get; }
+            public string SecretString { get; set; }
 
-            public string ExpectedName { get; }
+            public string ExpectedName { get; set; }
 
-            public string ExpectedAlias { get; }
+            public string ExpectedAlias { get; set; }
 
-            public string ExpectedVersion { get; }
+            public string ExpectedVersion { get; set; }
 
-            public Case(
-                string secretString,
-                string expectedName,
-                string expectedAlias = "",
-                string expectedVersion = "")
+            public Case()
             {
-                this.SecretString = secretString;
-                this.ExpectedName = expectedName;
-                this.ExpectedAlias = expectedAlias;
-                this.ExpectedVersion = expectedVersion;
+                this.ExpectedAlias = string.Empty;
+                this.ExpectedVersion = string.Empty;
+            }
+
+            public override string ToString()
+            {
+                return this.SecretString;
+            }
+
+            public void Serialize(
+                IXunitSerializationInfo info)
+            {
+                info.AddValue(nameof(this.SecretString), this.SecretString);
+                info.AddValue(nameof(this.ExpectedName), this.ExpectedName);
+                info.AddValue(nameof(this.ExpectedAlias), this.ExpectedAlias);
+                info.AddValue(nameof(this.ExpectedVersion), this.ExpectedVersion);
+            }
+
+            public void Deserialize(
+                IXunitSerializationInfo info)
+            {
+                this.SecretString = info.GetValue<string>(nameof(this.SecretString));
+                this.ExpectedName = info.GetValue<string>(nameof(this.ExpectedName));
+                this.ExpectedAlias = info.GetValue<string>(nameof(this.ExpectedAlias));
+                this.ExpectedVersion = info.GetValue<string>(nameof(this.ExpectedVersion));
             }
         }
 
@@ -35,141 +53,315 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.AzureKeyVaul
         {
             yield return new object[]
             {
-                new Case("secret-name/secret-alias:secret-version", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name/secret-alias:secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("    secret-name/secret-alias:secret-version", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "    secret-name/secret-alias:secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name    /secret-alias:secret-version", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name    /secret-alias:secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("    secret-name    /secret-alias:secret-version", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "    secret-name    /secret-alias:secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name/    secret-alias:secret-version", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name/    secret-alias:secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name/secret-alias    :secret-version", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name/secret-alias    :secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name/    secret-alias    :secret-version", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name/    secret-alias    :secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name/secret-alias:    secret-version", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name/secret-alias:    secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name/secret-alias:secret-version    ", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name/secret-alias:secret-version    ",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name/secret-alias:    secret-version    ", "secret-name", "secret-alias", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name/secret-alias:    secret-version    ",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name:secret-version", "secret-name", "", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name:secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("    secret-name:secret-version", "secret-name", "", "secret-version"),
+                new Case()
+                {
+                    SecretString = "    secret-name:secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name    :secret-version", "secret-name", "", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name    :secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("    secret-name    :secret-version", "secret-name", "", "secret-version"),
+                new Case()
+                {
+                    SecretString = "    secret-name    :secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name:    secret-version", "secret-name", "", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name:    secret-version",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name:secret-version    ", "secret-name", "", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name:secret-version    ",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name:    secret-version    ", "secret-name", "", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name:    secret-version    ",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name", "secret-name"),
+                new Case()
+                {
+                    SecretString = "secret-name",
+                    ExpectedName = "secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("    secret-name", "secret-name"),
+                new Case()
+                {
+                    SecretString = "    secret-name",
+                    ExpectedName = "secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name    ", "secret-name"),
+                new Case()
+                {
+                    SecretString = "secret-name    ",
+                    ExpectedName = "secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("    secret-name    ", "secret-name"),
+                new Case()
+                {
+                    SecretString = "    secret-name    ",
+                    ExpectedName = "secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name/secret-alias", "secret-name", "secret-alias"),
+                new Case()
+                {
+                    SecretString = "secret-name/secret-alias",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias"
+                }
             };
             yield return new object[]
             {
-                new Case("    secret-name/secret-alias", "secret-name", "secret-alias"),
+                new Case()
+                {
+                    SecretString = "    secret-name/secret-alias",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name/secret-alias    ", "secret-name", "secret-alias"),
+                new Case()
+                {
+                    SecretString = "secret-name/secret-alias    ",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias"
+                }
             };
             yield return new object[]
             {
-                new Case("    secret-name/secret-alias    ", "secret-name", "secret-alias"),
+                new Case()
+                {
+                    SecretString = "    secret-name/secret-alias    ",
+                    ExpectedName = "secret-name",
+                    ExpectedAlias = "secret-alias"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name`/secret-name", "secret-name/secret-name"),
+                new Case()
+                {
+                    SecretString = "secret-name`/secret-name",
+                    ExpectedName = "secret-name/secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name`:secret-name", "secret-name:secret-name"),
+                new Case()
+                {
+                    SecretString = "secret-name`:secret-name",
+                    ExpectedName = "secret-name:secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name``secret-name", "secret-name`secret-name"),
+                new Case()
+                {
+                    SecretString = "secret-name``secret-name",
+                    ExpectedName = "secret-name`secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name``/secret-alias", "secret-name`", "secret-alias"),
+                new Case()
+                {
+                    SecretString = "secret-name``/secret-alias",
+                    ExpectedName = "secret-name`",
+                    ExpectedAlias = "secret-alias"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name``:secret-version", "secret-name`", "", "secret-version"),
+                new Case()
+                {
+                    SecretString = "secret-name``:secret-version",
+                    ExpectedName = "secret-name`",
+                    ExpectedAlias = "",
+                    ExpectedVersion = "secret-version"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name`secret-name", "secret-name`secret-name"),
+                new Case()
+                {
+                    SecretString = "secret-name`secret-name",
+                    ExpectedName = "secret-name`secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name```/secret-name", "secret-name`/secret-name"),
+                new Case()
+                {
+                    SecretString = "secret-name```/secret-name",
+                    ExpectedName = "secret-name`/secret-name"
+                }
             };
             yield return new object[]
             {
-                new Case("secret-name````/secret-alias", "secret-name``", "secret-alias"),
+                new Case()
+                {
+                    SecretString = "secret-name````/secret-alias",
+                    ExpectedName = "secret-name``",
+                    ExpectedAlias = "secret-alias"
+                }
             };
         }
 
         [Theory]
         [MemberData(nameof(GetData))]
-        public void Should_read_secret_name_alias_version_When_secrets_string_contains_name_andor_alias_andor_version(
+        public void Should_read_secret_name_alias_version_From_secrets_string(
             Case @case)
         {
             var secret = new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret(@case.SecretString);

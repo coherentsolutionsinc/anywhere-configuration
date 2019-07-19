@@ -2,12 +2,12 @@
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
 {
-    public ref struct AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerable
+    public struct AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerable
     {
-        private readonly ReadOnlySpan<char> value;
+        private readonly string value;
 
         public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerable(
-            in ReadOnlySpan<char> value)
+            in string value)
         {
             this.value = value;
         }

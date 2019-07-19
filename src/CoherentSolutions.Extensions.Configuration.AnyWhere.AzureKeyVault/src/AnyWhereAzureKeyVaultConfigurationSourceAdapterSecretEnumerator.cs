@@ -3,91 +3,112 @@ using System.Runtime.ExceptionServices;
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
 {
-    public ref struct AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerator
+    public struct AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerator
     {
         private enum State
         {
-            Open = 0,
+            None = 0,
 
-            Closed = 1
+            Open = 1,
+
+            Closed = 2
         }
 
-        private readonly ReadOnlySpan<char> value;
+        private const char SECRETS_SEPARATOR_CHAR = ';';
+
+        private readonly string inputValue;
 
         private AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret current;
 
-        private ReadOnlySpan<char> inputValue;
+        private int currentIndex;
 
-        private State inputState;
+        private State currentState;
 
-        private int inputIndex;
+        public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret Current
+        {
+            get
+            {
+                if (this.currentState == State.None)
+                {
+                    throw new InvalidOperationException("The enumeration wasn't started.");
+                }
+
+                return this.current;
+            }
+        }
 
         public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerator(
-            in ReadOnlySpan<char> value)
+            in string value)
         {
-            this.value = value;
+            this.inputValue = value;
 
             this.current = default;
-
-            this.inputValue = value;
-            this.inputState = State.Open;
-            this.inputIndex = 0;
+            this.currentIndex = 0;
+            this.currentState = State.None;
         }
 
         public bool MoveNext()
         {
-            switch (this.inputState)
+            switch (this.currentState)
             {
+                case State.None:
+                    if (string.IsNullOrWhiteSpace(this.inputValue))
+                    {
+                        this.currentState = State.Closed;
+                        return false;
+                    }
+
+                    this.currentState = State.Open;
+                    goto case State.Open;
                 case State.Open:
-                    ReadOnlySpan<char> secretString;
                     for (;;)
                     {
-                        var index = this.inputValue.IndexOf(';');
-                        if (index >= 0)
-                        {
-                            this.inputIndex += index;
+                        var input = this.inputValue.AsSpan(this.currentIndex);
+                        var index = input.IndexOf(SECRETS_SEPARATOR_CHAR);
 
-                            this.inputValue = this.inputValue.TrimStart();
-                            if (this.inputValue[0] == ';')
-                            {
-                                this.inputValue = this.inputValue.Slice(1);
-                                continue;
-                            }
-                        }
+                        var output = index >= 0
+                            ? input.Slice(0, index)
+                            : input;
 
-                        if (this.inputValue.IsEmpty || this.inputValue.IsWhiteSpace())
-                        {
-                            this.inputState = State.Closed;
-                            return false;
-                        }
+                        output = output.Trim();
 
-                        if (index > 0)
+                        index++;
+
+                        if (index == 0 || input.Length == index)
                         {
-                            this.inputValue = this.inputValue.Slice(0, index);
+                            this.currentState = State.Closed;
                         }
                         else
                         {
-                            this.inputState = State.Closed;
+                            this.currentIndex += index;
                         }
 
-                        secretString = this.inputValue;
-                        break;
+                        if (output.IsEmpty)
+                        {
+                            if (this.currentState == State.Closed)
+                            {
+                                return false;
+                            }
+
+                            continue;
+                        }
+
+                        try
+                        {
+                            this.current = new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret(output);
+                        }
+                        catch (AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException e)
+                        {
+                            throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
+                                e.Message,
+                                this.inputValue,
+                                e.Position + this.currentIndex,
+                                ExceptionDispatchInfo.Capture(e).SourceException);
+                        }
+
+                        return true;
                     }
 
-                    try
-                    {
-                        this.current = new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret(secretString);
-                    }
-                    catch (AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException e)
-                    {
-                        throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
-                            e.Message,
-                            this.value,
-                            e.Position + this.inputIndex,
-                            ExceptionDispatchInfo.Capture(e).SourceException);
-                    }
-
-                    return true;
                 case State.Closed:
                     return false;
                 default:
@@ -98,12 +119,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
         public void Reset()
         {
             this.current = default;
-
-            this.inputValue = this.value;
-            this.inputState = State.Open;
-            this.inputIndex = 0;
+            this.currentIndex = 0;
+            this.currentState = State.Open;
         }
-
-        public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret Current => this.current;
     }
 }

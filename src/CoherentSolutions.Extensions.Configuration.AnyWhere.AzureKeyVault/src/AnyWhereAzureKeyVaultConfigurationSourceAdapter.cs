@@ -164,7 +164,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
                 ? KeyVault.CreateClientUsingManagedIdentity()
                 : KeyVault.CreateClientUsingServicePrinciple(clientId, clientSecret))
             {
-                foreach (var secret in new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerable(secretsString.AsSpan()))
+                foreach (var secret in new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerable(secretsString))
                 {
                     var name = secret.Name;
                     var alias = secret.Alias;

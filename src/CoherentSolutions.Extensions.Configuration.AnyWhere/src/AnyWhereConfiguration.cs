@@ -71,7 +71,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
             var directories = new HashSet<string>();
             foreach (var path in this.adapterProbingPaths.Enumerate())
             {
-                directories.Add(path.Value);
+                directories.Add(path.Path);
             }
 
             if (directories.Count == 0)

@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
+namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
-    public class AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException : Exception
+    public class AnyWhereConfigurationParseException : Exception
     {
         public int Line { get; }
 
         public int Position { get; }
 
-        public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
+        public AnyWhereConfigurationParseException(
             string message,
             int line,
             int position)

@@ -15,7 +15,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 {
     public class AnyWhereConfigurationAdapterArgumentEnumeratorTests
     {
-        public class Case : IXunitSerializable
+        public class SuccessCase : IXunitSerializable
         {
             public class EnvironmentKeyValue : IXunitSerializable
             {
@@ -90,7 +90,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 
             public ExpectedResult[] ExpectedResults { get; set; }
 
-            public Case()
+            public SuccessCase()
             {
                 this.EnvironmentKeyValues = Array.Empty<EnvironmentKeyValue>();
                 this.KnownAdapterDefinitions = Array.Empty<KnownAdapterDefinition>();
@@ -137,20 +137,20 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             }
         }
 
-        public static IEnumerable<object[]> GetData()
+        public static IEnumerable<object[]> GetSuccessData()
         {
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     EnvironmentKeyValues = new[]
                     {
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"0_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}",
                             Value = "One"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"1_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}",
                             Value = "Two"
@@ -158,13 +158,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     KnownAdapterDefinitions = new[]
                     {
-                        new Case.KnownAdapterDefinition()
+                        new SuccessCase.KnownAdapterDefinition()
                         {
                             Name = "One",
                             Type = "OneType",
                             Assembly = "OneAssembly"
                         }, 
-                        new Case.KnownAdapterDefinition()
+                        new SuccessCase.KnownAdapterDefinition()
                         {
                             Name = "Two",
                             Type = "TwoType",
@@ -173,12 +173,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new Case.ExpectedResult()
+                        new SuccessCase.ExpectedResult()
                         {
                             Type = "OneType",
                             Assembly = "OneAssembly"
                         }, 
-                        new Case.ExpectedResult()
+                        new SuccessCase.ExpectedResult()
                         {
                             Type = "TwoType",
                             Assembly = "TwoAssembly"
@@ -188,26 +188,26 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     EnvironmentKeyValues = new[]
                     {
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"0_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
                             Value = "OneType"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"0_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
                             Value = "OneAssembly"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"1_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
                             Value = "TwoType"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"1_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
                             Value = "TwoAssembly"
@@ -215,12 +215,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new Case.ExpectedResult()
+                        new SuccessCase.ExpectedResult()
                         {
                             Type = "OneType",
                             Assembly = "OneAssembly"
                         }, 
-                        new Case.ExpectedResult()
+                        new SuccessCase.ExpectedResult()
                         {
                             Type = "TwoType",
                             Assembly = "TwoAssembly"
@@ -230,26 +230,26 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     EnvironmentKeyValues = new[]
                     {
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"1_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
                             Value = "TwoAssembly"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"1_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
                             Value = "TwoType"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"0_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
                             Value = "OneType"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"0_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
                             Value = "OneAssembly"
@@ -257,12 +257,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new Case.ExpectedResult()
+                        new SuccessCase.ExpectedResult()
                         {
                             Type = "OneType",
                             Assembly = "OneAssembly"
                         }, 
-                        new Case.ExpectedResult()
+                        new SuccessCase.ExpectedResult()
                         {
                             Type = "TwoType",
                             Assembly = "TwoAssembly"
@@ -272,16 +272,16 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     EnvironmentKeyValues = new[]
                     {
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"0_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}",
                             Value = "One"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"2_{ANYWHERE_ADAPTER_NAME_PARAMETER_NAME}",
                             Value = "Three"
@@ -289,13 +289,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     KnownAdapterDefinitions = new[]
                     {
-                        new Case.KnownAdapterDefinition()
+                        new SuccessCase.KnownAdapterDefinition()
                         {
                             Name = "One",
                             Type = "OneType",
                             Assembly = "OneAssembly"
                         }, 
-                        new Case.KnownAdapterDefinition()
+                        new SuccessCase.KnownAdapterDefinition()
                         {
                             Name = "Three",
                             Type = "ThreeType",
@@ -304,7 +304,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new Case.ExpectedResult()
+                        new SuccessCase.ExpectedResult()
                         {
                             Type = "OneType",
                             Assembly = "OneAssembly"
@@ -314,26 +314,26 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new Case()
+                new SuccessCase()
                 {
                     EnvironmentKeyValues = new[]
                     {
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"0_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
                             Value = "OneType"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"0_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
                             Value = "OneAssembly"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"2_{ANYWHERE_ADAPTER_TYPE_NAME_PARAMETER_NAME}",
                             Value = "ThreeType"
                         },
-                        new Case.EnvironmentKeyValue()
+                        new SuccessCase.EnvironmentKeyValue()
                         {
                             Key = $"2_{ANYWHERE_ADAPTER_ASSEMBLY_NAME_PARAMETER_NAME}",
                             Value = "ThreeAssembly"
@@ -341,7 +341,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new Case.ExpectedResult()
+                        new SuccessCase.ExpectedResult()
                         {
                             Type = "OneType",
                             Assembly = "OneAssembly"
@@ -352,9 +352,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         }
 
         [Theory]
-        [MemberData(nameof(GetData))]
+        [MemberData(nameof(GetSuccessData))]
         public void Should_enumerate_all_adapters_From_environment(
-            Case @case)
+            SuccessCase @case)
         {
             var environment = AnyWhereConfigurationEnvironmentMockFactory.Create(
                 @case.EnvironmentKeyValues.Select(i => (i.Key, i.Value)));

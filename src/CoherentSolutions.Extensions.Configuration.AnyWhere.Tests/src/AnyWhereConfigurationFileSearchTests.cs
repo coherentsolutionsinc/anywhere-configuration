@@ -14,7 +14,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 {
     public class AnyWhereConfigurationFileSearchTests
     {
-        public class CaseFilesInDirectory : IXunitSerializable
+        public class SuccessCaseFilesInDirectory : IXunitSerializable
         {
             public string File { get; set; }
 
@@ -26,7 +26,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 
             public string[] ExpectedResults { get; set; }
 
-            public CaseFilesInDirectory()
+            public SuccessCaseFilesInDirectory()
             {
                 this.Files = Array.Empty<string>();
                 this.Extensions = Array.Empty<string>();
@@ -96,7 +96,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             }
         }
 
-        public class CaseFilesInDirectories : IXunitSerializable
+        public class SuccessCaseFilesInDirectories : IXunitSerializable
         {
             public class ExpectedResult : IXunitSerializable
             {
@@ -127,7 +127,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
 
             public ExpectedResult[] ExpectedResults { get; set; }
 
-            public CaseFilesInDirectories()
+            public SuccessCaseFilesInDirectories()
             {
                 this.Extensions = Array.Empty<string>();
                 this.Files = Array.Empty<string>();
@@ -185,11 +185,11 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             }
         }
 
-        public static IEnumerable<object[]> GetFilesInDirectoryData()
+        public static IEnumerable<object[]> GetSuccessFilesInDirectoryData()
         {
             yield return new object[]
             {
-                new CaseFilesInDirectory()
+                new SuccessCaseFilesInDirectory()
                 {
                     File = "assembly",
                     Directory = "bin",
@@ -202,7 +202,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectory()
+                new SuccessCaseFilesInDirectory()
                 {
                     File = "assembly",
                     Directory = "bin",
@@ -218,7 +218,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectory()
+                new SuccessCaseFilesInDirectory()
                 {
                     File = "assembly",
                     Directory = "bin",
@@ -235,7 +235,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectory()
+                new SuccessCaseFilesInDirectory()
                 {
                     File = "assembly",
                     Directory = "bin",
@@ -255,7 +255,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectory()
+                new SuccessCaseFilesInDirectory()
                 {
                     File = "assembly.assembly",
                     Directory = "bin",
@@ -275,7 +275,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectory()
+                new SuccessCaseFilesInDirectory()
                 {
                     File = "assembly",
                     Directory = "bin",
@@ -297,7 +297,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectory()
+                new SuccessCaseFilesInDirectory()
                 {
                     File = "assembly",
                     Directory = "bin",
@@ -320,19 +320,19 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
         }
 
-        public static IEnumerable<object[]> GetFilesInDirectoriesData()
+        public static IEnumerable<object[]> GetSuccessFilesInDirectoriesData()
         {
             yield return new object[]
             {
-                new CaseFilesInDirectories()
+                new SuccessCaseFilesInDirectories()
                 {
                     File = "assembly",
-                    ExpectedResults = Array.Empty<CaseFilesInDirectories.ExpectedResult>()
+                    ExpectedResults = Array.Empty<SuccessCaseFilesInDirectories.ExpectedResult>()
                 }
             };
             yield return new object[]
             {
-                new CaseFilesInDirectories()
+                new SuccessCaseFilesInDirectories()
                 {
                     File = "assembly",
                     Files = new[]
@@ -341,7 +341,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new CaseFilesInDirectories.ExpectedResult()
+                        new SuccessCaseFilesInDirectories.ExpectedResult()
                         { 
                             Directory = "bin",
                             Files = new []
@@ -354,19 +354,19 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectories()
+                new SuccessCaseFilesInDirectories()
                 {
                     File = "assembly",
                     Extensions = new[]
                     {
                         ".exe"
                     },
-                    ExpectedResults = Array.Empty<CaseFilesInDirectories.ExpectedResult>()
+                    ExpectedResults = Array.Empty<SuccessCaseFilesInDirectories.ExpectedResult>()
                 }
             };
             yield return new object[]
             {
-                new CaseFilesInDirectories()
+                new SuccessCaseFilesInDirectories()
                 {
                     File = "assembly",
                     Extensions = new[]
@@ -379,7 +379,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new CaseFilesInDirectories.ExpectedResult()
+                        new SuccessCaseFilesInDirectories.ExpectedResult()
                         { 
                             Directory = "bin",
                             Files = new []
@@ -392,7 +392,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectories()
+                new SuccessCaseFilesInDirectories()
                 {
                     File = "assembly.assembly",
                     Extensions = new[]
@@ -405,7 +405,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new CaseFilesInDirectories.ExpectedResult()
+                        new SuccessCaseFilesInDirectories.ExpectedResult()
                         { 
                             Directory = "bin",
                             Files = new []
@@ -418,7 +418,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectories()
+                new SuccessCaseFilesInDirectories()
                 {
                     File = "assembly",
                     Extensions = new[]
@@ -432,7 +432,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new CaseFilesInDirectories.ExpectedResult()
+                        new SuccessCaseFilesInDirectories.ExpectedResult()
                         { 
                             Directory = "bin",
                             Files = new []
@@ -446,7 +446,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectories()
+                new SuccessCaseFilesInDirectories()
                 {
                     File = "assembly",
                     Extensions = new[]
@@ -461,7 +461,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new CaseFilesInDirectories.ExpectedResult()
+                        new SuccessCaseFilesInDirectories.ExpectedResult()
                         { 
                             Directory = "bin",
                             Files = new []
@@ -475,7 +475,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             };
             yield return new object[]
             {
-                new CaseFilesInDirectories()
+                new SuccessCaseFilesInDirectories()
                 {
                     File = "assembly",
                     Extensions = new[]
@@ -490,7 +490,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                     },
                     ExpectedResults = new[]
                     {
-                        new CaseFilesInDirectories.ExpectedResult()
+                        new SuccessCaseFilesInDirectories.ExpectedResult()
                         { 
                             Directory = "bin",
                             Files = new []
@@ -499,7 +499,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                                 null
                             }
                         },
-                        new CaseFilesInDirectories.ExpectedResult()
+                        new SuccessCaseFilesInDirectories.ExpectedResult()
                         { 
                             Directory = "vars",
                             Files = new []
@@ -514,9 +514,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         }
 
         [Theory]
-        [MemberData(nameof(GetFilesInDirectoryData))]
+        [MemberData(nameof(GetSuccessFilesInDirectoryData))]
         public void Should_find_all_files_in_directory(
-            CaseFilesInDirectory @case)
+            SuccessCaseFilesInDirectory @case)
         {
             var fs = new Mock<IAnyWhereConfigurationFileSystem>();
             foreach (var file in @case.Files)
@@ -537,9 +537,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         }
 
         [Theory]
-        [MemberData(nameof(GetFilesInDirectoriesData))]
+        [MemberData(nameof(GetSuccessFilesInDirectoriesData))]
         public void Should_find_all_files_directory(
-            CaseFilesInDirectories @case)
+            SuccessCaseFilesInDirectories @case)
         {
             var fs = new Mock<IAnyWhereConfigurationFileSystem>();
             foreach (var file in @case.Files)

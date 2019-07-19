@@ -97,7 +97,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
                         argDefinition.AssemblyName, 
                         new []
                         {
-                            path.Value
+                            path.Path
                         }));
             }
 

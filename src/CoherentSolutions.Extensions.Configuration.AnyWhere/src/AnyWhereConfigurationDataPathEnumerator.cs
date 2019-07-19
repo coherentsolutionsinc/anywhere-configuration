@@ -1,8 +1,6 @@
 ﻿using System;
 using System.IO;
 
-using CoherentSolutions.Extensions.Configuration.AnyWhere.Abstractions;
-
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public struct AnyWhereConfigurationDataPathEnumerator
@@ -25,7 +23,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         private State currentState;
 
         public AnyWhereConfigurationDataPathEnumerator(
-            string inputValue)
+            in string inputValue)
         {
             this.inputValue = inputValue;
 
@@ -61,13 +59,12 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                     this.currentState = State.Open;
                     goto case State.Open;
                 case State.Open:
-                    ReadOnlySpan<char> output;
                     for (;;)
                     {
                         var input = this.inputValue.AsSpan(this.currentIndex);
                         var index = input.IndexOf(Path.PathSeparator);
 
-                        output = index >= 0
+                        var output = index >= 0
                             ? input.Slice(0, index)
                             : input;
 
@@ -90,13 +87,13 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
                             {
                                 return false;
                             }
+
                             continue;
                         }
-                        break;
-                    }
 
-                    this.current = new AnyWhereConfigurationDataPath(output.ToString());
-                    return true;
+                        this.current = new AnyWhereConfigurationDataPath(output.ToString());
+                        return true;
+                    }
                 case State.Closed:
                     return false;
                 default:
@@ -107,7 +104,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere
         public void Reset()
         {
             this.current = default;
-
             this.currentIndex = 0;
             this.currentState = State.None;
         }

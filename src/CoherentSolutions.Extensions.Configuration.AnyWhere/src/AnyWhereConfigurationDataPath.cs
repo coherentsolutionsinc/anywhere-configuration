@@ -1,13 +1,20 @@
-﻿namespace CoherentSolutions.Extensions.Configuration.AnyWhere
+﻿using System;
+
+namespace CoherentSolutions.Extensions.Configuration.AnyWhere
 {
     public struct AnyWhereConfigurationDataPath
     {
-        public string Value { get; }
+        public readonly string Path;
 
         public AnyWhereConfigurationDataPath(
-            string path)
+            in string path)
         {
-            this.Value = path;
+            if (string.IsNullOrWhiteSpace(path))
+            {
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(path));
+            }
+
+            this.Path = path;
         }
     }
 }

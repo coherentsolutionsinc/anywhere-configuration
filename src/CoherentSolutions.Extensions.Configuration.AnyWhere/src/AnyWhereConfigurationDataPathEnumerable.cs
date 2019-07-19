@@ -5,7 +5,7 @@
         private readonly string inputValue;
 
         public AnyWhereConfigurationDataPathEnumerable(
-            string inputValue)
+            in string inputValue)
         {
             this.inputValue = inputValue;
         }

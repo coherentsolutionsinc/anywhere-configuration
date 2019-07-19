@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 
-using CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.Tools;
-
 using Xunit;
 using Xunit.Abstractions;
 
@@ -42,7 +40,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             }
         }
 
-        public static IEnumerable<object[]> GetData()
+        public static IEnumerable<object[]> GetSuccessData()
         {
             yield return new object[]
             {
@@ -460,7 +458,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
         }
 
         [Theory]
-        [MemberData(nameof(GetData))]
+        [MemberData(nameof(GetSuccessData))]
         public void Should_enumerate_all_paths_From_path_string(
             Case @case)
         {
@@ -470,7 +468,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests
             {
                 Assert.True(enumerator.MoveNext());
 
-                Assert.Equal(expectedResult, enumerator.Current.Value);
+                Assert.Equal(expectedResult, enumerator.Current.Path);
             }
 
             Assert.False(enumerator.MoveNext());

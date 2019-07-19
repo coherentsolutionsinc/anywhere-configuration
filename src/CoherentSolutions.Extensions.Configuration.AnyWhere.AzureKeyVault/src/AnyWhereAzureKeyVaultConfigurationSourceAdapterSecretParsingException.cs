@@ -10,15 +10,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
 
         public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
             string message,
-            ReadOnlySpan<char> secretString,
-            int position,
-            Exception innerException = null)
-            : this(message, secretString.ToString(), position, innerException)
-        {
-        }
-
-        public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
-            string message,
             string secretString,
             int position,
             Exception innerException = null)

@@ -37,7 +37,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.AzureKeyVaul
                 IXunitSerializationInfo info)
             {
                 this.SecretsString = info.GetValue<string>(nameof(this.SecretsString));
-                this.Secrets = info.GetValue<string[]>(nameof(this.Secrets)) ?? Array.Empty<string>();
+                this.Secrets = info.GetValue<string[]>(nameof(this.Secrets));
             }
         }
 

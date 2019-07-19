@@ -2,13 +2,15 @@
 
 namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
 {
-    public ref struct AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret
+    public struct AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret
     {
         private const char ESCAPE_SYMBOL = '`';
 
         private const char VERSION_SEPARATOR_SYMBOL = ':';
 
         private const char ALIAS_SEPARATOR_SYMBOL = '/';
+
+        private const int MAX_LENGTH = 56;
 
         public readonly string Name;
 
@@ -57,7 +59,9 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
         private static string ToString(
             ReadOnlySpan<char> input)
         {
-            Span<char> value = stackalloc char[input.Length];
+            var value = input.Length < MAX_LENGTH
+                ? stackalloc char[input.Length]
+                : new char[input.Length];
 
             var j = 0;
             var i = 0;
@@ -84,7 +88,7 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
             if (secretString.IsEmpty || secretString.IsWhiteSpace())
             {
                 throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
-                    "The secret name cannot be empty or whitespace",
+                    "The secret name cannot be empty or whitespace.",
                     string.Empty,
                     0);
             }
@@ -97,8 +101,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
                 if (string.IsNullOrEmpty(this.Version))
                 {
                     throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
-                        "Unexpected name-version separator ':'",
-                        secretString,
+                        "Unexpected name-version separator ':'.",
+                        secretString.ToString(),
                         index);
                 }
 
@@ -116,8 +120,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
                 if (string.IsNullOrEmpty(this.Alias))
                 {
                     throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
-                        "Unexpected name-alias separator '/'",
-                        secretString,
+                        "Unexpected name-alias separator '/'.",
+                        secretString.ToString(),
                         index);
                 }
 
@@ -132,8 +136,8 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
             if (string.IsNullOrEmpty(this.Name))
             {
                 throw new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretParsingException(
-                    "The secret name cannot be empty or whitespace",
-                    secretString,
+                    "Expected secret name.",
+                    secretString.ToString(),
                     0);
             }
         }

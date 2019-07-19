@@ -119,5 +119,18 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.Tests.AzureKeyVaul
             }
             Assert.False(enumerator.MoveNext());
         }
+
+        [Fact]
+        public void Should_enumerate_nothing_When_initialized_as_default_struct()
+        {
+            Assert.False(new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerator().MoveNext());
+        }
+
+        [Fact]
+        public void Should_throw_InvalidOperationException_When_accessing_Current_on_stale_enumerator()
+        {
+            Assert.Throws<InvalidOperationException>(
+                () => { _ = new AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerator().Current; });
+        }
     }
 }

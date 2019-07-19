@@ -24,7 +24,18 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
 
         private State currentState;
 
-        public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret Current => this.current;
+        public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecret Current
+        {
+            get
+            {
+                if (this.currentState == State.None)
+                {
+                    throw new InvalidOperationException("The enumeration wasn't started.");
+                }
+
+                return this.current;
+            }
+        }
 
         public AnyWhereAzureKeyVaultConfigurationSourceAdapterSecretEnumerator(
             in string value)

@@ -182,8 +182,6 @@ namespace CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault
                 }
             }
 
-            configurationBuilder.AddAzureKeyVault()
-
             configurationBuilder.Add(new AnyWhereAzureKeyVaultConfigurationSourceAdapterConfigurationSource(values));
         }
     }

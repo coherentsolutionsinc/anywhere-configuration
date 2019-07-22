@@ -4,7 +4,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-        <Version>1.0.3</Version>
+        <Version>1.1</Version>
         <Authors>Coherent Solutions, Inc</Authors>
         <Copyright>2019 Coherent Solutions, Inc</Copyright>
         <PackageIconUrl>https://github.com/coherentsolutionsinc/anywhere-configuration/blob/master/favicon.png?raw=true</PackageIconUrl>

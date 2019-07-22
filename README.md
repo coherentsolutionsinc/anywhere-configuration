@@ -2,7 +2,7 @@
 
 | Build & Tests | Engine | Adapters List |
 |:---:|:---:|:---:|
-|![build & test](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiMnNkK0VHRHprQWNmdHQwU0hVMU1DYXBFSnZ0WHhUcUxPcjZmemhOWkM5cXRqZXBidnpFRnJnalRnWHdTTzVkQXgzUUJFZUtqNTR3ZlpnMjd2K2NUa0RjPSIsIml2UGFyYW1ldGVyU3BlYyI6InVOcGYxcGxtYlRBazZCR2EiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)|[![nuget package](https://img.shields.io/badge/nuget-1.0.3-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)|[![nuget package](https://img.shields.io/badge/nuget-1.1.1-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList/)
+|![build & test](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiMnNkK0VHRHprQWNmdHQwU0hVMU1DYXBFSnZ0WHhUcUxPcjZmemhOWkM5cXRqZXBidnpFRnJnalRnWHdTTzVkQXgzUUJFZUtqNTR3ZlpnMjd2K2NUa0RjPSIsIml2UGFyYW1ldGVyU3BlYyI6InVOcGYxcGxtYlRBazZCR2EiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)|[![nuget package](https://img.shields.io/badge/nuget-1.1.0-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)|[![nuget package](https://img.shields.io/badge/nuget-1.1.1-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList/)
 
 _For list of available configuration adapters please see [the list](https://github.com/coherentsolutionsinc/anywhere-configuration/blob/master/README.md#well-known-configuration-adapters)_
 
@@ -271,10 +271,10 @@ These configuration adapters available in form of packages and binaries:
 [109]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile/
 [110]: https://img.shields.io/badge/binary-2.1.1-brightgreen.svg
 [111]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.3/CoherentSolutions.Extensions.Configuration.AnyWhere.KeyPerFile-2.1.1.zip
-[112]: https://img.shields.io/badge/nuget-2.1.1-blue.svg
+[112]: https://img.shields.io/badge/nuget-2.2.0-blue.svg
 [113]: https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault/
-[114]: https://img.shields.io/badge/binary-2.1.1-brightgreen.svg
-[115]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.0.3/CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault-2.1.1.zip
+[114]: https://img.shields.io/badge/binary-2.2.0-brightgreen.svg
+[115]: https://github.com/coherentsolutionsinc/anywhere-configuration/releases/download/1.1.0/CoherentSolutions.Extensions.Configuration.AnyWhere.AzureKeyVault-2.2.0.tar.gz
 
 Well known configuration adapters are defined in [CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList) package and configured using `AddAnyWhereConfigurationAdapterList` method:
 

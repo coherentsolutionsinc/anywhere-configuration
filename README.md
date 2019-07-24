@@ -319,11 +319,23 @@ This project is owned and maintained by [Coherent Solutions][4].
 
 This project is licensed under the MIT License - see the [LICENSE.md][5] for details.
 
-## Third-Party Notice
+## See Also
 
-The `AzureKeyVault` configuration adapter uses [Polly][6] for request-retry strategy implementation.
+Besides this project [Coherent Solutions][4] also maintains a few more open source projects and workshops:
+
+**Projects**
+
+* [service-fabric-run-tests][7] - is a Docker image designed to run Service Fabric oriented unit-tests (.NET Core) on Linux.
+* [CoherentSolutions.Extensions.Hosting.ServiceFabric][6] - is an extension to existing HostBuilder. The idea is to simplify configuration of Reliable Services by removing unnecessary code and improving separation of concerns. 
+
+**Workshops**
+
+* [Building Self-Driving Car Architecture with Robot Operating System][8] - is a workshop to introduce attendee to [Robot Operating System][9] (ROS) design and create simple self-driving car architecture.
 
 [3]:  CONTRIBUTING.md "Contributing"
 [4]:  https://www.coherentsolutions.com/ "Coherent Solutions Inc."
 [5]:  LICENSE.md "License"
-[6]:  https://github.com/App-vNext/Polly "Polly"
+[6]:  https://github.com/coherentsolutionsinc/aspnetcore-service-fabric-hosting "Service Fabric Hosting"
+[7]:  https://github.com/coherentsolutionsinc/service-fabric-run-tests
+[8]:  https://github.com/coherentsolutionsinc/issoft-insights-2019-sdc-carla-ros
+[9]:  http://wiki.ros.org/

@@ -21,11 +21,11 @@ steps:
   inputs:
     command: 'build'
     projects: 'src/CoherentSolutions.Extensions.Configuration.AnyWhere.sln'
-    arguments: '--configuration $(Configuration)'
+    arguments: '-c Release --no-restore'
   displayName: 'Build'
 - task: DotNetCoreCLI@2
   inputs:
     command: 'test'
     projects: 'src/CoherentSolutions.Extensions.Configuration.AnyWhere.sln'
-    arguments: '--configuration $(Configuration)'
+    arguments: '-c Test --no-build --no-restore'
   displayName: 'Test'

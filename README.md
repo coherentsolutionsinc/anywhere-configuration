@@ -2,7 +2,7 @@
 
 | Build & Tests | Engine | Adapters List |
 |:---:|:---:|:---:|
-|![build & test](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiMnNkK0VHRHprQWNmdHQwU0hVMU1DYXBFSnZ0WHhUcUxPcjZmemhOWkM5cXRqZXBidnpFRnJnalRnWHdTTzVkQXgzUUJFZUtqNTR3ZlpnMjd2K2NUa0RjPSIsIml2UGFyYW1ldGVyU3BlYyI6InVOcGYxcGxtYlRBazZCR2EiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)|[![nuget package](https://img.shields.io/badge/nuget-1.1.0-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)|[![nuget package](https://img.shields.io/badge/nuget-1.1.1-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList/)
+|[![Build Status](https://dev.azure.com/coherent-oss/oss-pipelines/_apis/build/status/coherentsolutionsinc.anywhere-configuration?branchName=master)](https://dev.azure.com/coherent-oss/oss-pipelines/_build/latest?definitionId=1&branchName=master)|[![nuget package](https://img.shields.io/badge/nuget-1.1.0-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere/)|[![nuget package](https://img.shields.io/badge/nuget-1.1.1-blue.svg)](https://www.nuget.org/packages/CoherentSolutions.Extensions.Configuration.AnyWhere.AdapterList/)
 
 _For list of available configuration adapters please see [the list](https://github.com/coherentsolutionsinc/anywhere-configuration/blob/master/README.md#well-known-configuration-adapters)_
 
